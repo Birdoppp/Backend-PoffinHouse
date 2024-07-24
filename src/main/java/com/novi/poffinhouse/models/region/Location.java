@@ -14,10 +14,11 @@ public class Location {
     @Column(unique = true)
     private String name;
     @Setter
-    @Column(nullable = false)
+    private String description;
+    @Setter
+    @Column(nullable = false, name = "Horizontal Axis")
     private int coordinateX;
     @Setter
-    @Column(nullable = false)
+    @Column(nullable = false, name = "Vertical Axis")
     private int coordinateY;
-
 }
