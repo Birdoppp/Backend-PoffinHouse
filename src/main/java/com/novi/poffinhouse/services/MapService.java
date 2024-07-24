@@ -1,6 +1,5 @@
 package com.novi.poffinhouse.services;
 
-import com.novi.poffinhouse.dto.input.LocationInputDto;
 import com.novi.poffinhouse.dto.input.MapInputDto;
 import com.novi.poffinhouse.dto.output.MapOutputDto;
 import com.novi.poffinhouse.dto.mapper.MapMapper;
@@ -29,18 +28,19 @@ public class MapService {
         return MapMapper.toDto(savedMap);
     }
 
-    public void addLocationToMap(String regionName, LocationInputDto location) {
+    public Location addLocationToMap(String regionName, Location location) {
         Map map = mapRepository.findMapByRegionName(regionName)
                 .orElseThrow(() -> new RecordNotFoundException("No Map was found with name: " + regionName +", " + location +"has not been added"));
         if (!isLocationWithinBounds(map, location)) {
             throw new IllegalArgumentException("Location is out of map bounds");
-        }
-
+        } else {
         map.addLocation(location);
         mapRepository.save(map);
+        }
+        return location;
     }
 
-    public boolean isLocationWithinBounds(Map map, LocationInputDto location) {
+    public boolean isLocationWithinBounds(Map map, Location location) {
         return location.getCoordinateX() >= 0 && location.getCoordinateX() < map.getSizeXAxis() &&
                 location.getCoordinateY() >= 0 && location.getCoordinateY() < map.getSizeYAxis();
     }

@@ -1,11 +1,10 @@
 package com.novi.poffinhouse.services;
 
 import com.novi.poffinhouse.dto.input.LocationInputDto;
-import com.novi.poffinhouse.dto.output.LocationOutputDto;
 import com.novi.poffinhouse.dto.mapper.LocationMapper;
+import com.novi.poffinhouse.dto.output.LocationOutputDto;
 import com.novi.poffinhouse.models.region.Location;
 import com.novi.poffinhouse.repositories.LocationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class LocationService {
 
-    @Autowired
-    private LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
+
+    public LocationService(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
+    }
 
     public LocationOutputDto createLocation(LocationInputDto inputDto) {
         Location location = LocationMapper.toEntity(inputDto);

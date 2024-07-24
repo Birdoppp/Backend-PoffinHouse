@@ -16,7 +16,7 @@ public class LocationMapper {
     }
 
     public static LocationOutputDto toOutputDto(Location location) {
-        LocationOutputDto outputDto = new LocationOutputDto();
+      LocationOutputDto outputDto = new LocationOutputDto();
         outputDto.setId(location.getId());
         outputDto.setName(location.getName());
         outputDto.setDescription(location.getDescription());

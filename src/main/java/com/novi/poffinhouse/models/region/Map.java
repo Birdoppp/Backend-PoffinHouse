@@ -1,7 +1,5 @@
 package com.novi.poffinhouse.models.region;
 
-import com.novi.poffinhouse.dto.input.LocationInputDto;
-import com.novi.poffinhouse.models.region.Location;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -28,10 +26,10 @@ public class Map {
     @Positive
     private int sizeYAxis;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "map")
     private List<Location> map = new ArrayList<>();
 
-    public void addLocation(LocationInputDto location) {
+    public void addLocation(Location location) {
         this.map.add(location);
     }
 

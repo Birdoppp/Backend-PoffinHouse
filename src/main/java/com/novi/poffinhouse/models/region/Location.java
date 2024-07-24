@@ -21,4 +21,8 @@ public class Location {
     @Setter
     @Column(nullable = false, name = "Vertical Axis")
     private int coordinateY;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "map_id")  // Explicitly specifying the foreign key column
+    private Map map;
 }
