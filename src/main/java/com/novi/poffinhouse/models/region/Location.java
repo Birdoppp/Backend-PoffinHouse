@@ -11,7 +11,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Setter
-    @Column(unique = true)
+    @Column
     private String name;
     @Setter
     private String description;
@@ -23,6 +23,7 @@ public class Location {
     private int coordinateY;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "map_id")  // Explicitly specifying the foreign key column
+    @JoinColumn(name = "map_id")
+    @Setter
     private Map map;
 }

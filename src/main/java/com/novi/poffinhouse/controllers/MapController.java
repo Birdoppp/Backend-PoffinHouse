@@ -1,6 +1,8 @@
 package com.novi.poffinhouse.controllers;
 
+import com.novi.poffinhouse.dto.input.LocationInputDto;
 import com.novi.poffinhouse.dto.input.MapInputDto;
+import com.novi.poffinhouse.dto.output.LocationOutputDto;
 import com.novi.poffinhouse.dto.output.MapOutputDto;
 import com.novi.poffinhouse.models.region.Location;
 import com.novi.poffinhouse.services.MapService;
@@ -31,18 +33,17 @@ public class MapController {
     }
 
     @PostMapping("/{regionName}/locations")
-    public ResponseEntity<Location> addLocationToMap(@PathVariable String regionName, @RequestBody Location location) {
-        Location addedLocation = mapService.addLocationToMap(regionName, location);
-
+    public ResponseEntity<LocationOutputDto> addLocationToMap(@PathVariable String regionName, @RequestBody LocationInputDto location) {
+        LocationOutputDto addedLocation = mapService.addLocationToMap(regionName, location);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(addedLocation.getId())
-                .toUri();
+                .buildAndExpand(addedLocation.getId()).toUri();
         return ResponseEntity.created(uri).body(addedLocation);
     }
     @GetMapping("/{regionName}")
-    public MapOutputDto getMap(@PathVariable String regionName) {
-        return mapService.getMap(regionName);
+    public ResponseEntity<MapOutputDto> getMap(@PathVariable String regionName) {
+        MapOutputDto mapOutputDto = mapService.getMap(regionName);
+        return ResponseEntity.ok(mapOutputDto);
     }
 
     @GetMapping("/{regionName}/locations")

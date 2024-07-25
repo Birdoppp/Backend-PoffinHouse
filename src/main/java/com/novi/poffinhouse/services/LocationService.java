@@ -20,7 +20,7 @@ public class LocationService {
     }
 
     public LocationOutputDto createLocation(LocationInputDto inputDto) {
-        Location location = LocationMapper.toEntity(inputDto);
+        Location location = LocationMapper.toModel(inputDto);
         Location savedLocation = locationRepository.save(location);
         return LocationMapper.toOutputDto(savedLocation);
     }

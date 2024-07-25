@@ -1,8 +1,13 @@
 package com.novi.poffinhouse.dto.mapper;
 
 import com.novi.poffinhouse.dto.input.MapInputDto;
+import com.novi.poffinhouse.dto.output.LocationOutputDto;
 import com.novi.poffinhouse.dto.output.MapOutputDto;
+import com.novi.poffinhouse.models.region.Location;
 import com.novi.poffinhouse.models.region.Map;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapMapper {
 
@@ -20,7 +25,13 @@ public class MapMapper {
         dto.setRegionName(map.getRegionName());
         dto.setSizeXAxis(map.getSizeXAxis());
         dto.setSizeYAxis(map.getSizeYAxis());
-        dto.setLocations(map.getLocations());
+        if (map.getLocations() != null){
+            List<LocationOutputDto> locationOutputDtoList = new ArrayList<>();
+            for(Location location : map.getLocations()){
+                locationOutputDtoList.add(LocationMapper.toOutputDto(location));
+            }
+            dto.setLocations(locationOutputDtoList);
+        }
         return dto;
     }
 }

@@ -9,4 +9,5 @@ public class LocationOutputDto {
     private String description;
     private int coordinateX;
     private int coordinateY;
+    private String regionName;
 }
