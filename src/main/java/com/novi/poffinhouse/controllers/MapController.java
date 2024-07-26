@@ -40,6 +40,7 @@ public class MapController {
                 .buildAndExpand(addedLocation.getId()).toUri();
         return ResponseEntity.created(uri).body(addedLocation);
     }
+
     @GetMapping("/{regionName}")
     public ResponseEntity<MapOutputDto> getMap(@PathVariable String regionName) {
         MapOutputDto mapOutputDto = mapService.getMap(regionName);
