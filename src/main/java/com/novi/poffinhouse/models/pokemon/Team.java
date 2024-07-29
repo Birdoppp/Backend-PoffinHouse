@@ -1,4 +1,7 @@
 package com.novi.poffinhouse.models.pokemon;
 
-public interface Team {
+import java.util.List;
+
+public class Team {
+    private List<Pokemon> teamPokemon;
 }

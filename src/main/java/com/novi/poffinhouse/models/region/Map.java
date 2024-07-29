@@ -26,18 +26,16 @@ public class Map {
     @Positive
     private int sizeYAxis;
 
+    @Getter
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "map")
-    private List<Location> map = new ArrayList<>();
+    private List<Location> locations = new ArrayList<>();
 
     public void addLocation(Location location) {
-        this.map.add(location);
+        this.locations.add(location);
     }
 
     public void removeLocation(Location location) {
-        this.map.remove(location);
+        this.locations.remove(location);
     }
 
-    public List<Location> getLocations() {
-        return map;
-    }
 }
