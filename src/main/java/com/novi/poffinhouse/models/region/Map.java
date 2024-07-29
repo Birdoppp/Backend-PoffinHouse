@@ -26,7 +26,6 @@ public class Map {
     @Positive
     private int sizeYAxis;
 
-    @Getter
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "map")
     private List<Location> map = new ArrayList<>();
 
