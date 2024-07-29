@@ -5,6 +5,7 @@
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.http.HttpMethod;
 //import org.springframework.security.authentication.AuthenticationManager;
+//import org.springframework.security.authentication.ProviderManager;
 //import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 //import org.springframework.security.config.Customizer;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,7 +35,6 @@
 //    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
 //        var auth = new DaoAuthenticationProvider();
 //        auth.setPasswordEncoder(passwordEncoder);
-//        auth.setUserDetailsService(customUserDetailsService);
 //        return new ProviderManager(auth);
 //    }
 //
@@ -77,8 +77,8 @@
 //                .authorizeHttpRequests(auth ->
 //                        auth
 //                                .requestMatchers(HttpMethod.GET, "/berries").hasRole("ADMIN")
-//                                .requestMatchers(HttpMethod.POST, "/berries").authenticated()
-//                                .requestMatchers(HttpMethod.GET, "/berries/{username}").authenticated()
+//                                .requestMatchers(HttpMethod.POST, "/berries").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/berries/{username}").permitAll()
 //                                .anyRequest().denyAll()
 //
 //                ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
