@@ -11,12 +11,10 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Setter
-    @Column(unique = true)
-    private String name;
-    @Setter
     @Column(nullable = false)
-    private int coordinateX;
+    private String versionName;
     @Setter
-    @Column(nullable = false)
-    private int coordinateY;
+    private int pokemonGeneration;
+    @Setter
+    private String description;
 }
