@@ -25,7 +25,7 @@ public class LocationService {
         return LocationMapper.toOutputDto(savedLocation);
     }
 
-    public LocationOutputDto getLocationById(int id) {
+    public LocationOutputDto getLocationById(Long id) {
         Location location = locationRepository.findById(id).orElseThrow(() -> new RuntimeException("Location not found"));
         return LocationMapper.toOutputDto(location);
     }
@@ -35,7 +35,7 @@ public class LocationService {
         return locations.stream().map(LocationMapper::toOutputDto).collect(Collectors.toList());
     }
 
-    public LocationOutputDto updateLocation(int id, LocationInputDto inputDto) {
+    public LocationOutputDto updateLocation(Long id, LocationInputDto inputDto) {
         Location existingLocation = locationRepository.findById(id).orElseThrow(() -> new RuntimeException("Location not found"));
         existingLocation.setName(inputDto.getName());
         existingLocation.setDescription(inputDto.getDescription());
@@ -45,7 +45,7 @@ public class LocationService {
         return LocationMapper.toOutputDto(updatedLocation);
     }
 
-    public void deleteLocation(int id) {
+    public void deleteLocation(Long id) {
         locationRepository.deleteById(id);
     }
 }

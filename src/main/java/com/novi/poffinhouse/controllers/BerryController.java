@@ -31,7 +31,7 @@ public class BerryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BerryOutputDto> getBerryById(@PathVariable int id) throws RecordNotFoundException {
+    public ResponseEntity<BerryOutputDto> getBerryById(@PathVariable Long id) throws RecordNotFoundException {
         return ResponseEntity.ok(berryService.getBerryById(id));
     }
 

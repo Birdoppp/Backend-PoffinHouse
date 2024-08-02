@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Berry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @Column (unique = true)
     @Setter
     private String name;
@@ -23,7 +23,7 @@ public class Berry {
     @Setter
     private int growthTime; //    In genIV this ranges from 8 to 96 int in hours
     @Setter
-    private TypeEnum.BerryCategoryType categoryType;
+    private TypeEnum.BERRY_TYPE_CATEGORY typeCategory;
 
     @Setter
     private int spicyPotency;

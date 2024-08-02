@@ -16,7 +16,7 @@ public class BerryMapper {
         berryInputDto.setIndexNumber(berry.getIndexNumber());
         berryInputDto.setDescription(berry.getDescription());
         berryInputDto.setGrowthTime(berry.getGrowthTime());
-        berryInputDto.setCategoryType(berry.getCategoryType());
+        berryInputDto.setCategoryType(berry.getTypeCategory());
         berryInputDto.setSpicyPotency(berry.getSpicyPotency());
         berryInputDto.setDryPotency(berry.getDryPotency());
         berryInputDto.setSweetPotency(berry.getSweetPotency());
@@ -33,7 +33,7 @@ public class BerryMapper {
         berryOutputDto.setIndexNumber(berry.getIndexNumber());
         berryOutputDto.setDescription(berry.getDescription());
         berryOutputDto.setGrowthTime(berry.getGrowthTime());
-        berryOutputDto.setCategoryType(berry.getCategoryType());
+        berryOutputDto.setCategoryType(berry.getTypeCategory());
         berryOutputDto.setSpicyPotency(berry.getSpicyPotency());
         berryOutputDto.setDryPotency(berry.getDryPotency());
         berryOutputDto.setSweetPotency(berry.getSweetPotency());

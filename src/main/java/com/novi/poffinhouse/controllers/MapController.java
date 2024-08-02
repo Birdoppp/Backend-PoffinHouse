@@ -20,7 +20,6 @@ public class MapController {
 
     private final MapService mapService;
 
-    @Autowired
     public MapController(MapService mapService) {
         this.mapService = mapService;
     }
@@ -50,4 +49,5 @@ public class MapController {
     public List<Location> getAllLocations(@PathVariable String regionName) {
         return mapService.getAllLocations(regionName);
     }
+    
 }

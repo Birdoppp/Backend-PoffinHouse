@@ -34,19 +34,19 @@ public class LocationController {
         return ResponseEntity.ok(locations);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<LocationOutputDto> getLocationById(@PathVariable int id) {
+    public ResponseEntity<LocationOutputDto> getLocationById(@PathVariable Long id) {
        LocationOutputDto location = locationService.getLocationById(id);
         return ResponseEntity.ok(location);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LocationOutputDto> updateLocation(@PathVariable int id, @RequestBody LocationInputDto inputDto) {
+    public ResponseEntity<LocationOutputDto> updateLocation(@PathVariable Long id, @RequestBody LocationInputDto inputDto) {
         LocationOutputDto updatedLocation = locationService.updateLocation(id, inputDto);
         return ResponseEntity.ok(updatedLocation);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLocation(@PathVariable int id) {
+    public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
         locationService.deleteLocation(id);
         return ResponseEntity.noContent().build();
     }

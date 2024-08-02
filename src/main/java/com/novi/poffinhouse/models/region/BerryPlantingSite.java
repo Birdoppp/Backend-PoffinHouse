@@ -1,7 +1,6 @@
 package com.novi.poffinhouse.models.region;
 
 import com.novi.poffinhouse.models.berries.Berry;
-import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 public class BerryPlantingSite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @Setter
     private String description;
     @Setter

@@ -27,7 +27,7 @@ public class BerryService {
     }
 
     // Get ONE
-    public BerryOutputDto getBerryById(int id) {
+    public BerryOutputDto getBerryById(Long id) {
         Optional<Berry> optionalBerry = berryRepository.findBerryById(id);
         if (optionalBerry.isPresent()){
             return berryFromModelToOutput(optionalBerry.get());
@@ -36,9 +36,9 @@ public class BerryService {
         }
     }
 
-    // Create
+//     Create
     public BerryOutputDto createBerry(BerryInputDto berryInputDto, int indexNumber) {
-        Optional<Berry> optionalBerry = berryRepository.findBerryById(indexNumber);
+        Optional<Berry> optionalBerry = berryRepository.findBerryById(Long.valueOf((int) indexNumber));
         if (optionalBerry.isEmpty()) {
             Berry berry = berryRepository.save(berryFromInputDtoToModel(berryInputDto, indexNumber));
             return berryFromModelToOutput(berry);

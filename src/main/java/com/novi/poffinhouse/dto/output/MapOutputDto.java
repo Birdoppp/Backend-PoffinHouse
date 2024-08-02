@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class MapOutputDto {
-    private int id;
+    private Long id;
     private String regionName;
     private int sizeXAxis;
     private int sizeYAxis;
