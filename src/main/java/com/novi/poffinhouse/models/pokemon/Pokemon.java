@@ -16,31 +16,17 @@ public class Pokemon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Setter
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
     @Setter
     @Positive
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private int nationalDex;
-    @Setter
-    @Positive
-    @Column(nullable = false)
-    private int generation;
     @Setter
     @Column
     private TypeEnum.POKEMON_TYPE type;
 
-    @PrePersist
-    @PreUpdate
-    private void validateTypeByGeneration() {
-        if (generation < 6 && type == TypeEnum.POKEMON_TYPE.FAIRY) {
-            throw new IllegalArgumentException("Fairy type is not allowed for generation less than 6.");
-        }
 
-        if (generation < 2 && (type == TypeEnum.POKEMON_TYPE.DARK || type == TypeEnum.POKEMON_TYPE.GHOST)) {
-            throw new IllegalArgumentException("Dark or Ghost type is not allowed for generation less than 2.");
-        }
-    }
 
 //    @ManyToMany(mappedBy = "pokemons")
 //    private List<Team> teams = new ArrayList<>();
