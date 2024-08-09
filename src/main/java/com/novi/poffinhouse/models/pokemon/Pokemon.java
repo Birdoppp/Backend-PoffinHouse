@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 //import java.util.ArrayList;
 //import java.util.List;
 
@@ -20,12 +22,37 @@ public class Pokemon {
     private String name;
     @Setter
     @Positive
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private int nationalDex;
     @Setter
     @Column
     private TypeEnum.POKEMON_TYPE type;
 
+//    @Setter
+//    @Positive
+//    private Integer level;
+//    @Setter
+//    @Positive
+//    private Integer healthPoints;
+//    @Setter
+//    @Positive
+//    private Integer attack;
+//    @Setter
+//    @Positive
+//    private Integer defence;
+//    @Setter
+//    @Positive
+//    private Integer spAttack;
+//    @Setter
+//    @Positive
+//    private Integer spDefence;
+//    @Setter
+//    @Positive
+//    private Integer speed;
+
+
+    @OneToMany
+    private List<OwnedPokemon> ownedPokemonList;
 
 
 //    @ManyToMany(mappedBy = "pokemons")

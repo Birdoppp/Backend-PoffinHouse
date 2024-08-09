@@ -6,7 +6,6 @@ import com.novi.poffinhouse.dto.output.LocationOutputDto;
 import com.novi.poffinhouse.dto.output.MapOutputDto;
 import com.novi.poffinhouse.models.region.Location;
 import com.novi.poffinhouse.services.MapService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -31,6 +30,11 @@ public class MapController {
         return ResponseEntity.created(uri).body(mapOutputDto);
     }
 
+    @GetMapping("/{regionName}")
+    public ResponseEntity<MapOutputDto> getMap(@PathVariable String regionName) {
+        MapOutputDto mapOutputDto = mapService.getMap(regionName);
+        return ResponseEntity.ok(mapOutputDto);
+    }
     @PostMapping("/{regionName}/locations")
     public ResponseEntity<LocationOutputDto> addLocationToMap(@PathVariable String regionName, @RequestBody LocationInputDto location) {
         LocationOutputDto addedLocation = mapService.addLocationToMap(regionName, location);
@@ -38,11 +42,6 @@ public class MapController {
                 .path("/{id}")
                 .buildAndExpand(addedLocation.getId()).toUri();
         return ResponseEntity.created(uri).body(addedLocation);
-    }
-    @GetMapping("/{regionName}")
-    public ResponseEntity<MapOutputDto> getMap(@PathVariable String regionName) {
-        MapOutputDto mapOutputDto = mapService.getMap(regionName);
-        return ResponseEntity.ok(mapOutputDto);
     }
 
     @GetMapping("/{regionName}/locations")

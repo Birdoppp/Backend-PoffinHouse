@@ -2,7 +2,7 @@ package com.novi.poffinhouse.util;
 
 import lombok.Getter;
 
-import static com.novi.poffinhouse.util.Capitalize.getCapitalizedString;
+//import static com.novi.poffinhouse.util.Capitalize.getCapitalizedString;
 
 public class PreferencesEnum {
     public enum FLAVOR {
@@ -15,7 +15,7 @@ public class PreferencesEnum {
     }
 
     @Getter
-    public enum NATURE_PREFERENCE {
+    public enum NATURE {
         HARDY(FLAVOR.NONE, FLAVOR.NONE),
         LONELY(FLAVOR.SPICY, FLAVOR.SOUR),
         BRAVE(FLAVOR.SPICY, FLAVOR.SWEET),
@@ -44,16 +44,16 @@ public class PreferencesEnum {
 
         private final FLAVOR favorite;
         private final FLAVOR dislikes;
-        
-        NATURE_PREFERENCE(FLAVOR favorite, FLAVOR dislikes) {
+
+        NATURE(FLAVOR favorite, FLAVOR dislikes) {
             this.favorite = favorite;
             this.dislikes = dislikes;
         }
 
-        public static void main(String[] args) {
-            for (NATURE_PREFERENCE nature : NATURE_PREFERENCE.values()) {
-                System.out.println("A Pokemon with a "+ getCapitalizedString(nature.name()) + " nature likes " + getCapitalizedString(nature.getFavorite().name()) + " berries and dislikes " + getCapitalizedString(nature.getDislikes().name()) + "berries.");
-            }
-        }
+//        public static void main(String[] args) {
+//            for (NATURE nature : NATURE.values()) {
+//                System.out.println("A Pokemon with a " + getCapitalizedString(nature.name()) + " nature likes " + getCapitalizedString(nature.getFavorite().name()) + " berries and dislikes " + getCapitalizedString(nature.getDislikes().name()) + "berries.");
+//            }
+//        }
     }
 }
