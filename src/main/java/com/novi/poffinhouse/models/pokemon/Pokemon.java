@@ -2,6 +2,7 @@ package com.novi.poffinhouse.models.pokemon;
 
 import com.novi.poffinhouse.util.TypeEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +20,14 @@ public class Pokemon {
     private Long id;
     @Setter
     @Column(unique = true, nullable = false)
+    @NotBlank
     private String name;
     @Setter
     @Positive
     @Column(unique = true)
     private int nationalDex;
     @Setter
-    @Column
+    @Enumerated(EnumType.STRING)
     private TypeEnum.POKEMON_TYPE type;
 
 // Main Base Stats per Pokémon Species
@@ -53,7 +55,7 @@ public class Pokemon {
     private List<OwnedPokemon> ownedPokemonList;
 
 
-//    @ManyToMany(mappedBy = "pokemons")
+//    @ManyToMany(mappedBy = "pokemon")
 //    private List<Team> teams = new ArrayList<>();
 
 }

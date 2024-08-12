@@ -36,7 +36,6 @@ public class OwnedPokemonController {
         return ResponseEntity.ok(ownedPokemonList);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<OwnedPokemonOutputDto> updateOwnedPokemon(@PathVariable Long id, @RequestBody OwnedPokemonInputDto inputDto) {
         OwnedPokemonOutputDto updatedOwnedPokemon = ownedPokemonService.updateOwnedPokemon(id, inputDto);
@@ -44,8 +43,8 @@ public class OwnedPokemonController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteOwnedPokemon(@PathVariable Long id) {
-        String responseMessage = ownedPokemonService.deleteOwnedPokemon(id);
-        return ResponseEntity.ok(responseMessage);
+    public ResponseEntity<Void> deleteOwnedPokemon(@PathVariable Long id) {
+        ownedPokemonService.deleteOwnedPokemon(id);
+        return ResponseEntity.noContent().build();
     }
 }

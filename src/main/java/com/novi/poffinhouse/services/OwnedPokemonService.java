@@ -18,31 +18,29 @@ public class OwnedPokemonService {
 
     private final OwnedPokemonRepository ownedPokemonRepository;
     private final PokemonRepository pokemonRepository;
+    private final OwnedPokemonMapper ownedPokemonMapper;
 
-    public OwnedPokemonService(OwnedPokemonRepository ownedPokemonRepository, PokemonRepository pokemonRepository) {
+    public OwnedPokemonService(OwnedPokemonRepository ownedPokemonRepository, PokemonRepository pokemonRepository, OwnedPokemonMapper ownedPokemonMapper) {
         this.ownedPokemonRepository = ownedPokemonRepository;
         this.pokemonRepository = pokemonRepository;
+        this.ownedPokemonMapper = ownedPokemonMapper;
     }
 
     public OwnedPokemonOutputDto createOwnedPokemon(OwnedPokemonInputDto inputDto) {
         Pokemon pokemon = pokemonRepository.findByName(inputDto.getPokemonName())
                 .orElseThrow(() -> new IllegalArgumentException("Pokemon with name " + inputDto.getPokemonName() + " not found."));
 
-        OwnedPokemon ownedPokemon = new OwnedPokemon();
+        OwnedPokemon ownedPokemon = ownedPokemonMapper.toModel(inputDto);
         ownedPokemon.setPokemon(pokemon);
-        ownedPokemon.setNickname(inputDto.getNickname());
-        ownedPokemon.setNature(inputDto.getNature());
-        ownedPokemon.setCaughtByTrainerName(inputDto.getCaughtByTrainerName());
 
         OwnedPokemon savedOwnedPokemon = ownedPokemonRepository.save(ownedPokemon);
-        return OwnedPokemonMapper.toOutputDto(savedOwnedPokemon);
+        return ownedPokemonMapper.toOutputDto(savedOwnedPokemon);
     }
-
 
     public OwnedPokemonOutputDto getOwnedPokemonById(Long id) {
         Optional<OwnedPokemon> optionalOwnedPokemon = ownedPokemonRepository.findById(id);
         if (optionalOwnedPokemon.isPresent()) {
-            return OwnedPokemonMapper.toOutputDto(optionalOwnedPokemon.get());
+            return ownedPokemonMapper.toOutputDto(optionalOwnedPokemon.get());
         }
         throw new IllegalArgumentException("OwnedPokemon with id " + id + " not found.");
     }
@@ -50,10 +48,9 @@ public class OwnedPokemonService {
     public List<OwnedPokemonOutputDto> getAllOwnedPokemon() {
         return ownedPokemonRepository.findAll()
                 .stream()
-                .map(OwnedPokemonMapper::toOutputDto)
+                .map(ownedPokemonMapper::toOutputDto)
                 .collect(Collectors.toList());
     }
-
 
     public OwnedPokemonOutputDto updateOwnedPokemon(Long id, OwnedPokemonInputDto inputDto) {
         OwnedPokemon existingOwnedPokemon = ownedPokemonRepository.findById(id)
@@ -62,31 +59,21 @@ public class OwnedPokemonService {
         existingOwnedPokemon.setNickname(inputDto.getNickname());
         existingOwnedPokemon.setNature(inputDto.getNature());
         existingOwnedPokemon.setCaughtByTrainerName(inputDto.getCaughtByTrainerName());
+        existingOwnedPokemon.setBeauty(inputDto.getBeauty());
+        existingOwnedPokemon.setCoolness(inputDto.getCoolness());
+        existingOwnedPokemon.setCuteness(inputDto.getCuteness());
+        existingOwnedPokemon.setCleverness(inputDto.getCleverness());
+        existingOwnedPokemon.setToughness(inputDto.getToughness());
+
+        Pokemon pokemon = pokemonRepository.findByName(inputDto.getPokemonName())
+                .orElseThrow(() -> new IllegalArgumentException("Pokemon with name " + inputDto.getPokemonName() + " not found."));
+        existingOwnedPokemon.setPokemon(pokemon);
 
         OwnedPokemon updatedOwnedPokemon = ownedPokemonRepository.save(existingOwnedPokemon);
-        return OwnedPokemonMapper.toOutputDto(updatedOwnedPokemon);
+        return ownedPokemonMapper.toOutputDto(updatedOwnedPokemon);
     }
 
-//    public String deleteOwnedPokemon(Long id) {
-//        ownedPokemonRepository.deleteById(id);
-//        return "OwnedPokemon with id " + id + " has been deleted.";
-//    }
-
-    public String deleteOwnedPokemon(Long id) {
-        // Fetch the Pokémon entity by its ID
-        Optional<OwnedPokemon> pokemonOptional = ownedPokemonRepository.findById(id);
-        if (pokemonOptional.isPresent()) {
-            OwnedPokemon pokemon = pokemonOptional.get();
-            String pokemonName = pokemon.getPokemon().getName();
-            // Delete the Pokémon from the repository
-            ownedPokemonRepository.deleteById(id);
-            // Return the response message with the Pokémon's name
-            return "OwnedPokemon " + pokemonName + " with id " + id + " has been deleted.";
-        } else {
-            // Handle the case where the Pokémon with the given ID does not exist
-            return "OwnedPokemon with id " + id + " not found.";
-        }
+    public void deleteOwnedPokemon(Long id) {
+        ownedPokemonRepository.deleteById(id);
     }
-
-
 }
