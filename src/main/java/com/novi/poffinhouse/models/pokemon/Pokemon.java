@@ -28,27 +28,25 @@ public class Pokemon {
     @Column
     private TypeEnum.POKEMON_TYPE type;
 
-//    @Setter
-//    @Positive
-//    private Integer level;
-//    @Setter
-//    @Positive
-//    private Integer healthPoints;
-//    @Setter
-//    @Positive
-//    private Integer attack;
-//    @Setter
-//    @Positive
-//    private Integer defence;
-//    @Setter
-//    @Positive
-//    private Integer spAttack;
-//    @Setter
-//    @Positive
-//    private Integer spDefence;
-//    @Setter
-//    @Positive
-//    private Integer speed;
+// Main Base Stats per Pokémon Species
+    @Setter
+    @Positive
+    private Integer healthPoints;
+    @Setter
+    @Positive
+    private Integer attack;
+    @Setter
+    @Positive
+    private Integer defence;
+    @Setter
+    @Positive
+    private Integer spAttack;
+    @Setter
+    @Positive
+    private Integer spDefence;
+    @Setter
+    @Positive
+    private Integer speed;
 
 
     @OneToMany

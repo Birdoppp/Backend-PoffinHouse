@@ -16,4 +16,22 @@ public class PokemonInputDto {
     @NotNull(message = "Type cannot be null")
     private TypeEnum.POKEMON_TYPE type;
 
+
+    @Positive
+    private Integer healthPoints;
+
+    @Positive
+    private Integer attack;
+
+    @Positive
+    private Integer defence;
+
+    @Positive
+    private Integer spAttack;
+
+    @Positive
+    private Integer spDefence;
+
+    @Positive
+    private Integer speed;
 }

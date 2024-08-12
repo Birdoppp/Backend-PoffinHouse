@@ -9,4 +9,11 @@ public class PokemonOutputDto {
     private String name;
     private int nationalDex;
     private TypeEnum.POKEMON_TYPE type;
+
+    private Integer healthPoints;
+    private Integer attack;
+    private Integer defence;
+    private Integer spAttack;
+    private Integer spDefence;
+    private Integer speed;
 }
