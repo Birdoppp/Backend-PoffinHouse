@@ -23,21 +23,21 @@ public class Team {
 //    )
 //    @Getter
 //    @Setter
-//    private List<Pokemon> pokemons = new ArrayList<>();
+//    private List<Pokemon> pokemon = new ArrayList<>();
 //
 //
 //    public static final int MAX_POKEMON = 6;
 //
 //    public void addPokemon(Pokemon pokemon) {
-//        if (pokemons.size() < MAX_POKEMON) {
-//            pokemons.add(pokemon);
+//        if (pokemon.size() < MAX_POKEMON) {
+//            pokemon.add(pokemon);
 //            pokemon.getTeams().add(this);
 //        } else {
 //            throw new IllegalStateException("A team can only have up to 6 Pokemon.");
 //        }
 //    }
 //    public void removePokemon(Pokemon pokemon) {
-//        pokemons.remove(pokemon);
+//        pokemon.remove(pokemon);
 //        pokemon.getTeams().remove(this);
 //    }
 
