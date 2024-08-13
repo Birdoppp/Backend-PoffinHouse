@@ -51,7 +51,7 @@ public class Pokemon {
     private Integer speed;
 
 
-    @OneToMany
+    @OneToMany(mappedBy = "pokemon", cascade = CascadeType.REMOVE)
     private List<OwnedPokemon> ownedPokemonList;
 
 
