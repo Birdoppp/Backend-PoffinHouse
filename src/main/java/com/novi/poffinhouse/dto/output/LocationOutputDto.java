@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class LocationOutputDto {
-    private int id;
+    private Long id;
     private String name;
     private String description;
     private int coordinateX;

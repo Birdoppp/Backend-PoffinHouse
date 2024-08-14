@@ -21,7 +21,6 @@ public class MapService {
     private final MapRepository mapRepository;
     private final LocationRepository locationRepository;
 
-    @Autowired
     public MapService(MapRepository mapRepository, LocationRepository locationRepository) {
         this.mapRepository = mapRepository;
         this.locationRepository = locationRepository;

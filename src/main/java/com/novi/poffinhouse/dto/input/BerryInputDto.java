@@ -10,7 +10,7 @@ public class BerryInputDto {
 
     private String description;
     private int growthTime;
-    private TypeEnum.BerryCategoryType categoryType;
+    private TypeEnum.BERRY_TYPE_CATEGORY categoryType;
 
     private int spicyPotency;
     private int dryPotency;

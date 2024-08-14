@@ -1,7 +1,7 @@
 package com.novi.poffinhouse.util;
 
 public class TypeEnum {
-    public enum PokemonType {
+    public enum POKEMON_TYPE {
         NORMAL,
         FIRE,
         WATER,
@@ -24,7 +24,7 @@ public class TypeEnum {
     }
 
 
-    public enum BerryCategoryType {
+    public enum BERRY_TYPE_CATEGORY {
         EFFORT_DROP,
         MEDICINE,
         IN_A_PINCH,

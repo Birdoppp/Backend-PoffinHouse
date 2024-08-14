@@ -2,6 +2,8 @@ package com.novi.poffinhouse.models.berries;
 
 import com.novi.poffinhouse.util.TypeEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,20 +12,23 @@ import lombok.Setter;
 public class Berry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column (unique = true)
+    private Long id;
     @Setter
+    @Column(unique = true)
+    @NotBlank
     private String name;
-    @Column (unique = true)
     @Setter
+    @Column(unique = true)
+    @Positive
     private int indexNumber;
 
     @Setter
     private String description;
     @Setter
+    @Positive
     private int growthTime; //    In genIV this ranges from 8 to 96 int in hours
     @Setter
-    private TypeEnum.BerryCategoryType categoryType;
+    private TypeEnum.BERRY_TYPE_CATEGORY typeCategory;
 
     @Setter
     private int spicyPotency;

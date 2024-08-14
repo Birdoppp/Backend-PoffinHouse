@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface BerryRepository extends JpaRepository<Berry, Integer> {
-     Optional<Berry> findBerryById(int id);
+public interface BerryRepository extends JpaRepository<Berry, Long> {
+     Optional<Berry> findBerryById(Long id);
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface MapRepository extends JpaRepository<Map, Integer> {
+public interface MapRepository extends JpaRepository<Map, Long> {
 
     Optional<Map> findMapByRegionName(String regionName);
 }

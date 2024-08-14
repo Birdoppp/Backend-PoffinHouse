@@ -6,13 +6,13 @@ import lombok.Data;
 
 @Data
 public class BerryOutputDto {
-    private int id;
+    private Long id;
     private String name;
     private int indexNumber;
 
     private String description;
     private int growthTime;
-    private TypeEnum.BerryCategoryType categoryType;
+    private TypeEnum.BERRY_TYPE_CATEGORY categoryType;
 
     private int spicyPotency;
     private int dryPotency;
