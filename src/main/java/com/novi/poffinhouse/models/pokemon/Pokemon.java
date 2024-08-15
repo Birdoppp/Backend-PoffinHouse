@@ -1,6 +1,7 @@
 package com.novi.poffinhouse.models.pokemon;
 
 import com.novi.poffinhouse.util.TypeEnum;
+import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter
 public class Pokemon {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Setter
     @Column(unique = true, nullable = false)
@@ -28,6 +29,7 @@ public class Pokemon {
     private int nationalDex;
     @Setter
     @Enumerated(EnumType.STRING)
+    @ValidEnum(enumClass = TypeEnum.POKEMON_TYPE.class, message = "Invalid Pokemon type.")
     private TypeEnum.POKEMON_TYPE type;
 
 // Main Base Stats per Pokémon Species

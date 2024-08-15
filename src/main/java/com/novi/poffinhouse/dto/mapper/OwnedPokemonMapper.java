@@ -11,7 +11,7 @@ public class OwnedPokemonMapper {
     public OwnedPokemon toModel(OwnedPokemonInputDto inputDto) {
         OwnedPokemon ownedPokemon = new OwnedPokemon();
         ownedPokemon.setNickname(inputDto.getNickname());
-        ownedPokemon.setNature(inputDto.getNature());
+        ownedPokemon.setNature(inputDto.getNature().toString());
         ownedPokemon.setCaughtByTrainerName(inputDto.getCaughtByTrainerName());
         ownedPokemon.setBeauty(inputDto.getBeauty());
         ownedPokemon.setCoolness(inputDto.getCoolness());

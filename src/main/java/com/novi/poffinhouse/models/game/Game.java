@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 public class Game {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Setter
     @Column(nullable = false)

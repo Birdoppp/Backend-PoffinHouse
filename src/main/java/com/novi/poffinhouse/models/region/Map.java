@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 public class Map {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Setter
     @Column(unique = true)

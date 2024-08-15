@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 public class Berry {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Setter
     @Column(unique = true)
@@ -26,7 +26,7 @@ public class Berry {
     private String description;
     @Setter
     @Positive
-    private int growthTime; //    In genIV this ranges from 8 to 96 int in hours
+    private int growthTime; //    In gen IV this ranges from 8 to 96 int in hours
     @Setter
     private TypeEnum.BERRY_TYPE_CATEGORY typeCategory;
 

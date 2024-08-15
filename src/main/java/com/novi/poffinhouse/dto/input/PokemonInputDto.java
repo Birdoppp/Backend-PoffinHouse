@@ -1,6 +1,7 @@
 package com.novi.poffinhouse.dto.input;
 
 import com.novi.poffinhouse.util.TypeEnum;
+import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -14,6 +15,7 @@ public class PokemonInputDto {
     private int nationalDex;
 
     @NotNull(message = "Type cannot be null")
+    @ValidEnum(enumClass = TypeEnum.POKEMON_TYPE.class, message = "Invalid Pokemon type.")
     private TypeEnum.POKEMON_TYPE type;
 
 

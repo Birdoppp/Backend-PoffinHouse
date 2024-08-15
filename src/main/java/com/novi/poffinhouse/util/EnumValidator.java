@@ -4,7 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 
-public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
+public class EnumValidator implements ConstraintValidator<ValidEnum, Enum<?>> {
 
     private String[] validValues;
 
@@ -17,17 +17,13 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null || value.trim().isEmpty()) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(
-                            "Invalid value. Valid values are: " + String.join(", ", validValues))
-                    .addConstraintViolation();
+    public boolean isValid(Enum<?> value, ConstraintValidatorContext context) {
+        if (value == null) {
             return false;
         }
 
         boolean isValid = Arrays.stream(validValues)
-                .anyMatch(validValue -> validValue.equalsIgnoreCase(value));
+                .anyMatch(validValue -> validValue.equalsIgnoreCase(value.name()));
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();

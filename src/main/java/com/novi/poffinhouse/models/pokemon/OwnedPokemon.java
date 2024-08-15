@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 public class OwnedPokemon {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     //    Pokemon species
@@ -28,7 +28,7 @@ public class OwnedPokemon {
     @Size(max = 12)
     private String nickname;
     @Setter
-    @ValidEnum(enumClass = PreferencesEnum.NATURE.class)
+    @ValidEnum(enumClass = PreferencesEnum.NATURE.class, message = "Invalid nature. Valid values are: SASSY, BOLD, etc.")
     private String nature;
     @Setter
     @Size(min = 1, max = 12)
