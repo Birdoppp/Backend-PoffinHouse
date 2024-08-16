@@ -12,7 +12,7 @@ public class BerryOutputDto {
 
     private String description;
     private int growthTime;
-    private TypeEnum.BERRY_TYPE_CATEGORY categoryType;
+    private TypeEnum.BERRY_CATEGORY_TYPE categoryType;
 
     private int spicyPotency;
     private int dryPotency;

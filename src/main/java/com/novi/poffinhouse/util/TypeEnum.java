@@ -24,7 +24,7 @@ public class TypeEnum {
     }
 
 
-    public enum BERRY_TYPE_CATEGORY {
+    public enum BERRY_CATEGORY_TYPE {
         EFFORT_DROP,
         MEDICINE,
         IN_A_PINCH,

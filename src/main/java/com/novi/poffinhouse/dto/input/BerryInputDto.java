@@ -1,16 +1,34 @@
 package com.novi.poffinhouse.dto.input;
 
 import com.novi.poffinhouse.util.TypeEnum;
+import com.novi.poffinhouse.util.ValidEnum;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class BerryInputDto {
+    @NotBlank
+    @Size(min = 1, max = 10)
+    @Column(unique = true)
     private String name;
+
+    @Positive
+    @Column(unique = true)
     private int indexNumber;
 
     private String description;
+
+    @Positive
     private int growthTime;
-    private TypeEnum.BERRY_TYPE_CATEGORY categoryType;
+
+    @NotNull
+    @ValidEnum(enumClass = TypeEnum.BERRY_CATEGORY_TYPE.class, message = "Invalid Berry-Type Category")
+    private TypeEnum.BERRY_CATEGORY_TYPE categoryType;
+
 
     private int spicyPotency;
     private int dryPotency;
