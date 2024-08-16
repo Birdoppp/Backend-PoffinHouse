@@ -7,6 +7,7 @@ import com.novi.poffinhouse.models.pokemon.OwnedPokemon;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.PokemonRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class OwnedPokemonService {
         this.ownedPokemonMapper = ownedPokemonMapper;
     }
 
+    @Transactional
     public OwnedPokemonOutputDto createOwnedPokemon(OwnedPokemonInputDto inputDto) {
         Pokemon pokemon = pokemonRepository.findByName(inputDto.getPokemonName())
                 .orElseThrow(() -> new IllegalArgumentException("Pokemon with name " + inputDto.getPokemonName() + " not found."));

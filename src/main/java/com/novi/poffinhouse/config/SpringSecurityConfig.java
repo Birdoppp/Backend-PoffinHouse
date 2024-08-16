@@ -26,16 +26,6 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
-        var auth = new DaoAuthenticationProvider();
-        auth.setPasswordEncoder(passwordEncoder);
-        return new ProviderManager(auth);
-    }
-
-
-
-
-    @Bean
     protected SecurityFilterChain filter(HttpSecurity http) throws Exception {
 
         http
@@ -44,12 +34,10 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/**").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/berries").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/berries").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/berries").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/pokemon").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/pokemon").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/berries/{username}").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/trainer/**").hasRole("TRAINER")
                                 .anyRequest().denyAll()
 
                 ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -57,6 +45,25 @@ public class SpringSecurityConfig {
         return http.build();
 
     }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+        var auth = new DaoAuthenticationProvider();
+        auth.setPasswordEncoder(passwordEncoder);
+        return new ProviderManager(auth);
+    }
+
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+//        AuthenticationManagerBuilder authenticationManagerBuilder = new AuthenticationManagerBuilder(http.getSharedObject(ProviderManager.class));
+//        authenticationManagerBuilder
+//                .inMemoryAuthentication()
+//                .withUser("admin").password(passwordEncoder.encode("password")).roles("ADMIN")
+//                .and()
+//                .withUser("trainer").password(passwordEncoder.encode("password")).roles("TRAINER");
+//
+//        return authenticationManagerBuilder.build();
+//    }
 
 
 }

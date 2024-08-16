@@ -25,7 +25,7 @@ public class OwnedPokemonMapper {
         OwnedPokemonOutputDto outputDto = new OwnedPokemonOutputDto();
         outputDto.setId(ownedPokemon.getId());
         outputDto.setNickname(ownedPokemon.getNickname());
-        outputDto.setNature(ownedPokemon.getNature());
+        outputDto.setNature(ownedPokemon.getNature().toString());
         outputDto.setCaughtByTrainerName(ownedPokemon.getCaughtByTrainerName());
         outputDto.setBeauty(ownedPokemon.getBeauty());
         outputDto.setCoolness(ownedPokemon.getCoolness());

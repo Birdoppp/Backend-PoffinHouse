@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 public class Team {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Setter
     private String description;

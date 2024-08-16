@@ -24,7 +24,6 @@ public class BerryController {
         this.berryService = berryService;
     }
 
-    // Mappings
     @GetMapping
     public ResponseEntity<List<BerryOutputDto>> getAllBerries() {
         return ResponseEntity.ok(berryService.getAllBerries());
@@ -35,15 +34,15 @@ public class BerryController {
         return ResponseEntity.ok(berryService.getBerryById(id));
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<BerryOutputDto> createBerry(@RequestBody BerryInputDto berryInputDto, @AuthenticationPrincipal UserDetails userdetails) {
-        BerryOutputDto berryOutputDto = berryService.createBerry(berryInputDto, berryInputDto.getIndexNumber());
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(berryOutputDto.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(berryOutputDto);
-    }
-
+//    @PostMapping
+//    @PreAuthorize("hasRole('ROLE_USER')")
+//    public ResponseEntity<BerryOutputDto> createBerry(@RequestBody BerryInputDto berryInputDto, @AuthenticationPrincipal UserDetails userdetails) {
+//        BerryOutputDto berryOutputDto = berryService.createBerry(berryInputDto, berryInputDto.getIndexNumber());
+//        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+//                .path("/{id}")
+//                .buildAndExpand(berryOutputDto.getId())
+//                .toUri();
+//        return ResponseEntity.created(location).body(berryOutputDto);
+//    }
+//
 }

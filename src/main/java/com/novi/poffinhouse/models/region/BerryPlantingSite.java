@@ -12,7 +12,7 @@ import java.util.HashMap;
 @Getter
 public class BerryPlantingSite {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Setter
     private String description;

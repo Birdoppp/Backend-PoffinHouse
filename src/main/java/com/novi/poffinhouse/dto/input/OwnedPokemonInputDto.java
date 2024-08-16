@@ -12,8 +12,8 @@ public class OwnedPokemonInputDto {
     private String pokemonName;
     @Size(max = 12)
     private String nickname;
-    @ValidEnum(enumClass = PreferencesEnum.NATURE.class)
-    private String nature;
+    @ValidEnum(enumClass = PreferencesEnum.NATURE.class, message = "Invalid nature.")
+    private PreferencesEnum.NATURE nature;
     @Size(min = 1, max = 12)
     private String caughtByTrainerName;
 
