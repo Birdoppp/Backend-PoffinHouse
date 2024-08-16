@@ -40,8 +40,8 @@ public class AuthorityController {
 
 
     @DeleteMapping("/removeAll/{username}")
-    public ResponseEntity<Void> removeAllAuthorities(@PathVariable String username) {
-        authorityService.removeAllAuthorities(username);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> removeAllAuthorities(@PathVariable String username) {
+        String message = authorityService.removeAllAuthorities(username);
+        return ResponseEntity.ok(message);
     }
 }

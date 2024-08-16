@@ -64,11 +64,12 @@ public class AuthorityService {
 
     // Remove authorities from a user
     @Transactional
-    public void removeAllAuthorities(String username) {
+    public String removeAllAuthorities(String username) {
         if (username == null) {
             throw new IllegalArgumentException("Username must not be null");
         }
         User user = userService.findByUsername(username);
-        authorityRepository.deleteById(user.getId());
+        authorityRepository.deleteByUsername(user.getUsername());
+        return "Authorization has been removed for " + username;
     }
 }
