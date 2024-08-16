@@ -59,7 +59,7 @@ public class OwnedPokemonService {
                 .orElseThrow(() -> new IllegalArgumentException("OwnedPokemon with id " + id + " not found."));
 
         existingOwnedPokemon.setNickname(inputDto.getNickname());
-        existingOwnedPokemon.setNature(inputDto.getNature().toString());
+        existingOwnedPokemon.setNature(inputDto.getNature());
         existingOwnedPokemon.setCaughtByTrainerName(inputDto.getCaughtByTrainerName());
         existingOwnedPokemon.setBeauty(inputDto.getBeauty());
         existingOwnedPokemon.setCoolness(inputDto.getCoolness());

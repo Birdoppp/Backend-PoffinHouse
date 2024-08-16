@@ -3,6 +3,7 @@ package com.novi.poffinhouse.controllers;
 import com.novi.poffinhouse.dto.input.OwnedPokemonInputDto;
 import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
 import com.novi.poffinhouse.services.OwnedPokemonService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class OwnedPokemonController {
     @PostMapping
     public ResponseEntity<OwnedPokemonOutputDto> createOwnedPokemon(@RequestBody OwnedPokemonInputDto inputDto) {
         OwnedPokemonOutputDto newOwnedPokemon = ownedPokemonService.createOwnedPokemon(inputDto);
-        return ResponseEntity.ok(newOwnedPokemon);
+        return new ResponseEntity<>(newOwnedPokemon, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
