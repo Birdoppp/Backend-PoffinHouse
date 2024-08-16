@@ -4,49 +4,36 @@ import com.novi.poffinhouse.dto.input.BerryInputDto;
 import com.novi.poffinhouse.dto.output.BerryOutputDto;
 import com.novi.poffinhouse.models.berries.Berry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BerryMapper {
 
-    //      Dto to model
-    public static Berry berryFromInputDtoToModel(BerryInputDto berryInputDto, int id) {
+    public static Berry toEntity(BerryInputDto dto) {
         Berry berry = new Berry();
-        berryInputDto.setName(berry.getName());
-        berryInputDto.setIndexNumber(berry.getIndexNumber());
-        berryInputDto.setDescription(berry.getDescription());
-        berryInputDto.setGrowthTime(berry.getGrowthTime());
-        berryInputDto.setCategoryType(berry.getTypeCategory());
-        berryInputDto.setSpicyPotency(berry.getSpicyPotency());
-        berryInputDto.setDryPotency(berry.getDryPotency());
-        berryInputDto.setSweetPotency(berry.getSweetPotency());
-        berryInputDto.setBitterPotency(berry.getBitterPotency());
-        berryInputDto.setSourPotency(berry.getSourPotency());
-
+        berry.setName(dto.getName());
+        berry.setIndexNumber(dto.getIndexNumber());
+        berry.setDescription(dto.getDescription());
+        berry.setGrowthTime(dto.getGrowthTime());
+        berry.setCategoryType(dto.getCategoryType());
+        berry.setSpicyPotency(dto.getSpicyPotency());
+        berry.setDryPotency(dto.getDryPotency());
+        berry.setSweetPotency(dto.getSweetPotency());
+        berry.setBitterPotency(dto.getBitterPotency());
+        berry.setSourPotency(dto.getSourPotency());
         return berry;
     }
 
-    //    Model to dto
-    public static BerryOutputDto berryFromModelToOutput(Berry berry) {
-        BerryOutputDto berryOutputDto = new BerryOutputDto();
-        berryOutputDto.setName(berry.getName());
-        berryOutputDto.setIndexNumber(berry.getIndexNumber());
-        berryOutputDto.setDescription(berry.getDescription());
-        berryOutputDto.setGrowthTime(berry.getGrowthTime());
-        berryOutputDto.setCategoryType(berry.getTypeCategory());
-        berryOutputDto.setSpicyPotency(berry.getSpicyPotency());
-        berryOutputDto.setDryPotency(berry.getDryPotency());
-        berryOutputDto.setSweetPotency(berry.getSweetPotency());
-        berryOutputDto.setBitterPotency(berry.getBitterPotency());
-        berryOutputDto.setSourPotency(berry.getSourPotency());
-
-        return berryOutputDto;
-    }
-
-//    List to list
-    public static List<BerryOutputDto> berryModelListToOutputList(List<Berry> berries){
-        List<BerryOutputDto> berryOutputDtoList = new ArrayList<>();
-      berries.forEach((berry) -> berryOutputDtoList.add(berryFromModelToOutput(berry)));
-      return berryOutputDtoList;
+    public static BerryOutputDto toOutputDto(Berry berry) {
+        BerryOutputDto dto = new BerryOutputDto();
+        dto.setId(berry.getId());
+        dto.setName(berry.getName());
+        dto.setIndexNumber(berry.getIndexNumber());
+        dto.setDescription(berry.getDescription());
+        dto.setGrowthTime(berry.getGrowthTime());
+        dto.setCategoryType(berry.getCategoryType());
+        dto.setSpicyPotency(berry.getSpicyPotency());
+        dto.setDryPotency(berry.getDryPotency());
+        dto.setSweetPotency(berry.getSweetPotency());
+        dto.setBitterPotency(berry.getBitterPotency());
+        dto.setSourPotency(berry.getSourPotency());
+        return dto;
     }
 }

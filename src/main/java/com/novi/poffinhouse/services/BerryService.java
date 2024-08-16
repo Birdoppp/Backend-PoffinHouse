@@ -2,14 +2,15 @@ package com.novi.poffinhouse.services;
 
 import com.novi.poffinhouse.dto.input.BerryInputDto;
 import com.novi.poffinhouse.dto.output.BerryOutputDto;
-import static com.novi.poffinhouse.dto.mapper.BerryMapper.*;
+import com.novi.poffinhouse.dto.mapper.BerryMapper;
+import com.novi.poffinhouse.exceptions.BerryNotFoundException;
 import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.repositories.BerryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 @Service
 public class BerryService {
@@ -20,30 +21,51 @@ public class BerryService {
         this.berryRepository = berryRepository;
     }
 
-    // GetAll
+    public BerryOutputDto createBerry(BerryInputDto berryInputDto) {
+        Berry berry = BerryMapper.toEntity(berryInputDto);
+        Berry savedBerry = berryRepository.save(berry);
+        return BerryMapper.toOutputDto(savedBerry);
+    }
+
     public List<BerryOutputDto> getAllBerries() {
-        List<Berry> berryList = berryRepository.findAll();
-        return berryModelListToOutputList(berryList);
+        return berryRepository.findAll()
+                .stream()
+                .map(BerryMapper::toOutputDto)
+                .collect(Collectors.toList());
     }
 
-    // Get ONE
     public BerryOutputDto getBerryById(Long id) {
-        Optional<Berry> optionalBerry = berryRepository.findBerryById(id);
-        if (optionalBerry.isPresent()){
-            return berryFromModelToOutput(optionalBerry.get());
-        } else {
-            throw new RuntimeException("Id not found.");
-        }
+        Berry berry = berryRepository.findById(id)
+                .orElseThrow(() -> new BerryNotFoundException(id));
+        return BerryMapper.toOutputDto(berry);
     }
 
-//     Create
-    public BerryOutputDto createBerry(BerryInputDto berryInputDto, int indexNumber) {
-        Optional<Berry> optionalBerry = berryRepository.findBerryById(Long.valueOf((int) indexNumber));
-        if (optionalBerry.isEmpty()) {
-            Berry berry = berryRepository.save(berryFromInputDtoToModel(berryInputDto, indexNumber));
-            return berryFromModelToOutput(berry);
-        } else {
-            throw new RuntimeException("IndexNumber already exists. Please use a different integer");
+    public BerryOutputDto updateBerry(Long id, BerryInputDto berryInputDto) {
+        Berry berryToUpdate = berryRepository.findById(id)
+                .orElseThrow(() -> new BerryNotFoundException(id));
+
+        berryToUpdate.setName(berryInputDto.getName());
+        berryToUpdate.setIndexNumber(berryInputDto.getIndexNumber());
+        berryToUpdate.setDescription(berryInputDto.getDescription());
+        berryToUpdate.setGrowthTime(berryInputDto.getGrowthTime());
+        berryToUpdate.setCategoryType(berryInputDto.getCategoryType());
+        berryToUpdate.setSpicyPotency(berryInputDto.getSpicyPotency());
+        berryToUpdate.setDryPotency(berryInputDto.getDryPotency());
+        berryToUpdate.setSweetPotency(berryInputDto.getSweetPotency());
+        berryToUpdate.setBitterPotency(berryInputDto.getBitterPotency());
+        berryToUpdate.setSourPotency(berryInputDto.getSourPotency());
+
+        Berry updatedBerry = berryRepository.save(berryToUpdate);
+        return BerryMapper.toOutputDto(updatedBerry);
+    }
+
+    @Transactional
+    public String deleteBerry(Long id) {
+        if (!berryRepository.existsById(id)) {
+            throw new BerryNotFoundException(id);
         }
+        Berry berry = berryRepository.findById(id).get();
+        berryRepository.deleteById(berry.getId());
+        return berry.getName() + " berry deleted successfully";
     }
 }
