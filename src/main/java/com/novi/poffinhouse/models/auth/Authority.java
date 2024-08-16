@@ -30,12 +30,7 @@ public class Authority {
     @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
     private User user;
 
-    public Authority() {}
-
-    public Authority(Long id, String authority, String username) {
-        this.id = id;
-        this.authority = authority;
-        this.username = username;
+    public Authority() {
     }
 
 }

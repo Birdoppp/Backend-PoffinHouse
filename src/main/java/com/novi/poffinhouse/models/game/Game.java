@@ -1,6 +1,5 @@
 package com.novi.poffinhouse.models.game;
 
-import com.novi.poffinhouse.util.TypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,4 +29,6 @@ public class Game {
 //            throw new IllegalArgumentException("Dark or Ghost type is not allowed for generation less than 2.");
 //        }
 //    }
+    public Game() {
+    }
 }
