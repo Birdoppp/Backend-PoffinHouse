@@ -61,6 +61,8 @@ public class UserService {
         return userMapper.toDto(updatedUser);
     }
 
+
+
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("User not found with ID: " + id);
