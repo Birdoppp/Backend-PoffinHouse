@@ -10,22 +10,23 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "region_maps")
 public class RegionMap {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Setter
-    @Column(unique = true)
+    @Column(name = "region_name", unique = true)
     private String regionName;
 
     @Setter
-    @Column(nullable = false)
+    @Column(name = "horizontal_axis", nullable = false)
     @Positive
     private int sizeXAxis;
 
     @Setter
-    @Column(nullable = false)
+    @Column(name = "vertical_axis", nullable = false)
     @Positive
     private int sizeYAxis;
 
