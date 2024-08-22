@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Entity
 @Getter
+@Table(name = "berry_planting_sites")
 public class BerryPlantingSite {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

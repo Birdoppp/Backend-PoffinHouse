@@ -31,6 +31,7 @@ public class OwnedPokemon {
     private String nickname;
     @Setter
     @NotBlank
+    @Enumerated(EnumType.STRING)
     @ValidEnum(enumClass = PreferencesEnum.NATURE.class, message = "Invalid nature. Valid values are: SASSY, BOLD, etc.")
     private PreferencesEnum.NATURE nature;
     @Setter

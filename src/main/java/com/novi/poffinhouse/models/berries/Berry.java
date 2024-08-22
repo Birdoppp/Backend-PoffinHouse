@@ -11,6 +11,7 @@ import lombok.Setter;
 
 @Entity
 @Getter
+@Table(name = "berries")
 public class Berry {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -35,6 +36,7 @@ public class Berry {
 
     @Setter
     @NotNull
+    @Enumerated(EnumType.STRING)
     @ValidEnum(enumClass = TypeEnum.BERRY_CATEGORY_TYPE.class, message = "Invalid Berry-Type Category")
     private TypeEnum.BERRY_CATEGORY_TYPE categoryType; // Marks the usage purpose for the berry
 

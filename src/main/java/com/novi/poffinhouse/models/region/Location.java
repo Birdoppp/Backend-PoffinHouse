@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "locations")
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,16 +18,13 @@ public class Location {
     @Setter
     @Column(nullable = false)
     private String name;
-
     @Setter
     private String description;
-
     @Setter
-    @Column(nullable = false, name = "horizontal_axis")
+    @Column(nullable = false, name = "coordinate_X")
     private int coordinateX;
-
     @Setter
-    @Column(nullable = false, name = "vertical_axis")
+    @Column(nullable = false, name = "coordinate_Y")
     private int coordinateY;
 
     @ManyToOne(fetch = FetchType.LAZY)
