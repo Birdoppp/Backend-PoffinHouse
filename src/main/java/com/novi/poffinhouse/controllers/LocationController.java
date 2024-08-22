@@ -1,14 +1,13 @@
 package com.novi.poffinhouse.controllers;
 
 import com.novi.poffinhouse.dto.input.LocationInputDto;
+
 import com.novi.poffinhouse.dto.output.LocationOutputDto;
 import com.novi.poffinhouse.services.LocationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,36 +20,32 @@ public class LocationController {
     }
 
     @PostMapping
-    public ResponseEntity<LocationOutputDto> createLocation(@Valid @RequestBody LocationInputDto inputDto) {
-      LocationOutputDto createdLocation = locationService.createLocation(inputDto);
-         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(createdLocation.getId()).toUri();
-        return ResponseEntity.created(uri).body(createdLocation);
-    }
-    @GetMapping
-    public ResponseEntity<List<LocationOutputDto>> getAllLocations() {
-        List<LocationOutputDto> locations = locationService.getAllLocations();
-        return ResponseEntity.ok(locations);
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<LocationOutputDto> getLocationById(@PathVariable Long id) {
-       LocationOutputDto location = locationService.getLocationById(id);
-        return ResponseEntity.ok(location);
+    public ResponseEntity<LocationOutputDto> createLocation(@Valid @RequestBody LocationInputDto location) {
+        LocationOutputDto createdLocation = locationService.createLocation(location);
+        return ResponseEntity.ok(createdLocation);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<LocationOutputDto> updateLocation(@PathVariable Long id, @RequestBody LocationInputDto inputDto) {
-        LocationOutputDto updatedLocation = locationService.updateLocation(id, inputDto);
-        return ResponseEntity.ok(updatedLocation);
+    @GetMapping
+    public ResponseEntity<List<LocationOutputDto>> getAllLocations() {
+        return ResponseEntity.ok(locationService.getAllLocations());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LocationOutputDto> getLocationById(@PathVariable Long id) {
+        return ResponseEntity.ok(locationService.getLocationById(id));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<LocationOutputDto> updateLocation(@PathVariable Long id, @Valid @RequestBody LocationInputDto updatedLocation) {
+        LocationOutputDto updatedLocationDto = locationService.updateLocation(id, updatedLocation);
+        return ResponseEntity.ok(updatedLocationDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
         locationService.deleteLocation(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
-
 
 
 }

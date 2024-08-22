@@ -4,6 +4,7 @@ import com.novi.poffinhouse.dto.input.BerryInputDto;
 import com.novi.poffinhouse.dto.output.BerryOutputDto;
 import com.novi.poffinhouse.exceptions.BerryNotFoundException;
 import com.novi.poffinhouse.services.BerryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class BerryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BerryOutputDto> updateBerry(@PathVariable Long id, @RequestBody BerryInputDto berryInputDto) {
+    public ResponseEntity<BerryOutputDto> updateBerry(@PathVariable Long id, @Valid @RequestBody BerryInputDto berryInputDto) {
         BerryOutputDto updatedBerry = berryService.updateBerry(id, berryInputDto);
         return ResponseEntity.ok(updatedBerry);
     }

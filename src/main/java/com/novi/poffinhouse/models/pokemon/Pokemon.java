@@ -15,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "pokemon")
 public class Pokemon {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -1,8 +1,11 @@
 package com.novi.poffinhouse.dto.input;
 
-import com.novi.poffinhouse.models.region.Map;
+import com.novi.poffinhouse.dto.output.BerryPlantingSiteOutputDto;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class LocationInputDto {
@@ -12,5 +15,7 @@ public class LocationInputDto {
     private int coordinateX;
     @Positive(message = "Value must be more than 0")
     private int coordinateY;
-    private Map map;
+    @NotNull
+    private Long regionMapId;
+    private List<BerryPlantingSiteOutputDto> berryPlantingSites;
 }
