@@ -6,34 +6,34 @@ import com.novi.poffinhouse.models.berries.Berry;
 
 public class BerryMapper {
 
-    public static Berry toEntity(BerryInputDto dto) {
+    public static Berry toEntity(BerryInputDto inputDto) {
         Berry berry = new Berry();
-        berry.setName(dto.getName());
-        berry.setIndexNumber(dto.getIndexNumber());
-        berry.setDescription(dto.getDescription());
-        berry.setGrowthTime(dto.getGrowthTime());
-        berry.setCategoryType(dto.getCategoryType());
-        berry.setSpicyPotency(dto.getSpicyPotency());
-        berry.setDryPotency(dto.getDryPotency());
-        berry.setSweetPotency(dto.getSweetPotency());
-        berry.setBitterPotency(dto.getBitterPotency());
-        berry.setSourPotency(dto.getSourPotency());
+        berry.setName(inputDto.getName());
+        berry.setIndexNumber(inputDto.getIndexNumber());
+        berry.setDescription(inputDto.getDescription());
+        berry.setGrowthTime(inputDto.getGrowthTime());
+        berry.setCategoryType(inputDto.getCategoryType());
+        berry.setSpicyPotency(inputDto.getSpicyPotency());
+        berry.setDryPotency(inputDto.getDryPotency());
+        berry.setSweetPotency(inputDto.getSweetPotency());
+        berry.setBitterPotency(inputDto.getBitterPotency());
+        berry.setSourPotency(inputDto.getSourPotency());
         return berry;
     }
 
     public static BerryOutputDto toOutputDto(Berry berry) {
-        BerryOutputDto dto = new BerryOutputDto();
-        dto.setId(berry.getId());
-        dto.setName(berry.getName());
-        dto.setIndexNumber(berry.getIndexNumber());
-        dto.setDescription(berry.getDescription());
-        dto.setGrowthTime(berry.getGrowthTime());
-        dto.setCategoryType(berry.getCategoryType());
-        dto.setSpicyPotency(berry.getSpicyPotency());
-        dto.setDryPotency(berry.getDryPotency());
-        dto.setSweetPotency(berry.getSweetPotency());
-        dto.setBitterPotency(berry.getBitterPotency());
-        dto.setSourPotency(berry.getSourPotency());
-        return dto;
+        BerryOutputDto outputDto = new BerryOutputDto();
+        outputDto.setId(berry.getId());
+        outputDto.setName(berry.getName());
+        outputDto.setIndexNumber(berry.getIndexNumber());
+        outputDto.setDescription(berry.getDescription());
+        outputDto.setGrowthTime(berry.getGrowthTime());
+        outputDto.setCategoryType(berry.getCategoryType());
+        outputDto.setSpicyPotency(berry.getSpicyPotency());
+        outputDto.setDryPotency(berry.getDryPotency());
+        outputDto.setSweetPotency(berry.getSweetPotency());
+        outputDto.setBitterPotency(berry.getBitterPotency());
+        outputDto.setSourPotency(berry.getSourPotency());
+        return outputDto;
     }
 }

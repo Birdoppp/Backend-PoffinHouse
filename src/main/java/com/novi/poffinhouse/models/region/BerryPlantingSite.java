@@ -1,30 +1,48 @@
 package com.novi.poffinhouse.models.region;
 
 import com.novi.poffinhouse.models.berries.Berry;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
+import java.util.Map;
 
+@Entity
 @Getter
 public class BerryPlantingSite {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Setter
-    private String description;
-    @Setter
-    private int soilSlots;
-    @Setter
-    private HashMap<Integer, Berry> plantedBerriesBySlots;
 
+    @Setter
+    @Column(nullable = false)
+    private String description;
+
+    @Setter
+    @Column(nullable = false)
+    private int soilSlots;
+
+    @Setter
+    @CollectionTable(name = "berry_planting_site_slots", joinColumns = @JoinColumn(name = "site_id"))
+    @MapKeyColumn(name = "slot_number")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "berry_planting_site_berries",
+            joinColumns = @JoinColumn(name = "site_id"),
+            inverseJoinColumns = @JoinColumn(name = "berry_id"))
+    private Map<Integer, Berry> plantedBerriesBySlots = new HashMap<>();
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
     public BerryPlantingSite(int soilSlots) {
         this.soilSlots = soilSlots;
-        this.plantedBerriesBySlots = new HashMap<>(soilSlots); // Initialize HashMap with initial capacity equal to soilSlots
+        this.plantedBerriesBySlots = new HashMap<>(soilSlots);
+    }
+
+    protected BerryPlantingSite() {
     }
 
 }

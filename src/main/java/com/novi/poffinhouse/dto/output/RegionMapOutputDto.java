@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class MapOutputDto {
+public class RegionMapOutputDto {
     private Long id;
     private String regionName;
     private int sizeXAxis;
