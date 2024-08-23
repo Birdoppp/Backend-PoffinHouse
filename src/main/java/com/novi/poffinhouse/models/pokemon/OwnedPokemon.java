@@ -15,7 +15,7 @@ import lombok.Setter;
 @Table(name = "owned_pokemon")
 public class OwnedPokemon {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     //    Pokemon species

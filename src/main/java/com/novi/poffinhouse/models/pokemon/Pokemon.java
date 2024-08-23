@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "pokemon")
 public class Pokemon {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Setter
     @Column(unique = true, nullable = false)

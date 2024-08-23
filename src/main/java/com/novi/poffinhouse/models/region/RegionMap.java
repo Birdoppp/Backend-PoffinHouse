@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "region_maps")
 public class RegionMap {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Setter
