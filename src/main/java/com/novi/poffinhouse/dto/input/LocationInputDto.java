@@ -2,7 +2,7 @@ package com.novi.poffinhouse.dto.input;
 
 import com.novi.poffinhouse.dto.output.BerryPlantingSiteOutputDto;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 import java.util.List;
@@ -12,11 +12,11 @@ public class LocationInputDto {
     @NotBlank
     private String name;
     private String description;
-    @NotNull
+    @PositiveOrZero
     private int coordinateX;
-    @NotNull
+    @PositiveOrZero
     private int coordinateY;
-    @NotNull
+    @PositiveOrZero
     private Long regionMapId;
     private List<BerryPlantingSiteOutputDto> berryPlantingSites;
 }

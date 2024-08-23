@@ -10,5 +10,5 @@ public class RegionMapOutputDto {
     private String regionName;
     private int sizeXAxis;
     private int sizeYAxis;
-    private List<LocationOutputDto> locations;
+    private List<LocationOutputDtoShort> locations;
 }

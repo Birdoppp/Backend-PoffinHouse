@@ -35,7 +35,7 @@ public class LocationController {
         return ResponseEntity.ok(locationService.getLocationById(id));
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<LocationOutputDto> updateLocation(@PathVariable Long id, @Valid @RequestBody LocationInputDto updatedLocation) {
         LocationOutputDto updatedLocationDto = locationService.updateLocation(id, updatedLocation);
         return ResponseEntity.ok(updatedLocationDto);

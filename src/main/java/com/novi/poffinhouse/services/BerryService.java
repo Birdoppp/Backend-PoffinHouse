@@ -5,6 +5,8 @@ import com.novi.poffinhouse.dto.output.BerryOutputDto;
 import com.novi.poffinhouse.dto.mapper.BerryMapper;
 import com.novi.poffinhouse.exceptions.BerryNotFoundException;
 import com.novi.poffinhouse.models.berries.Berry;
+import com.novi.poffinhouse.models.region.BerryPlantingSite;
+import com.novi.poffinhouse.repositories.BerryPlantingSiteRepository;
 import com.novi.poffinhouse.repositories.BerryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,11 @@ import java.util.stream.Collectors;
 public class BerryService {
 
     private final BerryRepository berryRepository;
+    private final BerryPlantingSiteRepository berryPlantingSiteRepository;
 
-    public BerryService(BerryRepository berryRepository) {
+    public BerryService(BerryRepository berryRepository, BerryPlantingSiteRepository berryPlantingSiteRepository) {
         this.berryRepository = berryRepository;
+        this.berryPlantingSiteRepository = berryPlantingSiteRepository;
     }
 
     public BerryOutputDto createBerry(BerryInputDto berryInputDto) {
@@ -61,11 +65,24 @@ public class BerryService {
 
     @Transactional
     public String deleteBerry(Long id) {
-        if (!berryRepository.existsById(id)) {
-            throw new BerryNotFoundException(id);
+        // Retrieve the Berry to be deleted
+        Berry berry = berryRepository.findById(id).orElseThrow(() -> new BerryNotFoundException(id));
+
+        // Find all BerryPlantingSites that have this Berry
+        List<BerryPlantingSite> sites = berryPlantingSiteRepository.findBerryPlantingSiteByPlantedBerriesBySlotsEquals(berry);
+
+        // Update each BerryPlantingSite to remove the berry
+        for (BerryPlantingSite site : sites) {
+//            site.getPlantedBerriesBySlots().remove(1);
+            for (int i = 1; i <= site.getSoilSlots(); i++) {
+                if (site.getPlantedBerriesBySlots().get(i) == berry) {
+                    site.getPlantedBerriesBySlots().remove(i);
+                }
+            }
         }
-        Berry berry = berryRepository.findById(id).get();
-        berryRepository.deleteById(berry.getId());
+
+        berryRepository.deleteById(id);
+
         return berry.getName() + " berry deleted successfully";
     }
 }
