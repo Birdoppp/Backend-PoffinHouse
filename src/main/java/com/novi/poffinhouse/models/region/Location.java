@@ -1,6 +1,7 @@
 package com.novi.poffinhouse.models.region;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,24 +10,24 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "locations")
 public class Location {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Setter
     @Column(nullable = false)
     private String name;
-
     @Setter
     private String description;
-
     @Setter
-    @Column(nullable = false, name = "horizontal_axis")
+    @PositiveOrZero
+    @Column(nullable = false, name = "coordinate_X")
     private int coordinateX;
-
     @Setter
-    @Column(nullable = false, name = "vertical_axis")
+    @PositiveOrZero
+    @Column(nullable = false, name = "coordinate_Y")
     private int coordinateY;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,4 +47,6 @@ public class Location {
         this.berryPlantingSites.remove(site);
         site.setLocation(null); // Break the bidirectional relationship
     }
+
+
 }
