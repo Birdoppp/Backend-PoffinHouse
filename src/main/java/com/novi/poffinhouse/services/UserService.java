@@ -8,9 +8,12 @@ import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
 
+@Validated
+@Transactional
 @Service
 public class UserService {
 
@@ -42,7 +45,7 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
-    @Transactional
+
     public UserOutputDto updateUser(Long id, UserInputDto userInputDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
