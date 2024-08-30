@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 public class OwnedPokemonService {
 
@@ -27,7 +28,7 @@ public class OwnedPokemonService {
         this.ownedPokemonMapper = ownedPokemonMapper;
     }
 
-    @Transactional
+
     public OwnedPokemonOutputDto createOwnedPokemon(OwnedPokemonInputDto inputDto) {
         Pokemon pokemon = pokemonRepository.findByName(inputDto.getPokemonName())
                 .orElseThrow(() -> new IllegalArgumentException("Pokemon with name " + inputDto.getPokemonName() + " not found."));

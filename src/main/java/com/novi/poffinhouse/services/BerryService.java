@@ -10,10 +10,13 @@ import com.novi.poffinhouse.repositories.BerryPlantingSiteRepository;
 import com.novi.poffinhouse.repositories.BerryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Validated
+@Transactional
 @Service
 public class BerryService {
 
@@ -63,7 +66,6 @@ public class BerryService {
         return BerryMapper.toOutputDto(updatedBerry);
     }
 
-    @Transactional
     public String deleteBerry(Long id) {
         // Retrieve the Berry to be deleted
         Berry berry = berryRepository.findById(id).orElseThrow(() -> new BerryNotFoundException(id));

@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "owned_pokemon")
@@ -18,13 +20,12 @@ public class OwnedPokemon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //    Pokemon species
     @ManyToOne
     @Setter
     @JoinColumn(nullable = false)
     @NotNull
     @Valid
-    private Pokemon pokemon;
+    private Pokemon pokemon; //    Pokemon species
 
     @Setter
     @Size(max = 12)
@@ -50,4 +51,7 @@ public class OwnedPokemon {
     @Setter
     private Integer toughness;
 
+
+    @ManyToMany(mappedBy = "ownedPokemon")
+    private List<Team> teams;
 }

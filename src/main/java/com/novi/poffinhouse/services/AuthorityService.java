@@ -10,11 +10,13 @@ import com.novi.poffinhouse.util.RoleEnum;
 import com.novi.poffinhouse.repositories.AuthorityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@Validated
+@Transactional
 @Service
 public class AuthorityService {
 
@@ -28,7 +30,6 @@ public class AuthorityService {
         this.userRepository = userRepository;
     }
 
-    // Assign a role to a user
     public AuthorityOutputDto assignAuthority(String username, RoleEnum role) {
         if (username == null || role == null) {
             throw new IllegalArgumentException("Username and role must not be null");
@@ -48,7 +49,6 @@ public class AuthorityService {
         return AuthorityMapper.toOutputDto(savedAuthority);
     }
 
-    // Get authorities for a specific user
     public Set<AuthorityOutputDto> getAuthoritiesByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
@@ -62,8 +62,7 @@ public class AuthorityService {
                 .collect(Collectors.toSet());
     }
 
-    // Remove authorities from a user
-    @Transactional
+
     public String removeAllAuthorities(String username) {
         if (username == null) {
             throw new IllegalArgumentException("Username must not be null");
