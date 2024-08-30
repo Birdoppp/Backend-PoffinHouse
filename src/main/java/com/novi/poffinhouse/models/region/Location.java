@@ -38,15 +38,5 @@ public class Location {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "location")
     private List<BerryPlantingSite> berryPlantingSites = new ArrayList<>();
 
-    public void addBerryPlantingSite(BerryPlantingSite site) {
-        site.setLocation(this); // Ensure bidirectional relationship
-        this.berryPlantingSites.add(site);
-    }
-
-    public void removeBerryPlantingSite(BerryPlantingSite site) {
-        this.berryPlantingSites.remove(site);
-        site.setLocation(null); // Break the bidirectional relationship
-    }
-
 
 }

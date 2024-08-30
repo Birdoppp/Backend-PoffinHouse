@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,13 +44,18 @@ public class Berry {
 
 //    Potency per flavor
     @Setter
+    @PositiveOrZero
     private int spicyPotency;
     @Setter
+    @PositiveOrZero
     private int dryPotency;
     @Setter
+    @PositiveOrZero
     private int sweetPotency;
     @Setter
+    @PositiveOrZero
     private int bitterPotency;
     @Setter
+    @PositiveOrZero
     private int sourPotency;
 }

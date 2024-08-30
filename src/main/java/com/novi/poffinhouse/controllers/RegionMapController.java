@@ -2,7 +2,6 @@ package com.novi.poffinhouse.controllers;
 
 import com.novi.poffinhouse.dto.input.RegionMapInputDto;
 import com.novi.poffinhouse.dto.output.RegionMapOutputDto;
-import com.novi.poffinhouse.models.region.RegionMap;
 import com.novi.poffinhouse.services.RegionMapService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -31,12 +30,12 @@ public class RegionMapController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RegionMap> getRegionMapById(@PathVariable Long id) {
+    public ResponseEntity<RegionMapOutputDto> getRegionMapById(@PathVariable Long id) {
         return new ResponseEntity<>(regionMapService.getRegionMapById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RegionMap> updateMap(@PathVariable Long id,@Valid @RequestBody RegionMap regionMap) {
+    public ResponseEntity<RegionMapOutputDto> updateMap(@PathVariable Long id,@Valid @RequestBody RegionMapInputDto regionMap) {
         return new ResponseEntity<>(regionMapService.updateRegionMap(id, regionMap), HttpStatus.OK);
     }
 
@@ -46,9 +45,4 @@ public class RegionMapController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @PostMapping("/{regionMapId}/locations")
-//    public ResponseEntity<Void> addLocationToMap(@PathVariable Long regionMapId, @RequestBody Location location) {
-//        regionMapService.addLocationToMap(regionMapId, location);
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
 }

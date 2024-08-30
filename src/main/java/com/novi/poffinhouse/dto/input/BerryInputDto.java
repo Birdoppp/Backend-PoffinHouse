@@ -15,16 +15,12 @@ public class BerryInputDto {
     @Size(min = 1, max = 10)
     @Column(unique = true)
     private String name;
-
+    private String description;
     @Positive
     @Column(unique = true)
     private int indexNumber;
-
-    private String description;
-
     @Positive
     private int growthTime;
-
     @NotNull
     @ValidEnum(enumClass = TypeEnum.BERRY_CATEGORY_TYPE.class, message = "Invalid Berry-Type Category")
     private TypeEnum.BERRY_CATEGORY_TYPE categoryType;

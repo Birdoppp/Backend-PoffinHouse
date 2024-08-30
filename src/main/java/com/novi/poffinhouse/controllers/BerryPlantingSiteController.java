@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/berry-planting-sites")
@@ -41,10 +43,32 @@ public class BerryPlantingSiteController {
     }
 
     //    Assign Berry to BerryPlantingSite
-    @PostMapping("/{berryPlantingSiteId}/slots/{slotId}/berries")
-    public ResponseEntity<Void> addBerryToSoilSlot(@PathVariable Long berryPlantingSiteId, @PathVariable Long slotId, @RequestBody Long berryId) {
-        berryPlantingSiteService.plantBerryInSoilSlot(berryPlantingSiteId, slotId, berryId);
-        return ResponseEntity.ok().build();
-//
+    private String formatBerriesBySlots(Map<Integer, Long> berriesBySlots) {
+        return berriesBySlots.entrySet().stream()
+                .map(entry -> "Slot " + entry.getKey() + ": Berry ID " + entry.getValue())
+                .collect(Collectors.joining(", "));
     }
+
+    @PostMapping("/{berryPlantingSiteId}/berries")
+    public ResponseEntity<String> plantBerriesInBerryPlantingSite(
+            @PathVariable Long berryPlantingSiteId,
+            @RequestBody Map<Integer, Long> berriesBySlots) {
+
+        berryPlantingSiteService.plantBerriesInBerryPlantingSite(berryPlantingSiteId, berriesBySlots);
+        String formattedBerries = formatBerriesBySlots(berriesBySlots);
+        return ResponseEntity.ok("Berries planted successfully: " + formattedBerries);
+    }
+
+
+    @PatchMapping("/{berryPlantingSiteId}/berries")
+    public ResponseEntity<String> adjustBerriesInBerryPlantingSite(
+            @PathVariable Long berryPlantingSiteId,
+            @RequestBody Map<Integer, Long> berriesBySlots) {
+
+        berryPlantingSiteService.adjustBerriesInBerryPlantingSite(berryPlantingSiteId, berriesBySlots);
+        String formattedBerries = formatBerriesBySlots(berriesBySlots);
+        return ResponseEntity.ok("Berry Planting Site updated successfully. Changed Berries: " + formattedBerries);
+    }
+
+
 }
