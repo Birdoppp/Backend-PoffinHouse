@@ -26,6 +26,17 @@ VALUES
     (2, 'Rocky', 'IMPISH', 'Brock', 15, 25, 20, 30, 55),
     (3, null, 'CALM', 'Misty', 20, 30, 40, 50, 60);
 
+-- Insert data into team table
+INSERT INTO team (description) VALUES ('Team of GymLeader Brock');
+INSERT INTO team (description) VALUES ('Team of GymLeader Misty');
+
+-- Insert data into team_owned_pokemon join table for Brock's Team
+INSERT INTO team_owned_pokemon (team_id, owned_pokemon_id) VALUES (1, 1); -- Geodude
+INSERT INTO team_owned_pokemon (team_id, owned_pokemon_id) VALUES (1, 2); -- Onix
+
+-- Insert data into team_owned_pokemon join table for Misty's Team
+INSERT INTO team_owned_pokemon (team_id, owned_pokemon_id) VALUES (2, 3); -- Staryu
+
 -- Insert data into region_maps table
 INSERT INTO region_maps (region_name, horizontal_axis, vertical_axis)
 VALUES

@@ -3,9 +3,8 @@ package com.novi.poffinhouse.dto.input;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
-public class TeamInputDto {
-    private String description;
+public class AdjustPokemonInTeamDto {
     private List<Long> ownedPokemonIds;
 }
-

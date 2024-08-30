@@ -5,6 +5,7 @@ import com.novi.poffinhouse.dto.output.PokemonOutputDto;
 import com.novi.poffinhouse.dto.mapper.PokemonMapper;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.repositories.PokemonRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -13,8 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
 @Validated
+@Transactional
+@Service
 public class PokemonService {
 
 
