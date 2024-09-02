@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/berry-planting-sites")
@@ -37,17 +36,12 @@ public class BerryPlantingSiteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBerryPlantingSite(@PathVariable Long id) {
+    public ResponseEntity<String> deleteBerryPlantingSite(@PathVariable Long id) {
         berryPlantingSiteService.deleteBerryPlantingSite(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Berry Planting Site " + id + " deleted successfully");
     }
 
-    //    Assign Berry to BerryPlantingSite
-    private String formatBerriesBySlots(Map<Integer, Long> berriesBySlots) {
-        return berriesBySlots.entrySet().stream()
-                .map(entry -> "Slot " + entry.getKey() + ": Berry ID " + entry.getValue())
-                .collect(Collectors.joining(", "));
-    }
+    //    Assign Berries to BerryPlantingSite soilSlots
 
     @PostMapping("/{berryPlantingSiteId}/berries")
     public ResponseEntity<String> plantBerriesInBerryPlantingSite(
@@ -55,10 +49,10 @@ public class BerryPlantingSiteController {
             @RequestBody Map<Integer, Long> berriesBySlots) {
 
         berryPlantingSiteService.plantBerriesInBerryPlantingSite(berryPlantingSiteId, berriesBySlots);
-        String formattedBerries = formatBerriesBySlots(berriesBySlots);
+        BerryPlantingSiteOutputDto site = berryPlantingSiteService.getBerryPlantingSiteById(berryPlantingSiteId);
+        String formattedBerries = formatBerriesBySlots(site);
         return ResponseEntity.ok("Berries planted successfully: " + formattedBerries);
     }
-
 
     @PatchMapping("/{berryPlantingSiteId}/berries")
     public ResponseEntity<String> adjustBerriesInBerryPlantingSite(
@@ -66,9 +60,27 @@ public class BerryPlantingSiteController {
             @RequestBody Map<Integer, Long> berriesBySlots) {
 
         berryPlantingSiteService.adjustBerriesInBerryPlantingSite(berryPlantingSiteId, berriesBySlots);
-        String formattedBerries = formatBerriesBySlots(berriesBySlots);
-        return ResponseEntity.ok("Berry Planting Site updated successfully. Changed Berries: " + formattedBerries);
+        BerryPlantingSiteOutputDto site = berryPlantingSiteService.getBerryPlantingSiteById(berryPlantingSiteId);
+        String formattedBerries = formatBerriesBySlots(site);
+        return ResponseEntity.ok("Berry Planting Site updated successfully. " + formattedBerries);
     }
 
+    private String formatBerriesBySlots(BerryPlantingSiteOutputDto site) {
+        StringBuilder result = new StringBuilder();
 
+        for (int i = 1; i <= site.getSoilSlots(); i++) {
+            Long berry = site.getPlantedBerriesBySlots().get(i);
+            if (berry != null) {
+                result.append("Slot ").append(i).append(": Berry ID ").append(berry).append(", ");
+            } else {
+                result.append("Slot ").append(i).append(": Empty, ");
+            }
+        }
+
+        if (!result.isEmpty()) {
+            result.setLength(result.length() - 2);
+        }
+
+        return result.toString();
+    }
 }

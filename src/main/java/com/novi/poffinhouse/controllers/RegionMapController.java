@@ -31,18 +31,18 @@ public class RegionMapController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RegionMapOutputDto> getRegionMapById(@PathVariable Long id) {
-        return new ResponseEntity<>(regionMapService.getRegionMapById(id), HttpStatus.OK);
+        return ResponseEntity.ok(regionMapService.getRegionMapById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<RegionMapOutputDto> updateMap(@PathVariable Long id,@Valid @RequestBody RegionMapInputDto regionMap) {
-        return new ResponseEntity<>(regionMapService.updateRegionMap(id, regionMap), HttpStatus.OK);
+        return ResponseEntity.ok(regionMapService.updateRegionMap(id, regionMap));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMap(@PathVariable Long id) {
+    public ResponseEntity<String> deleteMap(@PathVariable Long id) {
         regionMapService.deleteRegionMap(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok("Region Map " + id + " deleted successfully");
     }
 
 }

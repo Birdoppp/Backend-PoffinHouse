@@ -4,7 +4,6 @@ import com.novi.poffinhouse.util.PreferencesEnum;
 import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -31,7 +30,6 @@ public class OwnedPokemon {
     @Size(max = 12)
     private String nickname;
     @Setter
-    @NotBlank
     @Enumerated(EnumType.STRING)
     @ValidEnum(enumClass = PreferencesEnum.NATURE.class, message = "Invalid nature. Valid values are: SASSY, BOLD, etc.")
     private PreferencesEnum.NATURE nature;
@@ -39,7 +37,7 @@ public class OwnedPokemon {
     @Size(min = 1, max = 12)
     private String caughtByTrainerName;
 
-    // Contest conditions
+    // Contest conditions for the Pokémon Contests
     @Setter
     private Integer beauty;
     @Setter

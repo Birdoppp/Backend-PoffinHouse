@@ -5,8 +5,10 @@ import com.novi.poffinhouse.dto.mapper.OwnedPokemonMapper;
 import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
 import com.novi.poffinhouse.models.pokemon.OwnedPokemon;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
+import com.novi.poffinhouse.models.pokemon.Team;
 import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.PokemonRepository;
+import com.novi.poffinhouse.repositories.TeamRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +23,13 @@ public class OwnedPokemonService {
     private final OwnedPokemonRepository ownedPokemonRepository;
     private final PokemonRepository pokemonRepository;
     private final OwnedPokemonMapper ownedPokemonMapper;
+    private final TeamRepository teamRepository;
 
-    public OwnedPokemonService(OwnedPokemonRepository ownedPokemonRepository, PokemonRepository pokemonRepository, OwnedPokemonMapper ownedPokemonMapper) {
+    public OwnedPokemonService(OwnedPokemonRepository ownedPokemonRepository, PokemonRepository pokemonRepository, OwnedPokemonMapper ownedPokemonMapper, TeamRepository teamRepository) {
         this.ownedPokemonRepository = ownedPokemonRepository;
         this.pokemonRepository = pokemonRepository;
         this.ownedPokemonMapper = ownedPokemonMapper;
+        this.teamRepository = teamRepository;
     }
 
 
@@ -76,7 +80,15 @@ public class OwnedPokemonService {
         return ownedPokemonMapper.toOutputDto(updatedOwnedPokemon);
     }
 
-    public void deleteOwnedPokemon(Long id) {
+    public String deleteOwnedPokemon(Long id) {
+        OwnedPokemon ownedPokemon = ownedPokemonRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("OwnedPokemon with Id " + id + " not found."));
+        List<Team> teams = teamRepository.findOwnedPokemonByOwnedPokemonId(ownedPokemon.getId());
+        for (Team team : teams) {
+            team.getOwnedPokemon().remove(ownedPokemon);
+        }
         ownedPokemonRepository.deleteById(id);
+
+        return "OwnedPokemon with Id " + id + " deleted successfully.  Note: This OwnedPokemon was removed from " + teams.size() + " team(s).";
+
     }
 }
