@@ -29,6 +29,16 @@ public class LocationMapper {
         return location;
     }
 
+    public static Location updateEntity(Location location, LocationInputDto inputDto) {
+        location.setName(inputDto.getName());
+        location.setDescription(inputDto.getDescription());
+        location.setCoordinateX(inputDto.getCoordinateX());
+        location.setCoordinateY(inputDto.getCoordinateY());
+        location.setRegionMap(mapRepository.findById(inputDto.getRegionMapId()).orElse(null));
+
+        return location;
+    }
+
     public static LocationOutputDto toOutputDto(Location location) {
         LocationOutputDto outputDto = new LocationOutputDto();
         outputDto.setId(location.getId());

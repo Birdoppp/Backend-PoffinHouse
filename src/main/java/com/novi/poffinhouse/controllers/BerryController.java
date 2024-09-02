@@ -2,7 +2,6 @@ package com.novi.poffinhouse.controllers;
 
 import com.novi.poffinhouse.dto.input.BerryInputDto;
 import com.novi.poffinhouse.dto.output.BerryOutputDto;
-import com.novi.poffinhouse.exceptions.BerryNotFoundException;
 import com.novi.poffinhouse.services.BerryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -45,14 +44,10 @@ public class BerryController {
         return ResponseEntity.ok(updatedBerry);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBerry(@PathVariable Long id) {
+    @DeleteMapping
+    public ResponseEntity<String> deleteBerry(@RequestBody Long id) {
         String message = berryService.deleteBerry(id);
         return ResponseEntity.ok(message);
     }
 
-    @ExceptionHandler(BerryNotFoundException.class)
-    public ResponseEntity<String> handleBerryNotFoundException(BerryNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
 }

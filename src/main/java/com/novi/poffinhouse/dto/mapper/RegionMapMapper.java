@@ -2,7 +2,6 @@ package com.novi.poffinhouse.dto.mapper;
 
 import com.novi.poffinhouse.dto.input.RegionMapInputDto;
 import com.novi.poffinhouse.dto.output.RegionMapOutputDto;
-import com.novi.poffinhouse.models.region.Location;
 import com.novi.poffinhouse.models.region.RegionMap;
 
 import java.util.stream.Collectors;

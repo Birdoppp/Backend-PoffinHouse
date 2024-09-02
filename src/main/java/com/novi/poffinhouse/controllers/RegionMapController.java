@@ -2,7 +2,6 @@ package com.novi.poffinhouse.controllers;
 
 import com.novi.poffinhouse.dto.input.RegionMapInputDto;
 import com.novi.poffinhouse.dto.output.RegionMapOutputDto;
-import com.novi.poffinhouse.models.region.RegionMap;
 import com.novi.poffinhouse.services.RegionMapService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -31,24 +30,19 @@ public class RegionMapController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RegionMap> getRegionMapById(@PathVariable Long id) {
-        return new ResponseEntity<>(regionMapService.getRegionMapById(id), HttpStatus.OK);
+    public ResponseEntity<RegionMapOutputDto> getRegionMapById(@PathVariable Long id) {
+        return ResponseEntity.ok(regionMapService.getRegionMapById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RegionMap> updateMap(@PathVariable Long id,@Valid @RequestBody RegionMap regionMap) {
-        return new ResponseEntity<>(regionMapService.updateRegionMap(id, regionMap), HttpStatus.OK);
+    public ResponseEntity<RegionMapOutputDto> updateMap(@PathVariable Long id,@Valid @RequestBody RegionMapInputDto regionMap) {
+        return ResponseEntity.ok(regionMapService.updateRegionMap(id, regionMap));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMap(@PathVariable Long id) {
+    public ResponseEntity<String> deleteMap(@PathVariable Long id) {
         regionMapService.deleteRegionMap(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok("Region Map " + id + " deleted successfully");
     }
 
-//    @PostMapping("/{regionMapId}/locations")
-//    public ResponseEntity<Void> addLocationToMap(@PathVariable Long regionMapId, @RequestBody Location location) {
-//        regionMapService.addLocationToMap(regionMapId, location);
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
 }

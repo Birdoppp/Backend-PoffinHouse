@@ -3,6 +3,7 @@ package com.novi.poffinhouse.controllers;
 import com.novi.poffinhouse.dto.input.LocationInputDto;
 
 import com.novi.poffinhouse.dto.output.LocationOutputDto;
+import com.novi.poffinhouse.repositories.RegionMapRepository;
 import com.novi.poffinhouse.services.LocationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +15,21 @@ import java.util.List;
 @RequestMapping("/locations")
 public class LocationController {
     private final LocationService locationService;
+    public final RegionMapRepository regionMapRepository;
 
-    public LocationController(LocationService locationService) {
+    public LocationController(LocationService locationService, RegionMapRepository regionMapRepository) {
         this.locationService = locationService;
+        this.regionMapRepository = regionMapRepository;
     }
 
     @PostMapping
     public ResponseEntity<LocationOutputDto> createLocation(@Valid @RequestBody LocationInputDto location) {
+        Long regionMapId = location.getRegionMapId();
+        if (regionMapId == null) {
+            throw new IllegalArgumentException("RegionMapId is required");
+        } else {
+            regionMapRepository.findById(regionMapId).orElseThrow(() -> new IllegalArgumentException("RegionMap with id " + regionMapId + " not found"));
+        }
         LocationOutputDto createdLocation = locationService.createLocation(location);
         return ResponseEntity.ok(createdLocation);
     }
@@ -37,14 +46,26 @@ public class LocationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<LocationOutputDto> updateLocation(@PathVariable Long id, @Valid @RequestBody LocationInputDto updatedLocation) {
-        LocationOutputDto updatedLocationDto = locationService.updateLocation(id, updatedLocation);
-        return ResponseEntity.ok(updatedLocationDto);
+//        LocationOutputDto existingLocation = locationService.getLocationById(id);
+//        if (existingLocation == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+        Long regionMapId = updatedLocation.getRegionMapId();
+        if (regionMapId == null) {
+            throw new IllegalArgumentException("RegionMapId is required");
+        } else {
+            regionMapRepository.findById(regionMapId).orElseThrow(() -> new IllegalArgumentException("RegionMap with id " + regionMapId + " not found"));
+
+            LocationOutputDto updatedLocationDto = locationService.updateLocation(id, updatedLocation);
+
+            return ResponseEntity.ok(updatedLocationDto);
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
+    @DeleteMapping
+    public ResponseEntity<String> deleteLocation(@RequestBody Long id) {
         locationService.deleteLocation(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Location " + id + " deleted successfully");
     }
 
 

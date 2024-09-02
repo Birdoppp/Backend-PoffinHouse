@@ -62,27 +62,6 @@ public class BerryPlantingSiteService {
 
 
     // Assigning Berries to Planting Sites
-//    public void plantBerryInSoilSlot(Long berryPlantingSiteId, Long slotId, Long berryId) {
-//        BerryPlantingSite site = berryPlantingSiteRepository.findById(berryPlantingSiteId)
-//                .orElseThrow(() -> new ResourceNotFoundException("BerryPlantingSite not found with id: " + berryPlantingSiteId));
-//
-//        Berry berry = berryRepository.findById(berryId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Berry not found with id: " + berryId));
-//
-//        if (slotId < 1 || slotId > site.getSoilSlots()) {
-//            throw new IllegalArgumentException("Slot number " + slotId + " is out of bounds. Must be between 1 and " + site.getSoilSlots());
-//        }
-//
-//        // Check if the slot is already occupied
-//        if (site.getPlantedBerriesBySlots().containsKey(slotId.intValue())) {
-//            throw new SlotOccupiedException("Slot " + slotId + " is already occupied by another berry.");
-//        }
-//
-//        site.getPlantedBerriesBySlots().put(slotId.intValue(), berry);
-//        berryPlantingSiteRepository.save(site);
-//    }
-
-
 
     public void plantBerriesInBerryPlantingSite(Long berryPlantingSiteId, Map<Integer, Long> berriesBySlots) {
         BerryPlantingSite site = berryPlantingSiteRepository.findById(berryPlantingSiteId)

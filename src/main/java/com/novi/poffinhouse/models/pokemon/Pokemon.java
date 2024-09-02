@@ -58,7 +58,4 @@ public class Pokemon {
     private List<OwnedPokemon> ownedPokemonList;
 
 
-//    @ManyToMany(mappedBy = "pokemon")
-//    private List<Team> teams = new ArrayList<>();
-
 }
