@@ -71,7 +71,7 @@ public class BerryPlantingSiteController {
         for (int i = 1; i <= site.getSoilSlots(); i++) {
             Long berry = site.getPlantedBerriesBySlots().get(i);
             if (berry != null) {
-                result.append("Slot ").append(i).append(": Berry ID ").append(berry).append(", ");
+                result.append("Slot ").append(i).append(": BerryId ").append(berry).append(", ");
             } else {
                 result.append("Slot ").append(i).append(": Empty, ");
             }

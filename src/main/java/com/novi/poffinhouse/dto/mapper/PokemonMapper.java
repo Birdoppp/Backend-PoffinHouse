@@ -17,6 +17,7 @@ public class PokemonMapper {
         pokemon.setSpAttack(inputDto.getSpAttack());
         pokemon.setSpDefence(inputDto.getSpDefence());
         pokemon.setSpeed(inputDto.getSpeed());
+        pokemon.setValidated(false);
         return pokemon;
     }
 
@@ -32,6 +33,7 @@ public class PokemonMapper {
         outputDto.setSpAttack(pokemon.getSpAttack());
         outputDto.setSpDefence(pokemon.getSpDefence());
         outputDto.setSpeed(pokemon.getSpeed());
+        outputDto.setValidated(pokemon.getValidated());
         return outputDto;
     }
 }

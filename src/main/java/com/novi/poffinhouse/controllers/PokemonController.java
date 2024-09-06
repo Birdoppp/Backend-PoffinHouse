@@ -49,4 +49,16 @@ public class PokemonController {
         pokemonService.deletePokemon(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/validated")
+    public ResponseEntity<List<PokemonOutputDto>> getAllValidatedPokemon() {
+        List<PokemonOutputDto> pokemonList = pokemonService.getAllValidatedPokemon();
+        return ResponseEntity.ok(pokemonList);
+    }
+
+    @PutMapping("/{id}/validate")
+    public ResponseEntity<PokemonOutputDto> validatePokemon(@PathVariable Long id) {
+        PokemonOutputDto validatedPokemon = pokemonService.validatePokemon(id);
+        return ResponseEntity.ok(validatedPokemon);
+    }
 }

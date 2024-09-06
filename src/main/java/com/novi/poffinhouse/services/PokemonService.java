@@ -47,6 +47,13 @@ public class PokemonService {
                 .collect(Collectors.toList());
     }
 
+    public List<PokemonOutputDto> getAllValidatedPokemon(){
+        return pokemonRepository.findAllByValidatedTrue()
+                .stream()
+                .map(PokemonMapper::toOutputDto)
+                .collect(Collectors.toList());
+    }
+
     public PokemonOutputDto updatePokemon(@Valid Long id, PokemonInputDto inputDto) {
         Pokemon existingPokemon = pokemonRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + id + " not found."));
@@ -67,5 +74,15 @@ public class PokemonService {
 
     public void deletePokemon(Long id) {
         pokemonRepository.deleteById(id);
+    }
+
+    public PokemonOutputDto validatePokemon(Long id) {
+        Pokemon existingPokemon = pokemonRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + id + " not found."));
+
+        existingPokemon.setValidated(true);
+
+        Pokemon validatedPokemon = pokemonRepository.save(existingPokemon);
+        return PokemonMapper.toOutputDto(validatedPokemon);
     }
 }

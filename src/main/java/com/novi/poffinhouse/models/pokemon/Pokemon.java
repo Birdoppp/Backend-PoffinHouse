@@ -1,5 +1,6 @@
 package com.novi.poffinhouse.models.pokemon;
 
+import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.util.TypeEnum;
 import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.persistence.*;
@@ -33,6 +34,9 @@ public class Pokemon {
     @ValidEnum(enumClass = TypeEnum.POKEMON_TYPE.class, message = "Invalid Pokemon type.")
     private TypeEnum.POKEMON_TYPE type;
 
+    @Setter
+    private Boolean validated;
+
 // Main Base Stats per Pokémon Species
     @Setter
     @Positive
@@ -57,5 +61,7 @@ public class Pokemon {
     @OneToMany(mappedBy = "pokemon", cascade = CascadeType.REMOVE)
     private List<OwnedPokemon> ownedPokemonList;
 
+    @ManyToMany(mappedBy = "pokemonList")
+    private List<Game> games;
 
 }

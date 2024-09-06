@@ -36,6 +36,7 @@ public class SpringSecurityConfig {
                                 .requestMatchers("/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/berries").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/pokemon").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/pokemon/{id}/validate").hasRole("ADMIN")
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/trainer/**").hasRole("TRAINER")
                                 .anyRequest().denyAll()

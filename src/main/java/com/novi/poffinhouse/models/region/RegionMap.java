@@ -1,5 +1,6 @@
 package com.novi.poffinhouse.models.region;
 
+import com.novi.poffinhouse.models.game.Game;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -34,14 +35,6 @@ public class RegionMap {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "regionMap")
     private List<Location> locations = new ArrayList<>();
 
-    public void addLocation(Location location) {
-        location.setRegionMap(this); // Ensure bidirectional relationship
-        this.locations.add(location);
-    }
-
-    public void removeLocation(Location location) {
-        this.locations.remove(location);
-        location.setRegionMap(null); // Break the bidirectional relationship
-    }
-
+    @OneToMany(mappedBy = "regionMap")
+    private List<Game> games;
 }

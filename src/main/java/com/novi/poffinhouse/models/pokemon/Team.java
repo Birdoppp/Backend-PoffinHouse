@@ -1,5 +1,6 @@
 package com.novi.poffinhouse.models.pokemon;
 
+import com.novi.poffinhouse.models.game.Game;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,4 +24,9 @@ public class Team {
             inverseJoinColumns = @JoinColumn(name = "owned_pokemon_id")
     )
     private List<OwnedPokemon> ownedPokemon;
+
+    @OneToOne (fetch = FetchType.LAZY)
+    @Setter
+    @JoinColumn(name = "game_id")
+    private Game game;
 }

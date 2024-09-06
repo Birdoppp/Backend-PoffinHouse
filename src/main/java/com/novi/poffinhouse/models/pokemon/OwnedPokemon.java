@@ -1,5 +1,6 @@
 package com.novi.poffinhouse.models.pokemon;
 
+import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.util.PreferencesEnum;
 import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.persistence.*;
@@ -52,4 +53,8 @@ public class OwnedPokemon {
 
     @ManyToMany(mappedBy = "ownedPokemon")
     private List<Team> teams;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
 }
