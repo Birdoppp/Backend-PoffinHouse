@@ -4,6 +4,7 @@ import com.novi.poffinhouse.models.auth.Authority;
 import com.novi.poffinhouse.dto.input.AuthorityInputDto;
 import com.novi.poffinhouse.dto.output.AuthorityOutputDto;
 import com.novi.poffinhouse.repositories.UserRepository;
+import com.novi.poffinhouse.util.RoleEnum;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,7 +22,7 @@ public class AuthorityMapper {
         }
 
         Authority authority = new Authority();
-        authority.setAuthority(dto.getAuthority());
+        authority.setAuthority(RoleEnum.valueOf(dto.getAuthority()));
         authority.setUsername(dto.getUsername());
         authority.setUser(userRepository.findByUsername(dto.getUsername()).get());
 
@@ -34,8 +35,7 @@ public class AuthorityMapper {
         }
 
         AuthorityOutputDto dto = new AuthorityOutputDto();
-        dto.setId(authority.getId());
-        dto.setAuthority(authority.getAuthority());
+        dto.setAuthority(authority.getAuthority().toString());
         dto.setUsername(authority.getUsername());
 
         if (authority.getUser() != null) {

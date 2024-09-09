@@ -1,7 +1,7 @@
 package com.novi.poffinhouse.controllers;
 
+import com.novi.poffinhouse.dto.input.AssignAuthorityToUserDto;
 import com.novi.poffinhouse.dto.output.AuthorityOutputDto;
-import com.novi.poffinhouse.util.RoleEnum;
 import com.novi.poffinhouse.services.AuthorityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +19,11 @@ public class AuthorityController {
         this.authorityService = authorityService;
     }
 
-    @PostMapping("/assign/{username}/{role}")
+    @PostMapping("/assign")
     public ResponseEntity<AuthorityOutputDto> assignRole(
-            @PathVariable String username,
-            @PathVariable RoleEnum role) {
+            @RequestBody AssignAuthorityToUserDto assignAuthorityToUserDto) {
 
-        AuthorityOutputDto createdAuthority = authorityService.assignAuthority(username, role);
+        AuthorityOutputDto createdAuthority = authorityService.assignAuthority(assignAuthorityToUserDto);
         return new ResponseEntity<>(createdAuthority, HttpStatus.CREATED);
     }
 
@@ -38,9 +37,8 @@ public class AuthorityController {
         }
     }
 
-
-    @DeleteMapping("/removeAll/{username}")
-    public ResponseEntity<String> removeAllAuthorities(@PathVariable String username) {
+    @DeleteMapping("/removeAllAuthorities")
+    public ResponseEntity<String> removeAllAuthorities(@RequestBody String username) {
         String message = authorityService.removeAllAuthorities(username);
         return ResponseEntity.ok(message);
     }

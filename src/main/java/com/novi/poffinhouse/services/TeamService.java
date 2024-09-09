@@ -56,6 +56,12 @@ public class TeamService {
         return teamMapper.toDto(team);
     }
 
+    public TeamOutputDto getTeamById(Long id) {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + id));
+        return teamMapper.toDto(team);
+    }
+
     public TeamOutputDto adjustPokemonInTeam(Long teamId, AdjustPokemonInTeamDto adjustPokemonInTeamDto) {
         if (adjustPokemonInTeamDto.getOwnedPokemonIds().size() > 6) {
             throw new IllegalArgumentException("A team can have a maximum of 6 Pokémon.");
@@ -80,9 +86,4 @@ public class TeamService {
         return teamMapper.toDto(team);
     }
 
-    public TeamOutputDto getTeamById(Long id) {
-        Team team = teamRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + id));
-        return teamMapper.toDto(team);
-    }
 }

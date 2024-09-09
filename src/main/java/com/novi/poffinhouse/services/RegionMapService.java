@@ -29,19 +29,19 @@ public class RegionMapService {
         return RegionMapMapper.toOutputDto(regionMap);
     }
 
-    public List<RegionMapOutputDto> getAllRegionMaps() {
-        return regionMapRepository.findAll().stream()
-                .map(RegionMapMapper::toOutputDto)
-                .collect(Collectors.toList());
-    }
-
     public RegionMapOutputDto getRegionMapById(Long id) {
         RegionMap regionMap = regionMapRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Map not found"));
         return RegionMapMapper.toOutputDto(regionMap);
     }
 
-   public RegionMapOutputDto updateRegionMap(Long id, RegionMapInputDto regionMapInputDto) {
+    public List<RegionMapOutputDto> getAllRegionMaps() {
+        return regionMapRepository.findAll().stream()
+                .map(RegionMapMapper::toOutputDto)
+                .collect(Collectors.toList());
+    }
+
+    public RegionMapOutputDto updateRegionMap(Long id, RegionMapInputDto regionMapInputDto) {
         RegionMap regionMap = regionMapRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Map not found"));
         regionMap.setRegionName(regionMapInputDto.getRegionName());

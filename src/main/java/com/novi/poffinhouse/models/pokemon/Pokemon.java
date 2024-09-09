@@ -1,6 +1,7 @@
 package com.novi.poffinhouse.models.pokemon;
 
 import com.novi.poffinhouse.models.game.Game;
+import com.novi.poffinhouse.util.Capitalize;
 import com.novi.poffinhouse.util.TypeEnum;
 import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.persistence.*;
@@ -11,8 +12,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-//import java.util.ArrayList;
-//import java.util.List;
+
 
 @Entity
 @Getter
@@ -21,10 +21,11 @@ public class Pokemon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Setter
+
     @Column(unique = true, nullable = false)
     @NotBlank
     private String name;
+
     @Setter
     @Positive
     @Column(unique = true)
@@ -64,4 +65,7 @@ public class Pokemon {
     @ManyToMany(mappedBy = "pokemonList")
     private List<Game> games;
 
+    public void setName(String name) {
+        this.name = name != null ? Capitalize.getCapitalizedString(name) : null;
+    }
 }

@@ -1,6 +1,6 @@
 package com.novi.poffinhouse.controllers;
 
-import com.novi.poffinhouse.dto.input.GameInputDto;
+import com.novi.poffinhouse.dto.input.*;
 import com.novi.poffinhouse.dto.output.GameOutputDto;
 import com.novi.poffinhouse.services.GameService;
 import jakarta.validation.Valid;
@@ -48,4 +48,24 @@ public class GameController {
         gameService.deleteGame(id);
         return ResponseEntity.ok("Game with id " + id + " deleted.");
     }
+
+    @PatchMapping("/{id}/pokemonList")
+    public ResponseEntity<GameOutputDto> patchPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustIdListDto adjustIdListDto) {
+        GameOutputDto updatedGame = gameService.patchPokemonList(id, adjustIdListDto);
+        return ResponseEntity.ok(updatedGame);
+    }
+
+    @PutMapping("/{id}/team")
+    public ResponseEntity<GameOutputDto> updateTeam(@PathVariable Long id, @RequestBody Long teamId) {
+        GameOutputDto updatedGame = gameService.updateTeam(id, teamId);
+        return ResponseEntity.ok(updatedGame);
+    }
+
+    @PatchMapping("/{id}/berryList")
+    public ResponseEntity<GameOutputDto> patchBerryList(@PathVariable Long id, @Valid @RequestBody AdjustIdListDto adjustIdListDto) {
+        GameOutputDto updatedGame = gameService.patchBerryList(id, adjustIdListDto);
+        return ResponseEntity.ok(updatedGame);
+    }
+
+
 }

@@ -12,7 +12,9 @@ public class GameOutputDto {
     private int generation;
     private String description;
     private GameRegionMapOutputDto regionMap;
+
     private List<GamePokemonOutputDto> pokemonList;
     private List<GameOwnedPokemonOutputDto> ownedPokemonList;
+    private TeamOutputDto team;
     private List<GameBerryOutputDto> berryList;
 }

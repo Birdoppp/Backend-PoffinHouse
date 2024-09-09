@@ -56,10 +56,6 @@ public class BerryPlantingSiteService {
         return BerryPlantingSiteMapper.toOutputDto(berryPlantingSite);
     }
 
-    public void deleteBerryPlantingSite(Long id) {
-        berryPlantingSiteRepository.deleteById(id);
-    }
-
 
     // Assigning Berries to Planting Sites
 
@@ -98,7 +94,6 @@ public class BerryPlantingSiteService {
     }
 
 
-
     public void adjustBerriesInBerryPlantingSite(Long berryPlantingSiteId, Map<Integer, Long> berriesBySlots) {
         BerryPlantingSite site = berryPlantingSiteRepository.findById(berryPlantingSiteId)
                 .orElseThrow(() -> new ResourceNotFoundException("BerryPlantingSite not found with id: " + berryPlantingSiteId));
@@ -128,4 +123,8 @@ public class BerryPlantingSiteService {
         berryPlantingSiteRepository.save(site);
     }
 
+
+    public void deleteBerryPlantingSite(Long id) {
+        berryPlantingSiteRepository.deleteById(id);
+    }
 }

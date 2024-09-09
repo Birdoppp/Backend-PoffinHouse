@@ -45,7 +45,6 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
-
     public UserOutputDto updateUser(Long id, UserInputDto userInputDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
@@ -64,8 +63,6 @@ public class UserService {
         return userMapper.toDto(updatedUser);
     }
 
-
-
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("User not found with ID: " + id);
@@ -73,6 +70,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+//For TeamService
     public User findByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
