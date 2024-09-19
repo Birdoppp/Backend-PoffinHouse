@@ -31,6 +31,13 @@ public class GameController {
         return ResponseEntity.ok(game);
     }
 
+
+    @GetMapping("/user/{username}")
+    public ResponseEntity<List<GameOutputDto>> getAllGamesByUsername(@PathVariable String username) {
+        List<GameOutputDto> games = gameService.getAllGamesByUsername(username);
+        return ResponseEntity.ok(games);
+    }
+
     @GetMapping
     public ResponseEntity<List<GameOutputDto>> getAllGames() {
         List<GameOutputDto> games = gameService.getAllGames();
@@ -52,6 +59,12 @@ public class GameController {
     @PatchMapping("/{id}/pokemonList")
     public ResponseEntity<GameOutputDto> patchPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustIdListDto adjustIdListDto) {
         GameOutputDto updatedGame = gameService.patchPokemonList(id, adjustIdListDto);
+        return ResponseEntity.ok(updatedGame);
+    }
+
+    @PatchMapping("/{id}/ownedPokemonList")
+    public ResponseEntity<GameOutputDto> patchOwnedPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustIdListDto adjustIdListDto) {
+        GameOutputDto updatedGame = gameService.patchOwnedPokemonList(id, adjustIdListDto);
         return ResponseEntity.ok(updatedGame);
     }
 

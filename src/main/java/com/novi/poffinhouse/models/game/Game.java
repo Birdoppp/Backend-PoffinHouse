@@ -1,5 +1,6 @@
 package com.novi.poffinhouse.models.game;
 
+import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.models.pokemon.OwnedPokemon;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
@@ -10,8 +11,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 @Entity
 @Getter
@@ -32,18 +33,23 @@ public class Game {
     @Setter
     private RegionMap regionMap;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @Setter
+    private User user;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "game_pokemon",
             joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "pokemon_id")
     )
-    private List<Pokemon> pokemonList;
+    private List<Pokemon> pokemonList = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id")
     @Setter
-    private List<OwnedPokemon> ownedPokemonList;
+    private List<OwnedPokemon> ownedPokemonList = new ArrayList<>();
 
     @OneToOne(mappedBy = "game")
     @Setter
@@ -57,7 +63,7 @@ public class Game {
             inverseJoinColumns = @JoinColumn(name = "berry_id")
     )
     @Setter
-    private List<Berry> berryList;
+    private List<Berry> berryList = new ArrayList<>();
 
     public Game() {
     }
@@ -95,7 +101,7 @@ public class Game {
         };
 
         if (nationalDex > maxDex) {
-            throw new IllegalArgumentException("Invalid national Dex number for Generation " + generation + ". Dex number must be less than or equal to " + maxDex + ".");
+            throw new IllegalArgumentException("Invalid national Dex number for Generation " + generation + ". Dex number must be less than or equal to " + maxDex +".");
         }
     }
 }

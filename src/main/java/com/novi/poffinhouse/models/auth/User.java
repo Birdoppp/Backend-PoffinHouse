@@ -1,7 +1,7 @@
 package com.novi.poffinhouse.models.auth;
 
+import com.novi.poffinhouse.models.game.Game;
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -26,13 +26,14 @@ public class User {
 
     @Setter
     @NotBlank
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true)
+    @Size(min = 4, max = 50, message = "Name must be between 4 and 100 characters")
     private String username;
 
     @Setter
     @NotBlank
     @Column(nullable = false)
-    @Size(min = 8, max = 50)
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
 
@@ -43,6 +44,9 @@ public class User {
             orphanRemoval = true,
             fetch = FetchType.LAZY)
     private Set<Authority> authorities = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Game> games = new HashSet<>();
 
     public User() {
     }

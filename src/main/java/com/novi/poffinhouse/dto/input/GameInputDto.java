@@ -11,6 +11,6 @@ public class GameInputDto {
     private String description;
     private Long regionMapId;
     private List<Long> pokemonIds;
-    private List<Long> ownedPokemonIds;
+//    private List<Long> ownedPokemonIds;
     private List<Long> berryIds;
 }

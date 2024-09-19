@@ -1,5 +1,6 @@
 package com.novi.poffinhouse.config;
 
+import com.novi.poffinhouse.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,9 +21,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SpringSecurityConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+
+    private final CustomUserDetailsService customUserDetailsService;
+    public final static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    public SpringSecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Bean
@@ -47,9 +51,11 @@ public class SpringSecurityConfig {
 
     }
 
+
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         var auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(customUserDetailsService);
         auth.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(auth);
     }

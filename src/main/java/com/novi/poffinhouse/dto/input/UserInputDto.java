@@ -12,10 +12,10 @@ public class UserInputDto {
     private String email;
 
     @NotBlank
-    @Size(min = 4, max = 100, message = "Name must be between 1 and 100 characters")
+    @Size(min = 4, max = 50, message = "Name must be between 4 and 50 characters")
     private String username;
 
     @NotBlank
-    @Size(min = 8, max = 50)
+    @Size(min = 8,  message = "Password must be at least 8 characters")
     private String password;
 }

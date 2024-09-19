@@ -1,10 +1,11 @@
+// src/main/java/com/novi/poffinhouse/dto/mapper/GameMapper.java
+
 package com.novi.poffinhouse.dto.mapper;
 
 import com.novi.poffinhouse.dto.input.GameInputDto;
 import com.novi.poffinhouse.dto.output.*;
 import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.models.berries.Berry;
-import com.novi.poffinhouse.models.pokemon.OwnedPokemon;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.models.region.RegionMap;
 import com.novi.poffinhouse.repositories.*;
@@ -17,18 +18,20 @@ import java.util.stream.Collectors;
 public class GameMapper {
 
     private final RegionMapRepository regionMapRepository;
+    private final UserRepository userRepository;
     private final PokemonRepository pokemonRepository;
     private final OwnedPokemonRepository ownedPokemonRepository;
     private final TeamRepository teamRepository;
     private final BerryRepository berryRepository;
     private final TeamMapper teamMapper;
 
-    public GameMapper(PokemonRepository pokemonRepository, OwnedPokemonRepository ownedPokemonRepository, BerryRepository berryRepository, RegionMapRepository regionMapRepository, TeamRepository teamRepository, TeamMapper teamMapper) {
-        this.regionMapRepository = regionMapRepository;
+    public GameMapper(PokemonRepository pokemonRepository, OwnedPokemonRepository ownedPokemonRepository, BerryRepository berryRepository, RegionMapRepository regionMapRepository, UserRepository userRepository, TeamRepository teamRepository, TeamMapper teamMapper) {
         this.pokemonRepository = pokemonRepository;
         this.ownedPokemonRepository = ownedPokemonRepository;
-        this.teamRepository = teamRepository;
         this.berryRepository = berryRepository;
+        this.regionMapRepository = regionMapRepository;
+        this.userRepository = userRepository;
+        this.teamRepository = teamRepository;
         this.teamMapper = teamMapper;
     }
 
@@ -50,14 +53,6 @@ public class GameMapper {
                 .collect(Collectors.toList());
         game.setPokemonList(pokemonList);
 
-        // Set OwnedPokemon list
-        List<OwnedPokemon> ownedPokemonList = inputDto.getOwnedPokemonIds().stream()
-                .map(ownedPokemonRepository::findById)
-                .map(optionalOwnedPokemon -> optionalOwnedPokemon.orElseThrow(() -> new IllegalArgumentException("OwnedPokemon not found.")))
-                .collect(Collectors.toList());
-        game.setOwnedPokemonList(ownedPokemonList);
-
-
         // Set Berry list
         List<Berry> berryList = inputDto.getBerryIds().stream()
                 .map(berryRepository::findById)
@@ -77,8 +72,9 @@ public class GameMapper {
 
         // Convert related entities to output DTOs
         outputDto.setRegionMap(new GameRegionMapOutputDto(game.getRegionMap().getId(), game.getRegionMap().getRegionName()));
+        outputDto.setUser(new GameUserOutputDto(game.getUser().getId(), game.getUser().getUsername()));
         outputDto.setPokemonList(game.getPokemonList().stream()
-                .map(pokemon -> new GamePokemonOutputDto(pokemon.getId(),pokemon.getNationalDex() ,pokemon.getName(), pokemon.getType()))
+                .map(pokemon -> new GamePokemonOutputDto(pokemon.getId(), pokemon.getNationalDex(), pokemon.getName(), pokemon.getType()))
                 .collect(Collectors.toList()));
         outputDto.setOwnedPokemonList(game.getOwnedPokemonList().stream()
                 .map(ownedPokemon -> new GameOwnedPokemonOutputDto(ownedPokemon.getId(), ownedPokemon.getPokemon().getName(), ownedPokemon.getNickname(), ownedPokemon.getNature()))

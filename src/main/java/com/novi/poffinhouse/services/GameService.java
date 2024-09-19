@@ -4,12 +4,14 @@ import com.novi.poffinhouse.dto.input.AdjustIdListDto;
 import com.novi.poffinhouse.dto.input.GameInputDto;
 import com.novi.poffinhouse.dto.mapper.GameMapper;
 import com.novi.poffinhouse.dto.output.GameOutputDto;
+import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.models.pokemon.OwnedPokemon;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.models.pokemon.Team;
 import com.novi.poffinhouse.repositories.*;
+import com.novi.poffinhouse.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -24,16 +26,18 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final GameMapper gameMapper;
+    private final UserRepository userRepository;
     private final PokemonRepository pokemonRepository;
     private final OwnedPokemonRepository ownedPokemonRepository;
     private final BerryRepository berryRepository;
     private final TeamRepository teamRepository;
 
-    public GameService(GameRepository gameRepository, GameMapper gameMapper, PokemonRepository pokemonRepository,
+    public GameService(GameRepository gameRepository, GameMapper gameMapper, UserRepository userRepository, PokemonRepository pokemonRepository,
                        OwnedPokemonRepository ownedPokemonRepository, BerryRepository berryRepository,
                        TeamRepository teamRepository) {
         this.gameRepository = gameRepository;
         this.gameMapper = gameMapper;
+        this.userRepository = userRepository;
         this.pokemonRepository = pokemonRepository;
         this.ownedPokemonRepository = ownedPokemonRepository;
         this.berryRepository = berryRepository;
@@ -41,7 +45,14 @@ public class GameService {
     }
 
     public GameOutputDto createGame(GameInputDto inputDto) {
+        String username = AuthUtil.getCurrentUsername();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
         Game game = gameMapper.toEntity(inputDto);
+        game.setUser(user);
+
         Game savedGame = gameRepository.save(game);
         return gameMapper.toDto(savedGame);
     }
@@ -50,6 +61,13 @@ public class GameService {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
         return gameMapper.toDto(game);
+    }
+
+    public List<GameOutputDto> getAllGamesByUsername(String username) {
+        List<Game> games = gameRepository.findAllByUser_Username(username);
+        return games.stream()
+                .map(gameMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     public List<GameOutputDto> getAllGames() {
@@ -115,6 +133,18 @@ public class GameService {
         return gameMapper.toDto(updatedGame);
     }
 
+    public GameOutputDto updateTeam(Long gameId, Long teamId) {
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new IllegalArgumentException("Game with id " + gameId + " not found."));
+
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new IllegalArgumentException("Team with id " + teamId + " not found."));
+
+        game.setTeam(team);
+        Game updatedGame = gameRepository.save(game);
+        return gameMapper.toDto(updatedGame);
+    }
+
     public GameOutputDto patchBerryList(Long id, AdjustIdListDto adjustIdListDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
@@ -136,23 +166,12 @@ public class GameService {
         return gameMapper.toDto(updatedGame);
     }
 
-    public GameOutputDto updateTeam(Long gameId, Long teamId) {
-        Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new IllegalArgumentException("Game with id " + gameId + " not found."));
-
-        Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new IllegalArgumentException("Team with id " + teamId + " not found."));
-
-        game.setTeam(team);
-        Game updatedGame = gameRepository.save(game);
-        return gameMapper.toDto(updatedGame);
-    }
-
     public void deleteGame(Long id) {
         if (!gameRepository.existsById(id)) {
             throw new IllegalArgumentException("Game with id " + id + " not found.");
         }
         gameRepository.deleteById(id);
     }
+
 
 }

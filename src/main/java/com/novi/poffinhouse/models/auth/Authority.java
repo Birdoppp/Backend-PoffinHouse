@@ -4,11 +4,13 @@ import com.novi.poffinhouse.util.RoleEnum;
 import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
 @Setter
 @Entity
-@Getter
+@NoArgsConstructor
 @IdClass(AuthorityKey.class)
 @Table(name = "authorities")
 public class Authority {
@@ -26,8 +28,5 @@ public class Authority {
     @ManyToOne
     @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
     private User user;
-
-    public Authority() {
-    }
 
 }

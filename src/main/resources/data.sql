@@ -1,8 +1,9 @@
 -- Insert data into users table
 INSERT INTO users (email, username, password)
 VALUES
-    ('brock@pokemon.com', 'Brock', 'password123'),
-    ('misty@pokemon.com', 'Misty', 'password456');
+    ('brock@pokemon.com', 'Brock', '$2a$12$764RLta2eg/DhWOm/EIZNeEeUdVrpjER/GFaL/n8H8ooBDYY4YKP2'),
+    ('misty@pokemon.com', 'Misty', '$2a$12$764RLta2eg/DhWOm/EIZNeEeUdVrpjER/GFaL/n8H8ooBDYY4YKP2');
+-- Password is 'password123'
 
 
 -- Insert data into authorities table
@@ -87,8 +88,8 @@ VALUES
 
 
 -- Insert Games
-INSERT INTO game ( version_name, generation, description, region_map_id)
-VALUES ( 'Diamond', 4, 'The first appearance of PoffinHouse', 4);
+INSERT INTO game ( version_name, generation, description, region_map_id, user_id)
+VALUES ( 'Diamond', 4, 'The first appearance of PoffinHouse', 4, 1);
 
 INSERT INTO game_pokemon (game_id, pokemon_id) VALUES (1, 1);
 INSERT INTO game_pokemon (game_id, pokemon_id) VALUES (1, 2);
