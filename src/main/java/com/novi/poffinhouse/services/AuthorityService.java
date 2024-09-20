@@ -1,5 +1,6 @@
 package com.novi.poffinhouse.services;
 
+import com.novi.poffinhouse.dto.input.AssignAuthorityToUserDto;
 import com.novi.poffinhouse.dto.mapper.AuthorityMapper;
 import com.novi.poffinhouse.dto.output.AuthorityOutputDto;
 import com.novi.poffinhouse.exceptions.UserNotFoundException;
@@ -30,8 +31,11 @@ public class AuthorityService {
         this.userRepository = userRepository;
     }
 
-    public AuthorityOutputDto assignAuthority(String username, RoleEnum role) {
-        if (username == null || role == null) {
+    public AuthorityOutputDto assignAuthority(AssignAuthorityToUserDto assignAuthorityToUserDto) {
+        RoleEnum role = assignAuthorityToUserDto.getRole();
+        String username = assignAuthorityToUserDto.getUsername();
+
+        if (role == null || username == null) {
             throw new IllegalArgumentException("Username and role must not be null");
         }
 
@@ -41,7 +45,7 @@ public class AuthorityService {
         }
 
         Authority authority = new Authority();
-        authority.setAuthority(role.name());
+        authority.setAuthority(role);
         authority.setUsername(username);
         authority.setUser(user);
 
@@ -54,7 +58,7 @@ public class AuthorityService {
         if (user.isEmpty()) {
             throw new RuntimeException("User not found with username: " + username);
         }
-        user.get();
+
         Set<Authority> authorities = authorityRepository.findByUsername(username);
 
         return authorities.stream()

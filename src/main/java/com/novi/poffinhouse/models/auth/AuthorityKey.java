@@ -1,16 +1,16 @@
 package com.novi.poffinhouse.models.auth;
 
+import com.novi.poffinhouse.util.RoleEnum;
 import lombok.Data;
 import java.io.Serializable;
 
 @Data
 public class AuthorityKey implements Serializable {
-    private Long id;
-    private String authority;
+
+    private RoleEnum authority;
     private String username;
 
-    public AuthorityKey(Long id, String authority, String username) {
-        this.id = id;
+    public AuthorityKey( RoleEnum authority, String username) {
         this.authority = authority;
         this.username = username;
     }

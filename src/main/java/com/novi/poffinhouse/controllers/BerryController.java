@@ -26,16 +26,22 @@ public class BerryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBerry);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<BerryOutputDto> getBerryById(@PathVariable Long id) {
+        BerryOutputDto berry = berryService.getBerryById(id);
+        return ResponseEntity.ok(berry);
+    }
+
     @GetMapping
     public ResponseEntity<List<BerryOutputDto>> getAllBerries() {
         List<BerryOutputDto> berries = berryService.getAllBerries();
         return ResponseEntity.ok(berries);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BerryOutputDto> getBerryById(@PathVariable Long id) {
-        BerryOutputDto berry = berryService.getBerryById(id);
-        return ResponseEntity.ok(berry);
+    @GetMapping("/ordered")
+    public ResponseEntity<List<BerryOutputDto>> getAllBerriesOrderedByIndexNumber() {
+        List<BerryOutputDto> berries = berryService.getAllBerriesOrderedByIndexNumber();
+        return ResponseEntity.ok(berries);
     }
 
     @PutMapping("/{id}")

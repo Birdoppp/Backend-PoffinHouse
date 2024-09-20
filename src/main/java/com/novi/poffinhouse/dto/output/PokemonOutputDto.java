@@ -16,4 +16,5 @@ public class PokemonOutputDto {
     private Integer spAttack;
     private Integer spDefence;
     private Integer speed;
+    private Boolean validated;
 }

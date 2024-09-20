@@ -8,7 +8,9 @@ import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.models.region.BerryPlantingSite;
 import com.novi.poffinhouse.repositories.BerryPlantingSiteRepository;
 import com.novi.poffinhouse.repositories.BerryRepository;
+import com.novi.poffinhouse.util.Capitalize;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -28,10 +30,20 @@ public class BerryService {
         this.berryPlantingSiteRepository = berryPlantingSiteRepository;
     }
 
-    public BerryOutputDto createBerry(BerryInputDto berryInputDto) {
+    public BerryOutputDto createBerry(@Valid BerryInputDto berryInputDto) {
+        if (berryRepository.existsByNameIgnoreCase(berryInputDto.getName())) {
+            throw new IllegalArgumentException("A Berry with the name '" + Capitalize.getCapitalizedString(berryInputDto.getName()) + "' already exists.");
+        }
+
         Berry berry = BerryMapper.toEntity(berryInputDto);
         Berry savedBerry = berryRepository.save(berry);
         return BerryMapper.toOutputDto(savedBerry);
+    }
+
+    public BerryOutputDto getBerryById(Long id) {
+        Berry berry = berryRepository.findById(id)
+                .orElseThrow(() -> new BerryNotFoundException(id));
+        return BerryMapper.toOutputDto(berry);
     }
 
     public List<BerryOutputDto> getAllBerries() {
@@ -41,13 +53,14 @@ public class BerryService {
                 .collect(Collectors.toList());
     }
 
-    public BerryOutputDto getBerryById(Long id) {
-        Berry berry = berryRepository.findById(id)
-                .orElseThrow(() -> new BerryNotFoundException(id));
-        return BerryMapper.toOutputDto(berry);
+    public List<BerryOutputDto> getAllBerriesOrderedByIndexNumber() {
+        return berryRepository.findAllOrderedByIndexNumber()
+                .stream()
+                .map(BerryMapper::toOutputDto)
+                .collect(Collectors.toList());
     }
 
-    public BerryOutputDto updateBerry(Long id, BerryInputDto berryInputDto) {
+    public BerryOutputDto updateBerry(Long id, @Valid BerryInputDto berryInputDto) {
         Berry berryToUpdate = berryRepository.findById(id)
                 .orElseThrow(() -> new BerryNotFoundException(id));
 

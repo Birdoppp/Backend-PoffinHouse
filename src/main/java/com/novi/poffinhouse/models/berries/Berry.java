@@ -1,5 +1,7 @@
 package com.novi.poffinhouse.models.berries;
 
+import com.novi.poffinhouse.models.game.Game;
+import com.novi.poffinhouse.util.Capitalize;
 import com.novi.poffinhouse.util.TypeEnum;
 import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.persistence.*;
@@ -10,6 +12,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "berries")
@@ -18,7 +22,6 @@ public class Berry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     @NotBlank
     @Column(unique = true)
     private String name;
@@ -34,6 +37,8 @@ public class Berry {
     @Setter
     @Positive
     private int growthTime; //    In gen IV this ranges from 8 to 96 int in hours
+
+    //TODO Validate
 
     @Setter
     @NotNull
@@ -58,4 +63,11 @@ public class Berry {
     @Setter
     @PositiveOrZero
     private int sourPotency;
+
+    @ManyToMany(mappedBy = "berryList")
+    private List<Game> games;
+
+    public void setName(String name) {
+        this.name = name != null ? Capitalize.getCapitalizedString(name) : null;
+    }
 }

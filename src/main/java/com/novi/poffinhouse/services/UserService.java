@@ -1,6 +1,7 @@
 package com.novi.poffinhouse.services;
 
 import com.novi.poffinhouse.dto.input.UserInputDto;
+import com.novi.poffinhouse.dto.authenticate.AuthenticationRequest;
 import com.novi.poffinhouse.dto.output.UserOutputDto;
 import com.novi.poffinhouse.dto.mapper.UserMapper;
 import com.novi.poffinhouse.exceptions.UserNotFoundException;
@@ -12,6 +13,8 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
 
+import static com.novi.poffinhouse.config.SpringSecurityConfig.passwordEncoder;
+
 @Validated
 @Transactional
 @Service
@@ -20,13 +23,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+
+    public UserService(UserRepository userRepository, UserMapper userMapper ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
 
     public UserOutputDto createUser(UserInputDto userInputDto) {
         User user = userMapper.toEntity(userInputDto);
+        user.setPassword(passwordEncoder.encode(userInputDto.getPassword()));
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
     }
@@ -45,6 +50,11 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
+    public AuthenticationRequest logInUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        return userMapper.toLogInDto(user);
+    }
 
     public UserOutputDto updateUser(Long id, UserInputDto userInputDto) {
         User user = userRepository.findById(id)
@@ -57,14 +67,12 @@ public class UserService {
             user.setUsername(userInputDto.getUsername());
         }
         if (userInputDto.getPassword() != null) {
-            user.setPassword(userInputDto.getPassword());
+            user.setPassword(passwordEncoder.encode(userInputDto.getPassword()));
         }
 
         User updatedUser = userRepository.save(user);
         return userMapper.toDto(updatedUser);
     }
-
-
 
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
@@ -73,6 +81,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+//For TeamService
     public User findByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {

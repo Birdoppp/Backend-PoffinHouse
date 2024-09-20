@@ -4,7 +4,9 @@ import com.novi.poffinhouse.dto.input.PokemonInputDto;
 import com.novi.poffinhouse.dto.output.PokemonOutputDto;
 import com.novi.poffinhouse.dto.mapper.PokemonMapper;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
+import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.PokemonRepository;
+import com.novi.poffinhouse.util.Capitalize;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
@@ -21,12 +23,18 @@ public class PokemonService {
 
 
     private final PokemonRepository pokemonRepository;
+    private final OwnedPokemonRepository ownedPokemonRepository;
 
-    public PokemonService(PokemonRepository pokemonRepository) {
+    public PokemonService(PokemonRepository pokemonRepository, OwnedPokemonRepository ownedPokemonRepository) {
         this.pokemonRepository = pokemonRepository;
+        this.ownedPokemonRepository = ownedPokemonRepository;
     }
 
-    public PokemonOutputDto createPokemon( @Valid PokemonInputDto inputDto) {
+    public PokemonOutputDto createPokemon(@Valid PokemonInputDto inputDto) {
+        if (pokemonRepository.existsByNameIgnoreCase(inputDto.getName())) {
+            throw new IllegalArgumentException("A Pokémon with the name '" + Capitalize.getCapitalizedString(inputDto.getName()) + "' already exists.");
+        }
+
         Pokemon pokemon = PokemonMapper.toEntity(inputDto);
         Pokemon savedPokemon = pokemonRepository.save(pokemon);
         return PokemonMapper.toOutputDto(savedPokemon);
@@ -40,6 +48,11 @@ public class PokemonService {
         throw new IllegalArgumentException("Pokemon with id " + id + " not found.");
     }
 
+    public Pokemon getPokemonByNationalDex(int nationalDexNumber) {
+        return pokemonRepository.findByNationalDex(nationalDexNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Pokemon with nationalDex number " + nationalDexNumber + " not found."));
+    }
+
     public List<PokemonOutputDto> getAllPokemon() {
         return pokemonRepository.findAll()
                 .stream()
@@ -47,7 +60,21 @@ public class PokemonService {
                 .collect(Collectors.toList());
     }
 
-    public PokemonOutputDto updatePokemon(@Valid Long id, PokemonInputDto inputDto) {
+    public List<PokemonOutputDto> getAllPokemonOrdered() {
+        return pokemonRepository.findAllOrderedByNationalDex()
+                .stream()
+                .map(PokemonMapper::toOutputDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<PokemonOutputDto> getAllValidatedPokemonOrdered() {
+        return pokemonRepository.findAllValidatedOrderedByNationalDex()
+                .stream()
+                .map(PokemonMapper::toOutputDto)
+                .collect(Collectors.toList());
+    }
+
+    public PokemonOutputDto updatePokemon(Long id, @Valid PokemonInputDto inputDto) {
         Pokemon existingPokemon = pokemonRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + id + " not found."));
 
@@ -65,7 +92,25 @@ public class PokemonService {
         return PokemonMapper.toOutputDto(updatedPokemon);
     }
 
-    public void deletePokemon(Long id) {
-        pokemonRepository.deleteById(id);
+    public PokemonOutputDto validatePokemon(int nationalDexId) {
+        Pokemon existingPokemon = pokemonRepository.findByNationalDex(nationalDexId)
+                .orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + nationalDexId + " not found."));
+
+        existingPokemon.setValidated(true);
+
+        Pokemon validatedPokemon = pokemonRepository.save(existingPokemon);
+        return PokemonMapper.toOutputDto(validatedPokemon);
     }
+
+    public void deletePokemon(int nationalDexId) {
+        Pokemon pokemon = pokemonRepository.findByNationalDex(nationalDexId)
+                .orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + nationalDexId + " not found."));
+        pokemon.getOwnedPokemonList().forEach(ownedPokemon -> ownedPokemon.getTeams().forEach(team -> team.getOwnedPokemon().remove(ownedPokemon)));
+        ownedPokemonRepository.deleteAll(pokemon.getOwnedPokemonList());
+        pokemon.getGames().forEach(game -> game.getPokemonList().remove(pokemon));
+
+        pokemonRepository.deleteByNationalDex(nationalDexId);
+
+    }
+
 }

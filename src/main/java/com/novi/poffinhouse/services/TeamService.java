@@ -41,13 +41,24 @@ public class TeamService {
         if (uniquePokemonIds.size() < teamInputDto.getOwnedPokemonIds().size()) {
             throw new IllegalArgumentException("The team cannot contain the same owned Pokémon twice.");
         }
+
         List<OwnedPokemon> ownedPokemonList = teamInputDto.getOwnedPokemonIds().stream()
                 .map(id -> ownedPokemonRepository.findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("OwnedPokemon not found with id " + id)))
                 .collect(Collectors.toList());
 
+        if (ownedPokemonList.stream().anyMatch(ownedPokemon -> !ownedPokemon.getPokemon().getValidated())) {
+            throw new IllegalArgumentException("All Pokémon in the team must be validated.");
+        }
+
         Team team = teamMapper.toEntity(teamInputDto, ownedPokemonList);
         team = teamRepository.save(team);
+        return teamMapper.toDto(team);
+    }
+
+    public TeamOutputDto getTeamById(Long id) {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + id));
         return teamMapper.toDto(team);
     }
 
@@ -75,9 +86,4 @@ public class TeamService {
         return teamMapper.toDto(team);
     }
 
-    public TeamOutputDto getTeamById(Long id) {
-        Team team = teamRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + id));
-        return teamMapper.toDto(team);
-    }
 }
