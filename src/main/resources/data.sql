@@ -9,8 +9,8 @@ VALUES
 -- Insert data into authorities table
 INSERT INTO authorities (username ,authority)
 VALUES
-    ('Brock','ADMIN'),
-    ('Misty','TRAINER');
+    ('Brock','ROLE_ADMIN'),
+    ('Misty','ROLE_TRAINER');
 
 -- Insert data into Pokemon table
 INSERT INTO pokemon (name, national_dex, type, health_points, attack, defence, sp_attack, sp_defence, speed, validated)

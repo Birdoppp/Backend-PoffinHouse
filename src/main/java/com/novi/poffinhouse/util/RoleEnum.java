@@ -1,6 +1,6 @@
 package com.novi.poffinhouse.util;
 
 public enum RoleEnum {
-    ADMIN,
-    TRAINER
+    ROLE_ADMIN,
+    ROLE_TRAINER
 }
