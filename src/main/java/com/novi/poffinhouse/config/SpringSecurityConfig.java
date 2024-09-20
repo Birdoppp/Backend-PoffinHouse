@@ -15,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import com.novi.poffinhouse.filters.JwtRequestFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -22,11 +24,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SpringSecurityConfig {
 
 
+    private final JwtRequestFilter jwtRequestFilter;
+
     private final CustomUserDetailsService customUserDetailsService;
     public final static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public SpringSecurityConfig(CustomUserDetailsService customUserDetailsService) {
+    public SpringSecurityConfig(CustomUserDetailsService customUserDetailsService, JwtRequestFilter jwtRequestFilter) {
         this.customUserDetailsService = customUserDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
     }
 
     @Bean
@@ -37,15 +42,20 @@ public class SpringSecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/**").permitAll()
+//                                .requestMatchers("/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/berries").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/pokemon").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/pokemon/{id}/validate").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/games").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/authenticated").authenticated()
+                                .requestMatchers("/users/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/trainer/**").hasRole("TRAINER")
                                 .anyRequest().denyAll()
 
                 ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
 
@@ -59,18 +69,5 @@ public class SpringSecurityConfig {
         auth.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(auth);
     }
-
-//    @Bean
-//    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
-//        AuthenticationManagerBuilder authenticationManagerBuilder = new AuthenticationManagerBuilder(http.getSharedObject(ProviderManager.class));
-//        authenticationManagerBuilder
-//                .inMemoryAuthentication()
-//                .withUser("admin").password(passwordEncoder.encode("password")).roles("ADMIN")
-//                .and()
-//                .withUser("trainer").password(passwordEncoder.encode("password")).roles("TRAINER");
-//
-//        return authenticationManagerBuilder.build();
-//    }
-
 
 }
