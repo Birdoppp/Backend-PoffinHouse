@@ -1,4 +1,4 @@
-package com.novi.poffinhouse.dto.output;
+package com.novi.poffinhouse.dto.output.game;
 
 import com.novi.poffinhouse.util.PreferencesEnum;
 import jakarta.validation.constraints.Size;

@@ -1,7 +1,8 @@
 package com.novi.poffinhouse.controllers;
 
 import com.novi.poffinhouse.dto.input.*;
-import com.novi.poffinhouse.dto.output.GameOutputDto;
+import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
+import com.novi.poffinhouse.dto.output.game.GameOutputDto;
 import com.novi.poffinhouse.services.GameService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,11 @@ public class GameController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GameOutputDto> getGameById(@PathVariable Long id) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication().getName();
+
         GameOutputDto game = gameService.getGameById(id);
         return ResponseEntity.ok(game);
     }
-
 
     @GetMapping("/user/{username}")
     public ResponseEntity<List<GameOutputDto>> getAllGamesByUsername(@PathVariable String username) {
@@ -50,34 +52,39 @@ public class GameController {
         return ResponseEntity.ok(updatedGame);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteGame(@PathVariable Long id) {
-        gameService.deleteGame(id);
-        return ResponseEntity.ok("Game with id " + id + " deleted.");
-    }
-
+    //Pokemon
     @PatchMapping("/{id}/pokemonList")
     public ResponseEntity<GameOutputDto> patchPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustIdListDto adjustIdListDto) {
         GameOutputDto updatedGame = gameService.patchPokemonList(id, adjustIdListDto);
         return ResponseEntity.ok(updatedGame);
     }
 
-    @PatchMapping("/{id}/ownedPokemonList")
-    public ResponseEntity<GameOutputDto> patchOwnedPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustIdListDto adjustIdListDto) {
-        GameOutputDto updatedGame = gameService.patchOwnedPokemonList(id, adjustIdListDto);
-        return ResponseEntity.ok(updatedGame);
+    //OwnedPokemon - other methods in OwnedPokemonController
+    @PostMapping("/{id}/ownedPokemon")
+    public ResponseEntity<OwnedPokemonOutputDto> createOwnedPokemon(@PathVariable Long id, @Valid @RequestBody OwnedPokemonInputDto ownedPokemonInputDto) {
+        OwnedPokemonOutputDto ownedPokemon = gameService.createOwnedPokemon(id, ownedPokemonInputDto);
+        return ResponseEntity.ok(ownedPokemon);
     }
 
+    //Team
     @PutMapping("/{id}/team")
     public ResponseEntity<GameOutputDto> updateTeam(@PathVariable Long id, @RequestBody Long teamId) {
         GameOutputDto updatedGame = gameService.updateTeam(id, teamId);
         return ResponseEntity.ok(updatedGame);
     }
 
+    //Berries
     @PatchMapping("/{id}/berryList")
     public ResponseEntity<GameOutputDto> patchBerryList(@PathVariable Long id, @Valid @RequestBody AdjustIdListDto adjustIdListDto) {
         GameOutputDto updatedGame = gameService.patchBerryList(id, adjustIdListDto);
         return ResponseEntity.ok(updatedGame);
+    }
+
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteGame(@RequestBody Long id) {
+        gameService.deleteGame(id);
+        return ResponseEntity.ok("Game with id " + id + " deleted.");
     }
 
 

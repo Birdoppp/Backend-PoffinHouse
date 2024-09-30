@@ -38,11 +38,4 @@ public class RegionMapController {
     public ResponseEntity<RegionMapOutputDto> updateMap(@PathVariable Long id,@Valid @RequestBody RegionMapInputDto regionMap) {
         return ResponseEntity.ok(regionMapService.updateRegionMap(id, regionMap));
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMap(@PathVariable Long id) {
-        regionMapService.deleteRegionMap(id);
-        return ResponseEntity.ok("Region Map " + id + " deleted successfully");
-    }
-
 }

@@ -1,6 +1,7 @@
-package com.novi.poffinhouse.dto.output;
+package com.novi.poffinhouse.dto.output.game;
 
 
+import com.novi.poffinhouse.dto.output.*;
 import lombok.Data;
 
 import java.util.List;

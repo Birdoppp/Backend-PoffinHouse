@@ -4,8 +4,8 @@ import com.novi.poffinhouse.dto.input.AdjustPokemonInTeamDto;
 import com.novi.poffinhouse.dto.input.TeamInputDto;
 import com.novi.poffinhouse.dto.output.TeamOutputDto;
 import com.novi.poffinhouse.dto.mapper.TeamMapper;
-import com.novi.poffinhouse.models.pokemon.OwnedPokemon;
-import com.novi.poffinhouse.models.pokemon.Team;
+import com.novi.poffinhouse.models.game.OwnedPokemon;
+import com.novi.poffinhouse.models.game.Team;
 import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.TeamRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,6 +32,8 @@ public class TeamService {
         this.ownedPokemonRepository = ownedPokemonRepository;
         this.teamMapper = teamMapper;
     }
+
+        //    Post/Creation of Team happens in Game
 
     public TeamOutputDto createTeam(TeamInputDto teamInputDto) {
         if (teamInputDto.getOwnedPokemonIds().size() > 6) {

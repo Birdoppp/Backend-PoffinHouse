@@ -1,6 +1,7 @@
 package com.novi.poffinhouse.models.pokemon;
 
 import com.novi.poffinhouse.models.game.Game;
+import com.novi.poffinhouse.models.game.OwnedPokemon;
 import com.novi.poffinhouse.util.Capitalize;
 import com.novi.poffinhouse.util.TypeEnum;
 import com.novi.poffinhouse.util.ValidEnum;

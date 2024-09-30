@@ -3,9 +3,9 @@ package com.novi.poffinhouse.services;
 import com.novi.poffinhouse.dto.input.OwnedPokemonInputDto;
 import com.novi.poffinhouse.dto.mapper.OwnedPokemonMapper;
 import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
-import com.novi.poffinhouse.models.pokemon.OwnedPokemon;
+import com.novi.poffinhouse.models.game.OwnedPokemon;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
-import com.novi.poffinhouse.models.pokemon.Team;
+import com.novi.poffinhouse.models.game.Team;
 import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.PokemonRepository;
 import com.novi.poffinhouse.repositories.TeamRepository;
@@ -32,17 +32,8 @@ public class OwnedPokemonService {
         this.teamRepository = teamRepository;
     }
 
+    //    Post/Creation of OwnedPokemon happens in Game
 
-    public OwnedPokemonOutputDto createOwnedPokemon(OwnedPokemonInputDto inputDto) {
-        Pokemon pokemon = pokemonRepository.findByName(inputDto.getPokemonName())
-                .orElseThrow(() -> new IllegalArgumentException("Pokemon with name " + inputDto.getPokemonName() + " not found."));
-
-        OwnedPokemon ownedPokemon = ownedPokemonMapper.toModel(inputDto);
-        ownedPokemon.setPokemon(pokemon);
-
-        OwnedPokemon savedOwnedPokemon = ownedPokemonRepository.save(ownedPokemon);
-        return ownedPokemonMapper.toOutputDto(savedOwnedPokemon);
-    }
 
     public OwnedPokemonOutputDto getOwnedPokemonById(Long id) {
         Optional<OwnedPokemon> optionalOwnedPokemon = ownedPokemonRepository.findById(id);

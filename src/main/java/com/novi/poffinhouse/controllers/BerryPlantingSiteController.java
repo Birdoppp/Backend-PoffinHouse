@@ -35,11 +35,7 @@ public class BerryPlantingSiteController {
         return ResponseEntity.ok(berryPlantingSiteService.getBerryPlantingSiteById(id));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBerryPlantingSite(@PathVariable Long id) {
-        berryPlantingSiteService.deleteBerryPlantingSite(id);
-        return ResponseEntity.ok("Berry Planting Site " + id + " deleted successfully");
-    }
+
 
     //    Assign Berries to BerryPlantingSite soilSlots
 
@@ -82,5 +78,12 @@ public class BerryPlantingSiteController {
         }
 
         return result.toString();
+    }
+
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteBerryPlantingSite(@RequestBody Long id) {
+        berryPlantingSiteService.deleteBerryPlantingSite(id);
+        return ResponseEntity.ok("Berry Planting Site " + id + " deleted successfully");
     }
 }
