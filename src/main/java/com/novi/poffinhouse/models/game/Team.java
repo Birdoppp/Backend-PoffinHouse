@@ -1,6 +1,5 @@
-package com.novi.poffinhouse.models.pokemon;
+package com.novi.poffinhouse.models.game;
 
-import com.novi.poffinhouse.models.game.Game;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

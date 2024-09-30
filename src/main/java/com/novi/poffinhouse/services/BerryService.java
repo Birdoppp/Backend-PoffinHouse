@@ -86,6 +86,9 @@ public class BerryService {
         // Find all BerryPlantingSites that have this Berry
         List<BerryPlantingSite> sites = berryPlantingSiteRepository.findBerryPlantingSiteByPlantedBerriesBySlotsEquals(berry);
 
+        // Delete Berry from all Games
+        berry.getGames().forEach(game -> game.getBerryList().remove(berry));
+
         // Update each BerryPlantingSite to remove the berry
         for (BerryPlantingSite site : sites) {
 //            site.getPlantedBerriesBySlots().remove(1);

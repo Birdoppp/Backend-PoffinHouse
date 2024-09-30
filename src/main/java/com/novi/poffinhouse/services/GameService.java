@@ -2,17 +2,22 @@ package com.novi.poffinhouse.services;
 
 import com.novi.poffinhouse.dto.input.AdjustIdListDto;
 import com.novi.poffinhouse.dto.input.GameInputDto;
+import com.novi.poffinhouse.dto.input.OwnedPokemonInputDto;
 import com.novi.poffinhouse.dto.mapper.GameMapper;
-import com.novi.poffinhouse.dto.output.GameOutputDto;
+import com.novi.poffinhouse.dto.mapper.OwnedPokemonMapper;
+import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
+import com.novi.poffinhouse.dto.output.game.GameOutputDto;
 import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.models.game.Game;
-import com.novi.poffinhouse.models.pokemon.OwnedPokemon;
+import com.novi.poffinhouse.models.game.OwnedPokemon;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
-import com.novi.poffinhouse.models.pokemon.Team;
+import com.novi.poffinhouse.models.game.Team;
 import com.novi.poffinhouse.repositories.*;
 import com.novi.poffinhouse.util.AuthUtil;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -31,10 +36,11 @@ public class GameService {
     private final OwnedPokemonRepository ownedPokemonRepository;
     private final BerryRepository berryRepository;
     private final TeamRepository teamRepository;
+    private final OwnedPokemonMapper ownedPokemonMapper;
 
     public GameService(GameRepository gameRepository, GameMapper gameMapper, UserRepository userRepository, PokemonRepository pokemonRepository,
                        OwnedPokemonRepository ownedPokemonRepository, BerryRepository berryRepository,
-                       TeamRepository teamRepository) {
+                       TeamRepository teamRepository, OwnedPokemonMapper ownedPokemonMapper) {
         this.gameRepository = gameRepository;
         this.gameMapper = gameMapper;
         this.userRepository = userRepository;
@@ -42,6 +48,7 @@ public class GameService {
         this.ownedPokemonRepository = ownedPokemonRepository;
         this.berryRepository = berryRepository;
         this.teamRepository = teamRepository;
+        this.ownedPokemonMapper = ownedPokemonMapper;
     }
 
     public GameOutputDto createGame(GameInputDto inputDto) {
@@ -82,7 +89,7 @@ public class GameService {
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
 
         existingGame.setVersionName(inputDto.getVersionName());
-        existingGame.setGeneration(inputDto.getGeneration());
+//        existingGame.setGeneration(inputDto.getGeneration());
         existingGame.setDescription(inputDto.getDescription());
         existingGame.setRegionMap(gameMapper.toEntity(inputDto).getRegionMap());
 
@@ -90,11 +97,19 @@ public class GameService {
         return gameMapper.toDto(updatedGame);
     }
 
+    //Pokemon
+//    public void setPokemonListForGame(Long gameId, GameSetIdListInputDto inputDto) {
+//        Game game = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
+//        List<Pokemon> pokemonList = pokemonRepository.findAllByValidatedTrueAndNationalDexBetween(NationalDexByGeneration.getNationalDexByGeneration(game.getGeneration()));
+//        GameSetIdList.setPokemonList(pokemonList);
+//        gameRepository.save(game);
+//    }
 
     public GameOutputDto patchPokemonList(Long id, AdjustIdListDto adjustIdListDto) {
         Game game = gameRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
-
+                .orElseThrow(() -> new EntityNotFoundException("Game with id " + id + " not found."));
+//        List<Pokemon> existingPokemonList = game.getPokemonList();
+//      Add Method to skip double pokemon and check if pokemon is validated
         List<Pokemon> pokemonListToAdd = adjustIdListDto.getAddIdList().stream()
                 .map(pokemonRepository::findById)
                 .map(pokemon -> pokemon.orElseThrow(() -> new IllegalArgumentException("Pokemon not found.")))
@@ -112,27 +127,24 @@ public class GameService {
         return gameMapper.toDto(updatedGame);
     }
 
-    public GameOutputDto patchOwnedPokemonList(Long id, AdjustIdListDto adjustIdListDto) {
+    //OwnedPokemon
+    public OwnedPokemonOutputDto createOwnedPokemon(Long id, @Valid OwnedPokemonInputDto ownedPokemonInputDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
 
-        List<OwnedPokemon> ownedPokemonListToAdd = adjustIdListDto.getAddIdList().stream()
-                .map(ownedPokemonRepository::findById)
-                .map(ownedPokemon -> ownedPokemon.orElseThrow(() -> new IllegalArgumentException("OwnedPokemon not found.")))
-                .toList();
+        OwnedPokemon ownedPokemon = ownedPokemonMapper.toEntity(ownedPokemonInputDto);
+        ownedPokemon.setPokemon(pokemonRepository.findByName(ownedPokemonInputDto.getPokemonName())
+                .orElseThrow(() -> new IllegalArgumentException("Pokemon with name " + ownedPokemonInputDto.getPokemonName() + " not found.")));
 
-        List<OwnedPokemon> ownedPokemonListToRemove = adjustIdListDto.getRemoveIdList().stream()
-                .map(ownedPokemonRepository::findById)
-                .map(ownedPokemon -> ownedPokemon.orElseThrow(() -> new IllegalArgumentException("OwnedPokemon not found.")))
-                .toList();
+        ownedPokemon.setGame(game);
+        ownedPokemon.setUsername(AuthUtil.getCurrentUsername());
 
-        game.getOwnedPokemonList().removeAll(ownedPokemonListToRemove);
-        game.getOwnedPokemonList().addAll(ownedPokemonListToAdd);
-
-        Game updatedGame = gameRepository.save(game);
-        return gameMapper.toDto(updatedGame);
+        OwnedPokemon savedOwnedPokemon = ownedPokemonRepository.save(ownedPokemon);
+        return ownedPokemonMapper.toOutputDto(savedOwnedPokemon);
     }
 
+
+    //Team
     public GameOutputDto updateTeam(Long gameId, Long teamId) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + gameId + " not found."));
@@ -145,6 +157,7 @@ public class GameService {
         return gameMapper.toDto(updatedGame);
     }
 
+    //Berries
     public GameOutputDto patchBerryList(Long id, AdjustIdListDto adjustIdListDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
@@ -165,6 +178,7 @@ public class GameService {
         Game updatedGame = gameRepository.save(game);
         return gameMapper.toDto(updatedGame);
     }
+
 
     public void deleteGame(Long id) {
         if (!gameRepository.existsById(id)) {

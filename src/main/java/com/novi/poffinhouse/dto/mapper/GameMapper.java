@@ -1,37 +1,26 @@
-// src/main/java/com/novi/poffinhouse/dto/mapper/GameMapper.java
-
 package com.novi.poffinhouse.dto.mapper;
 
 import com.novi.poffinhouse.dto.input.GameInputDto;
-import com.novi.poffinhouse.dto.output.*;
+import com.novi.poffinhouse.dto.output.game.*;
 import com.novi.poffinhouse.models.game.Game;
-import com.novi.poffinhouse.models.berries.Berry;
-import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.models.region.RegionMap;
 import com.novi.poffinhouse.repositories.*;
+import com.novi.poffinhouse.util.GameIdListSetter;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class GameMapper {
 
     private final RegionMapRepository regionMapRepository;
-    private final UserRepository userRepository;
-    private final PokemonRepository pokemonRepository;
-    private final OwnedPokemonRepository ownedPokemonRepository;
-    private final TeamRepository teamRepository;
-    private final BerryRepository berryRepository;
+    private final GameIdListSetter gameIdListSetter;
     private final TeamMapper teamMapper;
 
-    public GameMapper(PokemonRepository pokemonRepository, OwnedPokemonRepository ownedPokemonRepository, BerryRepository berryRepository, RegionMapRepository regionMapRepository, UserRepository userRepository, TeamRepository teamRepository, TeamMapper teamMapper) {
-        this.pokemonRepository = pokemonRepository;
-        this.ownedPokemonRepository = ownedPokemonRepository;
-        this.berryRepository = berryRepository;
+    public GameMapper(
+            RegionMapRepository regionMapRepository, GameIdListSetter gameIdListSetter, TeamMapper teamMapper) {
         this.regionMapRepository = regionMapRepository;
-        this.userRepository = userRepository;
-        this.teamRepository = teamRepository;
+        this.gameIdListSetter = gameIdListSetter;
         this.teamMapper = teamMapper;
     }
 
@@ -45,20 +34,14 @@ public class GameMapper {
         RegionMap regionMap = regionMapRepository.findById(inputDto.getRegionMapId())
                 .orElseThrow(() -> new IllegalArgumentException("RegionMap not found."));
         game.setRegionMap(regionMap);
-
-        // Set Pokemon list
-        List<Pokemon> pokemonList = inputDto.getPokemonIds().stream()
-                .map(pokemonRepository::findById)
-                .map(optionalPokemon -> optionalPokemon.orElseThrow(() -> new IllegalArgumentException("Pokemon not found.")))
-                .collect(Collectors.toList());
-        game.setPokemonList(pokemonList);
-
+        // Set Pokémon list
+        if (inputDto.getPokemonInput() != null) {
+            game.setPokemonList(gameIdListSetter.PokemonListByGeneration(inputDto.getPokemonInput(), inputDto.getGeneration()));
+        }
         // Set Berry list
-        List<Berry> berryList = inputDto.getBerryIds().stream()
-                .map(berryRepository::findById)
-                .map(optionalBerry -> optionalBerry.orElseThrow(() -> new IllegalArgumentException("Berry not found.")))
-                .collect(Collectors.toList());
-        game.setBerryList(berryList);
+        if (inputDto.getBerryInput() != null) {
+            game.setBerryList(gameIdListSetter.BerryList(inputDto.getBerryInput()));
+        }
 
         return game;
     }
@@ -70,7 +53,7 @@ public class GameMapper {
         outputDto.setGeneration(game.getGeneration());
         outputDto.setDescription(game.getDescription());
 
-        // Convert related entities to output DTOs
+        // Convert to GameOutputDto
         outputDto.setRegionMap(new GameRegionMapOutputDto(game.getRegionMap().getId(), game.getRegionMap().getRegionName()));
         outputDto.setUser(new GameUserOutputDto(game.getUser().getId(), game.getUser().getUsername()));
         outputDto.setPokemonList(game.getPokemonList().stream()

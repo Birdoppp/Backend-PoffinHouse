@@ -7,6 +7,7 @@ import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.PokemonRepository;
 import com.novi.poffinhouse.util.Capitalize;
+import com.novi.poffinhouse.util.NationalDexByGeneration;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,13 @@ public class PokemonService {
     public Pokemon getPokemonByNationalDex(int nationalDexNumber) {
         return pokemonRepository.findByNationalDex(nationalDexNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Pokemon with nationalDex number " + nationalDexNumber + " not found."));
+    }
+
+    private List<Pokemon> getPokemonByGeneration(int generation) {
+        // Assuming you have a method to get the max National Dex number for a generation
+        int startDexNumber = NationalDexByGeneration.getStartIndexByGeneration(generation);
+        int maxDexNumber = NationalDexByGeneration.getMaxIndexByGeneration(generation);
+        return pokemonRepository.findAllByValidatedTrueAndNationalDexBetween(startDexNumber,maxDexNumber);
     }
 
     public List<PokemonOutputDto> getAllPokemon() {

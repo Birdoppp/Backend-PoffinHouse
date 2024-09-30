@@ -1,4 +1,4 @@
-package com.novi.poffinhouse.dto.output;
+package com.novi.poffinhouse.dto.output.game;
 
 import lombok.Data;
 

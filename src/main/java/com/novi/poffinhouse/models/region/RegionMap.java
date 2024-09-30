@@ -32,7 +32,7 @@ public class RegionMap {
     private int sizeYAxis;
 
     @Getter
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "regionMap")
+    @OneToMany(mappedBy = "regionMap", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Location> locations = new ArrayList<>();
 
     @OneToMany(mappedBy = "regionMap")

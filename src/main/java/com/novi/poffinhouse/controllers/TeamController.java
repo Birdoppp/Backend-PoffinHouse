@@ -17,6 +17,8 @@ public class TeamController {
         this.teamService = teamService;
     }
 
+        //    Post/Creation of Team happens in Game
+
     @PostMapping
     public ResponseEntity<TeamOutputDto> createTeam(@RequestBody TeamInputDto dto) {
         TeamOutputDto teamOutputDto = teamService.createTeam(dto);

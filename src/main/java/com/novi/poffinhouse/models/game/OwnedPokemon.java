@@ -1,6 +1,6 @@
-package com.novi.poffinhouse.models.pokemon;
+package com.novi.poffinhouse.models.game;
 
-import com.novi.poffinhouse.models.game.Game;
+import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.util.PreferencesEnum;
 import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.persistence.*;
@@ -19,6 +19,9 @@ public class OwnedPokemon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Setter
+    @NotNull
+    private String username;
 
     @ManyToOne
     @Setter
@@ -38,6 +41,7 @@ public class OwnedPokemon {
     @Size(min = 1, max = 12)
     private String caughtByTrainerName;
 
+
     // Contest conditions for the Pokémon Contests
     @Setter
     private Integer beauty;
@@ -55,6 +59,7 @@ public class OwnedPokemon {
     private List<Team> teams;
 
     @ManyToOne
+    @Setter
     @JoinColumn(name = "game_id")
     private Game game;
 }

@@ -51,8 +51,5 @@ public class RegionMapService {
         return RegionMapMapper.toOutputDto(regionMap);
     }
 
-    public void deleteRegionMap(Long id) {
-        regionMapRepository.deleteById(id);
-    }
 
 }

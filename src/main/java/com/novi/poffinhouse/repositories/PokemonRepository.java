@@ -19,6 +19,8 @@ public interface PokemonRepository extends JpaRepository <Pokemon,Long> {
     @Query("SELECT p FROM Pokemon p WHERE p.validated = true ORDER BY p.nationalDex")
     List<Pokemon> findAllValidatedOrderedByNationalDex();
 
+    List<Pokemon> findAllByValidatedTrueAndNationalDexBetween(int startNationalDex, int maxNationalDex);
+
     void deleteByNationalDex (int nationalDex);
 
 }

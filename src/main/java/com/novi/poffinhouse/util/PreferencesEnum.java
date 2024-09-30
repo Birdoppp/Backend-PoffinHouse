@@ -2,9 +2,9 @@ package com.novi.poffinhouse.util;
 
 import lombok.Getter;
 
-//import static com.novi.poffinhouse.util.Capitalize.getCapitalizedString;
 
 public class PreferencesEnum {
+  @Getter
     public enum FLAVOR {
         SPICY,
         DRY,
@@ -49,11 +49,5 @@ public class PreferencesEnum {
             this.favorite = favorite;
             this.dislikes = dislikes;
         }
-
-//        public static void main(String[] args) {
-//            for (NATURE nature : NATURE.values()) {
-//                System.out.println("A Pokemon with a " + getCapitalizedString(nature.name()) + " nature likes " + getCapitalizedString(nature.getFavorite().name()) + " berries and dislikes " + getCapitalizedString(nature.getDislikes().name()) + "berries.");
-//            }
-//        }
     }
 }

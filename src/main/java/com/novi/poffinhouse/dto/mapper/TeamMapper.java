@@ -3,8 +3,8 @@ package com.novi.poffinhouse.dto.mapper;
 import com.novi.poffinhouse.dto.input.TeamInputDto;
 import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
 import com.novi.poffinhouse.dto.output.TeamOutputDto;
-import com.novi.poffinhouse.models.pokemon.Team;
-import com.novi.poffinhouse.models.pokemon.OwnedPokemon;
+import com.novi.poffinhouse.models.game.Team;
+import com.novi.poffinhouse.models.game.OwnedPokemon;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
