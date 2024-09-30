@@ -27,7 +27,7 @@ public class AuthorityController {
         return new ResponseEntity<>(createdAuthority, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("username/{username}")
     public ResponseEntity<?> getAuthoritiesByUsername(@PathVariable String username) {
         try {
             Set<AuthorityOutputDto> authorities = authorityService.getAuthoritiesByUsername(username);

@@ -74,12 +74,16 @@ public class UserService {
         return userMapper.toDto(updatedUser);
     }
 
-    public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("User not found with ID: " + id);
-        }
+    public String deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " not found."));
+        String username = user.getUsername();
         userRepository.deleteById(id);
+        return "User with username:'" + username + "' has been deleted successfully. Including all associated data.";
     }
+
+
+
 
 //For TeamService
     public User findByUsername(String username) {

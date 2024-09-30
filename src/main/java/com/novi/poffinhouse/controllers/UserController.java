@@ -6,6 +6,7 @@ import com.novi.poffinhouse.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,6 +27,7 @@ public class UserController {
     // Get by Id, Email or Username
     @GetMapping("/{field}/{value}")
     public ResponseEntity<UserOutputDto> getUserByField(@PathVariable String field, @PathVariable String value) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
         UserOutputDto userDTO = userService.getUserBy(field, value);
         return ResponseEntity.ok(userDTO);
     }
@@ -36,9 +38,9 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@Valid @PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok("User with id " + id + " has been deleted.");
+    @DeleteMapping
+    public ResponseEntity<String> deleteUser(@Valid @RequestBody Long id) {
+        String message = userService.deleteUser(id);
+        return ResponseEntity.ok(message);
     }
 }

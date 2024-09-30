@@ -29,7 +29,7 @@ public class User {
     @Setter
     @NotBlank
     @Column(nullable = false, unique = true)
-    @Size(min = 4, max = 50, message = "Name must be between 4 and 100 characters")
+    @Size(min = 4, max = 50, message = "Name must be between 4 and 50 characters")
     private String username;
 
     @Setter
@@ -49,6 +49,5 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Game> games = new HashSet<>();
-
 
 }
