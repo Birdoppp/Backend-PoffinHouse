@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,18 +40,44 @@ public class SpringSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth ->
-                        auth
-//                                .requestMatchers("/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/berries").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/pokemon").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/pokemon/{id}/validate").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/games").authenticated()
-                                .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/authenticated").authenticated()
-                                .requestMatchers("/users/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/trainer/**").hasRole("TRAINER")
-                                .anyRequest().denyAll()
+                                auth
+                                        .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("TRAINER","ADMIN")
+                                        .requestMatchers(HttpMethod.GET, "/authorities/**").hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.GET, "/authenticated").authenticated()
+                                        .requestMatchers(HttpMethod.GET, "/**").authenticated()
+                                        .requestMatchers(HttpMethod.GET, "/*/validated").permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/**/createdBy/{username}").hasRole("TRAINER")
+
+
+                                        .requestMatchers(HttpMethod.POST, "/users", "/authenticate").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                                        .requestMatchers(HttpMethod.POST, "/authorities/**").hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.POST, "/region-maps").hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.POST, "/games/**",
+                                                                          "/locations",
+                                                                          "/berry-planting-sites",
+                                                                          "/berries",
+                                                                          "/pokemon",
+                                                                          "/owned-pokemon",
+                                                                          "/teams").hasAnyRole("TRAINER", "ADMIN")
+
+
+                                        .requestMatchers(HttpMethod.PATCH, "/games/**").hasAnyRole("TRAINER", "ADMIN")
+
+
+                                        .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.PUT, "/*/*/team").hasAnyRole("TRAINER", "ADMIN")
+//                                .requestMatchers(HttpMethod.PUT, "/**").authenticated()
+                                        .requestMatchers(HttpMethod.PUT, "/*/validate").hasRole("ADMIN")
+
+
+                                        .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+//
+//
+//                                .requestMatchers("/users/**").hasAnyRole("USER", "ADMIN")
+//                                .requestMatchers("/admin/**").hasRole("ADMIN")
+//                                .requestMatchers("/trainer/**").hasRole("TRAINER")
+                                        .anyRequest().denyAll()
 
                 ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
