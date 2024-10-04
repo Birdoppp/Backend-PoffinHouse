@@ -7,9 +7,7 @@ import com.novi.poffinhouse.repositories.BerryRepository;
 import com.novi.poffinhouse.repositories.PokemonRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -32,25 +30,29 @@ public class GameIdListSetter {
         } else if (idList == null) {
             return Collections.emptyList();
         } else {
+            Set<Long> uniqueIds = new HashSet<>();
             return idList.stream()
-                    .map(pokemonRepository::findById)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
+                    .filter(uniqueIds::add) // Skip duplicates
+                    .map(id -> pokemonRepository.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("Pokemon with Id " + id + " not found.")))
                     .collect(Collectors.toList());
         }
     }
 
+
     public List<Berry> BerryList(GameIdListSetterInputDto inputDto) {
+        List<Long> idList = inputDto.getIdList();
         if (inputDto.isAutofill()) {
             return berryRepository.findAll();
-        }
-        if (inputDto.getIdList() == null) {
+        } else if (idList == null) {
             return Collections.emptyList();
+        } else {
+            Set<Long> uniqueIds = new HashSet<>();
+            return idList.stream()
+                    .filter(uniqueIds::add) // Skip duplicates
+                    .map(id -> berryRepository.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("Berry with ID " + id + " not found.")))
+                    .collect(Collectors.toList());
         }
-        return inputDto.getIdList().stream()
-                .map(berryRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
     }
 }

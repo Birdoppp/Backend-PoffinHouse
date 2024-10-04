@@ -34,6 +34,7 @@ public class GameMapper {
         RegionMap regionMap = regionMapRepository.findById(inputDto.getRegionMapId())
                 .orElseThrow(() -> new IllegalArgumentException("RegionMap not found."));
         game.setRegionMap(regionMap);
+
         // Set Pokémon list
         if (inputDto.getPokemonInput() != null) {
             game.setPokemonList(gameIdListSetter.PokemonListByGeneration(inputDto.getPokemonInput(), inputDto.getGeneration()));

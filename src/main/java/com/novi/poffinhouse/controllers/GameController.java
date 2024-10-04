@@ -66,12 +66,7 @@ public class GameController {
         return ResponseEntity.ok(ownedPokemon);
     }
 
-    //Team
-    @PutMapping("/{id}/team")
-    public ResponseEntity<GameOutputDto> updateTeam(@PathVariable Long id, @RequestBody Long teamId) {
-        GameOutputDto updatedGame = gameService.updateTeam(id, teamId);
-        return ResponseEntity.ok(updatedGame);
-    }
+    //Team in Team Service
 
     //Berries
     @PatchMapping("/{id}/berryList")

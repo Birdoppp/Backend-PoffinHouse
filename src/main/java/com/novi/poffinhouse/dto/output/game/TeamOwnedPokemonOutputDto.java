@@ -1,16 +1,13 @@
-package com.novi.poffinhouse.dto.output;
+package com.novi.poffinhouse.dto.output.game;
 
 import lombok.Data;
 
 @Data
-public class OwnedPokemonOutputDto {
-    private Long gameId;
+public class TeamOwnedPokemonOutputDto {
     private Long id;
-    private String username;
     private String pokemonName;
     private String nickname;
     private String nature;
-    private String caughtByTrainerName;
 
     private Integer beauty;
     private Integer coolness;

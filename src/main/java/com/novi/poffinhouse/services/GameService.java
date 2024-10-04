@@ -12,7 +12,6 @@ import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.models.game.OwnedPokemon;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
-import com.novi.poffinhouse.models.game.Team;
 import com.novi.poffinhouse.repositories.*;
 import com.novi.poffinhouse.util.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,19 +34,16 @@ public class GameService {
     private final PokemonRepository pokemonRepository;
     private final OwnedPokemonRepository ownedPokemonRepository;
     private final BerryRepository berryRepository;
-    private final TeamRepository teamRepository;
     private final OwnedPokemonMapper ownedPokemonMapper;
 
     public GameService(GameRepository gameRepository, GameMapper gameMapper, UserRepository userRepository, PokemonRepository pokemonRepository,
-                       OwnedPokemonRepository ownedPokemonRepository, BerryRepository berryRepository,
-                       TeamRepository teamRepository, OwnedPokemonMapper ownedPokemonMapper) {
+                       OwnedPokemonRepository ownedPokemonRepository, BerryRepository berryRepository, OwnedPokemonMapper ownedPokemonMapper) {
         this.gameRepository = gameRepository;
         this.gameMapper = gameMapper;
         this.userRepository = userRepository;
         this.pokemonRepository = pokemonRepository;
         this.ownedPokemonRepository = ownedPokemonRepository;
         this.berryRepository = berryRepository;
-        this.teamRepository = teamRepository;
         this.ownedPokemonMapper = ownedPokemonMapper;
     }
 
@@ -98,17 +94,11 @@ public class GameService {
     }
 
     //Pokemon
-//    public void setPokemonListForGame(Long gameId, GameSetIdListInputDto inputDto) {
-//        Game game = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found"));
-//        List<Pokemon> pokemonList = pokemonRepository.findAllByValidatedTrueAndNationalDexBetween(NationalDexByGeneration.getNationalDexByGeneration(game.getGeneration()));
-//        GameSetIdList.setPokemonList(pokemonList);
-//        gameRepository.save(game);
-//    }
 
     public GameOutputDto patchPokemonList(Long id, AdjustIdListDto adjustIdListDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Game with id " + id + " not found."));
-//        List<Pokemon> existingPokemonList = game.getPokemonList();
+
 //      Add Method to skip double pokemon and check if pokemon is validated
         List<Pokemon> pokemonListToAdd = adjustIdListDto.getAddIdList().stream()
                 .map(pokemonRepository::findById)
@@ -132,6 +122,14 @@ public class GameService {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
 
+        // Check if the pokemonName exists in the pokemonList of the Game
+        boolean pokemonExistsInGame = game.getPokemonList().stream()
+                .anyMatch(pokemon -> pokemon.getName().equals(ownedPokemonInputDto.getPokemonName()));
+
+        if (!pokemonExistsInGame) {
+            throw new IllegalArgumentException("Pokemon with name " + ownedPokemonInputDto.getPokemonName() + " does not exist in the game's pokemon list.");
+        }
+
         OwnedPokemon ownedPokemon = ownedPokemonMapper.toEntity(ownedPokemonInputDto);
         ownedPokemon.setPokemon(pokemonRepository.findByName(ownedPokemonInputDto.getPokemonName())
                 .orElseThrow(() -> new IllegalArgumentException("Pokemon with name " + ownedPokemonInputDto.getPokemonName() + " not found.")));
@@ -143,19 +141,7 @@ public class GameService {
         return ownedPokemonMapper.toOutputDto(savedOwnedPokemon);
     }
 
-
-    //Team
-    public GameOutputDto updateTeam(Long gameId, Long teamId) {
-        Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new IllegalArgumentException("Game with id " + gameId + " not found."));
-
-        Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new IllegalArgumentException("Team with id " + teamId + " not found."));
-
-        game.setTeam(team);
-        Game updatedGame = gameRepository.save(game);
-        return gameMapper.toDto(updatedGame);
-    }
+    //Team in TeamService
 
     //Berries
     public GameOutputDto patchBerryList(Long id, AdjustIdListDto adjustIdListDto) {

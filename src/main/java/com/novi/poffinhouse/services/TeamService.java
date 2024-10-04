@@ -1,6 +1,5 @@
 package com.novi.poffinhouse.services;
 
-import com.novi.poffinhouse.dto.input.AdjustPokemonInTeamDto;
 import com.novi.poffinhouse.dto.input.TeamInputDto;
 import com.novi.poffinhouse.dto.output.TeamOutputDto;
 import com.novi.poffinhouse.dto.mapper.TeamMapper;
@@ -33,9 +32,12 @@ public class TeamService {
         this.teamMapper = teamMapper;
     }
 
-        //    Post/Creation of Team happens in Game
 
     public TeamOutputDto createTeam(TeamInputDto teamInputDto) {
+        teamRepository.findByGameId(teamInputDto.getGameId()).ifPresent(existingTeam -> {
+            throw new IllegalArgumentException("A team already exists for the given game.");
+        });
+
         if (teamInputDto.getOwnedPokemonIds().size() > 6) {
             throw new IllegalArgumentException("A team can have a maximum of 6 Pokémon.");
         }
@@ -64,12 +66,12 @@ public class TeamService {
         return teamMapper.toDto(team);
     }
 
-    public TeamOutputDto adjustPokemonInTeam(Long teamId, AdjustPokemonInTeamDto adjustPokemonInTeamDto) {
-        if (adjustPokemonInTeamDto.getOwnedPokemonIds().size() > 6) {
+    public TeamOutputDto adjustPokemonInTeam(Long teamId, List<Long> ownedPokemonIdList){
+        if (ownedPokemonIdList.size() > 6) {
             throw new IllegalArgumentException("A team can have a maximum of 6 Pokémon.");
         }
-        Set<Long> uniquePokemonIds = new HashSet<>(adjustPokemonInTeamDto.getOwnedPokemonIds());
-        if (uniquePokemonIds.size() < adjustPokemonInTeamDto.getOwnedPokemonIds().size()) {
+        Set<Long> uniquePokemonIds = new HashSet<>(ownedPokemonIdList);
+        if (uniquePokemonIds.size() < ownedPokemonIdList.size()) {
             throw new IllegalArgumentException("The team cannot contain the same owned Pokémon twice.");
         }
         Team team = teamRepository.findById(teamId)
@@ -78,7 +80,7 @@ public class TeamService {
         team.getOwnedPokemon().clear();
 
         // Add the new list of Pokémon
-        List<OwnedPokemon> ownedPokemonList = adjustPokemonInTeamDto.getOwnedPokemonIds().stream()
+        List<OwnedPokemon> ownedPokemonList = ownedPokemonIdList.stream()
                 .map(id -> ownedPokemonRepository.findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("OwnedPokemon not found with id " + id)))
                 .collect(Collectors.toList());

@@ -19,6 +19,12 @@ public class OwnedPokemon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @Setter
+    @JoinColumn(name = "game_id")
+    private Game game;
+
     @Setter
     @NotNull
     private String username;
@@ -58,8 +64,4 @@ public class OwnedPokemon {
     @ManyToMany(mappedBy = "ownedPokemon")
     private List<Team> teams;
 
-    @ManyToOne
-    @Setter
-    @JoinColumn(name = "game_id")
-    private Game game;
 }

@@ -2,10 +2,11 @@ package com.novi.poffinhouse.controllers;
 
 import com.novi.poffinhouse.dto.input.TeamInputDto;
 import com.novi.poffinhouse.dto.output.TeamOutputDto;
-import com.novi.poffinhouse.dto.input.AdjustPokemonInTeamDto;
 import com.novi.poffinhouse.services.TeamService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/teams")
@@ -31,8 +32,8 @@ public class TeamController {
         return ResponseEntity.ok(teamOutputDto);
     }
     @PutMapping("/{teamId}/pokemon")
-    public ResponseEntity<TeamOutputDto> adjustPokemonInTeam(@PathVariable Long teamId, @RequestBody AdjustPokemonInTeamDto dto) {
-        TeamOutputDto teamOutputDto = teamService.adjustPokemonInTeam(teamId, dto);
+    public ResponseEntity<TeamOutputDto> adjustPokemonInTeam(@PathVariable Long teamId, @RequestBody List<Long> ownedPokemonIdList) {
+        TeamOutputDto teamOutputDto = teamService.adjustPokemonInTeam(teamId, ownedPokemonIdList);
         return ResponseEntity.ok(teamOutputDto);
     }
 

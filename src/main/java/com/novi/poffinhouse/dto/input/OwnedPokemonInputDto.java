@@ -3,11 +3,14 @@ package com.novi.poffinhouse.dto.input;
 import com.novi.poffinhouse.util.PreferencesEnum;
 import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class OwnedPokemonInputDto {
+    @Positive
+    private Long gameId;
     @NotBlank
     private String pokemonName;
     @Size(max = 12)

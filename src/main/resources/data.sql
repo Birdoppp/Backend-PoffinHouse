@@ -248,7 +248,8 @@ VALUES ('East gate berry planting site', 4, 1),
 INSERT INTO berry_planting_site_slots (site_id, slot_number, planted_berries_by_slots_id)
 VALUES (1, 1, 1), -- Cheri Berry
        (1, 2, 1), -- Cheri Berry
-       (2, 1, 2); -- Chesto Berry
+       (2, 1, 2);
+-- Chesto Berry
 
 
 -- Insert Games
@@ -275,11 +276,11 @@ VALUES (1, 1),
 
 
 -- Insert data into owned_pokemon table to map users to their Pokémon
-INSERT INTO owned_pokemon (pokemon_id, nickname, nature, caught_by_trainer_name, username, beauty, coolness, cuteness,
+INSERT INTO owned_pokemon (pokemon_id, username, nickname, nature, caught_by_trainer_name, beauty, coolness, cuteness,
                            cleverness, toughness, game_id)
-VALUES (74, null, 'HARDY', 'Brock', 'Brock', 10, 20, 15, 25, 50, 1),
-       (95, 'Rocky', 'IMPISH', 'Brock', 'Brock', 15, 25, 20, 30, 55, 1),
-       (120, null, 'CALM', 'Misty', 'Misty', 20, 30, 40, 50, 60, 2);
+VALUES (74, 'Brock', null, 'HARDY', 'Brock', 10, 20, 15, 25, 50, 1),
+       (95, 'Brock', 'Rocky', 'IMPISH', 'Brock', 15, 25, 20, 30, 55, 1),
+       (120, 'Misty', null, 'CALM', 'Misty', 20, 30, 40, 50, 60, 2);
 
 
 -- Insert data into team table
