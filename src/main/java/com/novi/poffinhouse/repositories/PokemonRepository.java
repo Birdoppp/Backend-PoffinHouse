@@ -8,19 +8,20 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PokemonRepository extends JpaRepository <Pokemon,Long> {
-    boolean existsByNameIgnoreCase(String name);
 
     Optional<Pokemon> findByName(String pokemonName);
-    Optional<Pokemon> findByNationalDex(int nationalDexNumber);
+    Optional<Pokemon> findByNationalDex(Long nationalDexNumber);
 
-    @Query("SELECT p FROM Pokemon p ORDER BY p.nationalDex")
-    List<Pokemon> findAllOrderedByNationalDex();
+    boolean existsByNameIgnoreCase(String name);
 
     @Query("SELECT p FROM Pokemon p WHERE p.validated = true ORDER BY p.nationalDex")
     List<Pokemon> findAllValidatedOrderedByNationalDex();
 
-    List<Pokemon> findAllByValidatedTrueAndNationalDexBetween(int startNationalDex, int maxNationalDex);
+    List<Pokemon> findAllByValidatedTrueAndNationalDexBetween(Long startNationalDex, Long maxNationalDex);
 
-    void deleteByNationalDex (int nationalDex);
+    @Query("SELECT p FROM Pokemon p WHERE p.validated = false ORDER BY p.nationalDex")
+    List<Pokemon>  findAllUnvalidatedOrderedByNationalDex();
+
+    void deleteByNationalDex (Long nationalDex);
 
 }

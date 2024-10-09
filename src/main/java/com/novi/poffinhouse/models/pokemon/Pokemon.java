@@ -30,7 +30,7 @@ public class Pokemon {
     @Setter
     @Positive
     @Column(unique = true)
-    private int nationalDex;
+    private Long nationalDex;
     @Setter
     @Enumerated(EnumType.STRING)
     @ValidEnum(enumClass = TypeEnum.POKEMON_TYPE.class, message = "Invalid Pokemon type.")

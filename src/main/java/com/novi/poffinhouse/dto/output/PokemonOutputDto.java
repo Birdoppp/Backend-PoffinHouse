@@ -7,7 +7,7 @@ import lombok.Data;
 public class PokemonOutputDto {
     private Long id;
     private String name;
-    private int nationalDex;
+    private Long nationalDex;
     private TypeEnum.POKEMON_TYPE type;
 
     private Integer healthPoints;

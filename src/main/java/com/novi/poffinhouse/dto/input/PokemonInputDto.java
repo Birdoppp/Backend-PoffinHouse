@@ -12,7 +12,7 @@ public class PokemonInputDto {
     private String name;
 
     @Positive(message = "National Dex number must be positive")
-    private int nationalDex;
+    private Long nationalDex;
 
     @NotNull(message = "Type cannot be null")
     @ValidEnum(enumClass = TypeEnum.POKEMON_TYPE.class, message = "Invalid Pokemon type.")

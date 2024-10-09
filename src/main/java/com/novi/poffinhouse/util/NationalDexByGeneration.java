@@ -4,25 +4,25 @@ import lombok.Getter;
 
 @Getter
 public enum NationalDexByGeneration {
-    GENERATION_I(1, 151),
-    GENERATION_II(152, 251),
-    GENERATION_III(252, 386),
-    GENERATION_IV(387, 493),
-    GENERATION_V(494, 649),
-    GENERATION_VI(650, 721),
-    GENERATION_VII(722, 809),
-    GENERATION_VIII(810, 905),
-    GENERATION_IX(906, 1025);
+    GENERATION_I(1L, 151L),
+    GENERATION_II(152L, 251L),
+    GENERATION_III(252L, 386L),
+    GENERATION_IV(387L, 493L),
+    GENERATION_V(494L, 649L),
+    GENERATION_VI(650L, 721L),
+    GENERATION_VII(722L, 809L),
+    GENERATION_VIII(810L, 905L),
+    GENERATION_IX(906L, 1025L);
 
-    private final int startIndex;
-    private final int maxIndex;
+    private final Long startIndex;
+    private final Long maxIndex;
 
-    NationalDexByGeneration(int startIndex, int maxIndex) {
+    NationalDexByGeneration(Long startIndex, Long maxIndex) {
         this.startIndex = startIndex;
         this.maxIndex = maxIndex;
     }
 
-    public static int getStartIndexByGeneration(int generation) {
+    public static Long getStartIndexByGeneration(Integer generation) {
         return switch (generation) {
             case 1 -> GENERATION_I.getStartIndex();
             case 2 -> GENERATION_II.getStartIndex();
@@ -37,7 +37,7 @@ public enum NationalDexByGeneration {
         };
     }
 
-    public static int getMaxIndexByGeneration(int generation) {
+    public static Long getMaxIndexByGeneration(Integer generation) {
         return switch (generation) {
             case 1 -> GENERATION_I.getMaxIndex();
             case 2 -> GENERATION_II.getMaxIndex();
