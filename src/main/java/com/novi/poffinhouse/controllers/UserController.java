@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -24,6 +26,7 @@ public class UserController {
         UserOutputDto userDTO = userService.createUser(userInputDto);
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
+
     // Get by Id, Email or Username
     @GetMapping("/{field}/{value}")
     public ResponseEntity<UserOutputDto> getUserByField(@PathVariable String field, @PathVariable String value) {
@@ -32,15 +35,21 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserOutputDto> updateUser(@PathVariable Long id,@RequestBody UserInputDto userInputDto) {
-        UserOutputDto updatedUser = userService.updateUser(id, userInputDto);
+    @GetMapping
+    public ResponseEntity<List<UserOutputDto>> getAllUsers() {
+        List<UserOutputDto> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/username/{username}")
+    public ResponseEntity<UserOutputDto> updateUser(@PathVariable String username, @Valid @RequestBody UserInputDto userInputDto) {
+        UserOutputDto updatedUser = userService.updateUser(username, userInputDto);
         return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteUser(@Valid @RequestBody Long id) {
-        String message = userService.deleteUser(id);
+    public ResponseEntity<String> deleteUser(@RequestBody String username) {
+        String message = userService.deleteUser(username);
         return ResponseEntity.ok(message);
     }
 }

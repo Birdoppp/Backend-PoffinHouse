@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.novi.poffinhouse.config.SpringSecurityConfig.passwordEncoder;
@@ -36,6 +37,12 @@ public class UserService {
         return userMapper.toDto(savedUser);
     }
 
+    public AuthenticationRequest logInUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        return userMapper.toLogInDto(user);
+    }
+
     public UserOutputDto getUserBy(String field, String value) {
         User user;
         switch (field) {
@@ -50,15 +57,14 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
-    public AuthenticationRequest logInUser(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
-        return userMapper.toLogInDto(user);
+    public List<UserOutputDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return userMapper.toDto(users);
     }
 
-    public UserOutputDto updateUser(Long id, UserInputDto userInputDto) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+    public UserOutputDto updateUser(String username, UserInputDto userInputDto) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
 
         if (userInputDto.getEmail() != null) {
             user.setEmail(userInputDto.getEmail());
@@ -74,11 +80,10 @@ public class UserService {
         return userMapper.toDto(updatedUser);
     }
 
-    public String deleteUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " not found."));
-        String username = user.getUsername();
-        userRepository.deleteById(id);
+    public String deleteUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User with username " + username + " not found."));
+        userRepository.deleteById(user.getId());
         return "User with username:'" + username + "' has been deleted successfully. Including all associated data.";
     }
 
