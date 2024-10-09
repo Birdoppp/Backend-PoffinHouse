@@ -58,7 +58,7 @@ public class PokemonController {
         return ResponseEntity.ok(pokemonList);
     }
 
-    @PatchMapping("/nationalDex/{nationalDex}")
+    @PutMapping("/nationalDex/{nationalDex}")
     public ResponseEntity<PokemonOutputDto> updatePokemon(@PathVariable Long nationalDex, @Valid @RequestBody PokemonInputDto inputDto) {
         PokemonOutputDto updatedPokemon = pokemonService.updatePokemon(nationalDex, inputDto);
         return ResponseEntity.ok(updatedPokemon);

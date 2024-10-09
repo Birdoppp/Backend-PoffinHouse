@@ -8,17 +8,19 @@ import lombok.Data;
 public class BerryOutputDto {
     private Long id;
     private String name;
-    private int indexNumber;
+    private Long indexNumber;
 
     private String description;
-    private int growthTime;
+    private Integer growthTime;
     private TypeEnum.BERRY_CATEGORY_TYPE categoryType;
 
-    private int spicyPotency;
-    private int dryPotency;
-    private int sweetPotency;
-    private int bitterPotency;
-    private int sourPotency;
+    private Integer spicyPotency;
+    private Integer dryPotency;
+    private Integer sweetPotency;
+    private Integer bitterPotency;
+    private Integer sourPotency;
+
+    private Boolean validated;
 }
 
 

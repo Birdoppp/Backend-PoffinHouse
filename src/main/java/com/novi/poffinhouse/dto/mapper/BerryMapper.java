@@ -18,6 +18,7 @@ public class BerryMapper {
         berry.setSweetPotency(inputDto.getSweetPotency());
         berry.setBitterPotency(inputDto.getBitterPotency());
         berry.setSourPotency(inputDto.getSourPotency());
+        berry.setValidated(false);
         return berry;
     }
 
@@ -34,6 +35,7 @@ public class BerryMapper {
         outputDto.setSweetPotency(berry.getSweetPotency());
         outputDto.setBitterPotency(berry.getBitterPotency());
         outputDto.setSourPotency(berry.getSourPotency());
+        outputDto.setValidated(berry.getValidated());
         return outputDto;
     }
 }

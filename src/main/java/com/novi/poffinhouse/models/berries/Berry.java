@@ -29,16 +29,14 @@ public class Berry {
     @Setter
     @Positive
     @Column(unique = true)
-    private int indexNumber;
+    private Long indexNumber;
 
     @Setter
     private String description;
 
     @Setter
     @Positive
-    private int growthTime; //    In gen IV this ranges from 8 to 96 int in hours
-
-    //TODO Validate
+    private Integer growthTime; //    In gen IV this ranges from 8 to 96 int in hours
 
     @Setter
     @NotNull
@@ -46,23 +44,25 @@ public class Berry {
     @ValidEnum(enumClass = TypeEnum.BERRY_CATEGORY_TYPE.class, message = "Invalid Berry-Type Category")
     private TypeEnum.BERRY_CATEGORY_TYPE categoryType; // Marks the usage purpose for the berry
 
+    //    Potency per flavor
+    @Setter
+    @PositiveOrZero
+    private Integer spicyPotency;
+    @Setter
+    @PositiveOrZero
+    private Integer dryPotency;
+    @Setter
+    @PositiveOrZero
+    private Integer sweetPotency;
+    @Setter
+    @PositiveOrZero
+    private Integer bitterPotency;
+    @Setter
+    @PositiveOrZero
+    private Integer sourPotency;
 
-//    Potency per flavor
     @Setter
-    @PositiveOrZero
-    private int spicyPotency;
-    @Setter
-    @PositiveOrZero
-    private int dryPotency;
-    @Setter
-    @PositiveOrZero
-    private int sweetPotency;
-    @Setter
-    @PositiveOrZero
-    private int bitterPotency;
-    @Setter
-    @PositiveOrZero
-    private int sourPotency;
+    private Boolean validated;
 
     @ManyToMany(mappedBy = "berryList")
     private List<Game> games;

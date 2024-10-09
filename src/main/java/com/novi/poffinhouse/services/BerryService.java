@@ -46,6 +46,19 @@ public class BerryService {
         return BerryMapper.toOutputDto(berry);
     }
 
+    public BerryOutputDto getBerryByIndexNumber(Long indexNumber) {
+        Berry berry = berryRepository.findByIndexNumber(indexNumber)
+                .orElseThrow(() -> new BerryNotFoundException(indexNumber));
+        return BerryMapper.toOutputDto(berry);
+    }
+
+    public List<BerryOutputDto> getUnvalidatedBerries() {
+        return berryRepository.findUnvalidatedBerriesOrderedByIndexNumber()
+                .stream()
+                .map(BerryMapper::toOutputDto)
+                .collect(Collectors.toList());
+    }
+
     public List<BerryOutputDto> getAllBerries() {
         return berryRepository.findAll()
                 .stream()
@@ -53,35 +66,41 @@ public class BerryService {
                 .collect(Collectors.toList());
     }
 
-    public List<BerryOutputDto> getAllBerriesOrderedByIndexNumber() {
-        return berryRepository.findAllOrderedByIndexNumber()
+    public List<BerryOutputDto> getAllValidatedBerriesOrderedByIndexNumber() {
+        return berryRepository.findValidatedBerriesOrderedByIndexNumber()
                 .stream()
                 .map(BerryMapper::toOutputDto)
                 .collect(Collectors.toList());
     }
 
-    public BerryOutputDto updateBerry(Long id, @Valid BerryInputDto berryInputDto) {
-        Berry berryToUpdate = berryRepository.findById(id)
-                .orElseThrow(() -> new BerryNotFoundException(id));
+    public BerryOutputDto updateBerry(Long indexNumber, @Valid BerryInputDto berryInputDto) {
+        Berry berry = berryRepository.findByIndexNumber(indexNumber)
+                .orElseThrow(() -> new BerryNotFoundException(indexNumber));
 
-        berryToUpdate.setName(berryInputDto.getName());
-        berryToUpdate.setIndexNumber(berryInputDto.getIndexNumber());
-        berryToUpdate.setDescription(berryInputDto.getDescription());
-        berryToUpdate.setGrowthTime(berryInputDto.getGrowthTime());
-        berryToUpdate.setCategoryType(berryInputDto.getCategoryType());
-        berryToUpdate.setSpicyPotency(berryInputDto.getSpicyPotency());
-        berryToUpdate.setDryPotency(berryInputDto.getDryPotency());
-        berryToUpdate.setSweetPotency(berryInputDto.getSweetPotency());
-        berryToUpdate.setBitterPotency(berryInputDto.getBitterPotency());
-        berryToUpdate.setSourPotency(berryInputDto.getSourPotency());
+        berry.setName(berryInputDto.getName());
+        berry.setDescription(berryInputDto.getDescription());
+        berry.setGrowthTime(berryInputDto.getGrowthTime());
+        berry.setCategoryType(berryInputDto.getCategoryType());
+        berry.setSpicyPotency(berryInputDto.getSpicyPotency());
+        berry.setDryPotency(berryInputDto.getDryPotency());
+        berry.setSweetPotency(berryInputDto.getSweetPotency());
+        berry.setBitterPotency(berryInputDto.getBitterPotency());
+        berry.setSourPotency(berryInputDto.getSourPotency());
+        berry.setValidated(false);
 
-        Berry updatedBerry = berryRepository.save(berryToUpdate);
+        Berry updatedBerry = berryRepository.save(berry);
         return BerryMapper.toOutputDto(updatedBerry);
     }
 
-    public String deleteBerry(Long id) {
-        // Retrieve the Berry to be deleted
-        Berry berry = berryRepository.findById(id).orElseThrow(() -> new BerryNotFoundException(id));
+    public BerryOutputDto validateBerry(Long indexNumber) {
+        Berry berry = berryRepository.findByIndexNumber(indexNumber).orElseThrow(() -> new BerryNotFoundException(indexNumber));
+        berry.setValidated(true);
+        berryRepository.save(berry);
+        return BerryMapper.toOutputDto(berry);
+    }
+
+    public String deleteBerry(Long indexNumber) {
+        Berry berry = berryRepository.findByIndexNumber(indexNumber).orElseThrow(() -> new BerryNotFoundException(indexNumber));
 
         // Find all BerryPlantingSites that have this Berry
         List<BerryPlantingSite> sites = berryPlantingSiteRepository.findBerryPlantingSiteByPlantedBerriesBySlotsEquals(berry);
@@ -99,7 +118,7 @@ public class BerryService {
             }
         }
 
-        berryRepository.deleteById(id);
+        berryRepository.deleteByIndexNumber(indexNumber);
 
         return berry.getName() + " berry deleted successfully";
     }

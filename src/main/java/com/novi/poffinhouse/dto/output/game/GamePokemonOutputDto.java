@@ -7,11 +7,11 @@ import lombok.Data;
 @Data
 public class GamePokemonOutputDto {
     private Long id;
-    private int nationalDex;
+    private Long nationalDex;
     private String name;
     private TypeEnum.POKEMON_TYPE type;
 
-    public GamePokemonOutputDto(Long id, int nationalDex, @NotBlank String name, TypeEnum.POKEMON_TYPE type) {
+    public GamePokemonOutputDto(Long id, Long nationalDex, @NotBlank String name, TypeEnum.POKEMON_TYPE type) {
         this.id = id;
         this.nationalDex = nationalDex;
         this.name = name;
