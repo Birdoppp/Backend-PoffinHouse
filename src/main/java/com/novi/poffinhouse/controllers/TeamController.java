@@ -18,8 +18,6 @@ public class TeamController {
         this.teamService = teamService;
     }
 
-        //    Post/Creation of Team happens in Game
-
     @PostMapping
     public ResponseEntity<TeamOutputDto> createTeam(@RequestBody TeamInputDto dto) {
         TeamOutputDto teamOutputDto = teamService.createTeam(dto);
@@ -31,9 +29,10 @@ public class TeamController {
         TeamOutputDto teamOutputDto = teamService.getTeamById(id);
         return ResponseEntity.ok(teamOutputDto);
     }
-    @PutMapping("/{teamId}/pokemon")
-    public ResponseEntity<TeamOutputDto> adjustPokemonInTeam(@PathVariable Long teamId, @RequestBody List<Long> ownedPokemonIdList) {
-        TeamOutputDto teamOutputDto = teamService.adjustPokemonInTeam(teamId, ownedPokemonIdList);
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TeamOutputDto> adjustPokemonInTeam(@PathVariable Long id, @RequestBody List<Long> ownedPokemonIdList) {
+        TeamOutputDto teamOutputDto = teamService.putPokemonInTeam(id, ownedPokemonIdList);
         return ResponseEntity.ok(teamOutputDto);
     }
 

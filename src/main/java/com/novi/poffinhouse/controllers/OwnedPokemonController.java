@@ -3,6 +3,7 @@ package com.novi.poffinhouse.controllers;
 import com.novi.poffinhouse.dto.input.OwnedPokemonInputDto;
 import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
 import com.novi.poffinhouse.services.OwnedPokemonService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +19,10 @@ public class OwnedPokemonController {
         this.ownedPokemonService = ownedPokemonService;
     }
 
-            //    Post/Creation of OwnedPokemon happens in Game
-
-
-    @GetMapping
-    public ResponseEntity<List<OwnedPokemonOutputDto>> getAllOwnedPokemon() {
-        List<OwnedPokemonOutputDto> ownedPokemonList = ownedPokemonService.getAllOwnedPokemon();
-        return ResponseEntity.ok(ownedPokemonList);
+    @PostMapping
+    public ResponseEntity<OwnedPokemonOutputDto> createOwnedPokemon(@Valid @RequestBody OwnedPokemonInputDto ownedPokemonInputDto) {
+        OwnedPokemonOutputDto ownedPokemon = ownedPokemonService.createOwnedPokemon(ownedPokemonInputDto);
+        return ResponseEntity.ok(ownedPokemon);
     }
 
     @GetMapping("/{id}")
@@ -33,8 +31,14 @@ public class OwnedPokemonController {
         return ResponseEntity.ok(ownedPokemon);
     }
 
+    @GetMapping
+    public ResponseEntity<List<OwnedPokemonOutputDto>> getAllOwnedPokemon() {
+        List<OwnedPokemonOutputDto> ownedPokemonList = ownedPokemonService.getAllOwnedPokemon();
+        return ResponseEntity.ok(ownedPokemonList);
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<OwnedPokemonOutputDto> updateOwnedPokemon(@PathVariable Long id, @RequestBody OwnedPokemonInputDto inputDto) {
+    public ResponseEntity<OwnedPokemonOutputDto> updateOwnedPokemon(@PathVariable Long id, @Valid @RequestBody OwnedPokemonInputDto inputDto) {
         OwnedPokemonOutputDto updatedOwnedPokemon = ownedPokemonService.updateOwnedPokemon(id, inputDto);
         return ResponseEntity.ok(updatedOwnedPokemon);
     }

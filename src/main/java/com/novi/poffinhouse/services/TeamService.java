@@ -32,7 +32,6 @@ public class TeamService {
         this.teamMapper = teamMapper;
     }
 
-
     public TeamOutputDto createTeam(TeamInputDto teamInputDto) {
         teamRepository.findByGameId(teamInputDto.getGameId()).ifPresent(existingTeam -> {
             throw new IllegalArgumentException("A team already exists for the given game.");
@@ -51,10 +50,6 @@ public class TeamService {
                         .orElseThrow(() -> new EntityNotFoundException("OwnedPokemon not found with id " + id)))
                 .collect(Collectors.toList());
 
-        if (ownedPokemonList.stream().anyMatch(ownedPokemon -> !ownedPokemon.getPokemon().getValidated())) {
-            throw new IllegalArgumentException("All Pokémon in the team must be validated.");
-        }
-
         Team team = teamMapper.toEntity(teamInputDto, ownedPokemonList);
         team = teamRepository.save(team);
         return teamMapper.toDto(team);
@@ -66,7 +61,7 @@ public class TeamService {
         return teamMapper.toDto(team);
     }
 
-    public TeamOutputDto adjustPokemonInTeam(Long teamId, List<Long> ownedPokemonIdList){
+    public TeamOutputDto putPokemonInTeam(Long teamId, List<Long> ownedPokemonIdList) {
         if (ownedPokemonIdList.size() > 6) {
             throw new IllegalArgumentException("A team can have a maximum of 6 Pokémon.");
         }
@@ -79,7 +74,6 @@ public class TeamService {
 
         team.getOwnedPokemon().clear();
 
-        // Add the new list of Pokémon
         List<OwnedPokemon> ownedPokemonList = ownedPokemonIdList.stream()
                 .map(id -> ownedPokemonRepository.findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("OwnedPokemon not found with id " + id)))

@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class OwnedPokemonOutputDto {
-    private Long gameId;
     private Long id;
+    private Long gameId;
     private String username;
     private String pokemonName;
     private String nickname;

@@ -34,8 +34,8 @@ public class OwnedPokemonMapper {
 
     public OwnedPokemonOutputDto toOutputDto(OwnedPokemon ownedPokemon) {
         OwnedPokemonOutputDto outputDto = new OwnedPokemonOutputDto();
-        outputDto.setGameId(ownedPokemon.getGame().getId());
         outputDto.setId(ownedPokemon.getId());
+        outputDto.setGameId(ownedPokemon.getGame().getId());
         outputDto.setUsername(ownedPokemon.getGame().getUser().getUsername());
         outputDto.setNickname(ownedPokemon.getNickname());
         outputDto.setNature(ownedPokemon.getNature().toString());
