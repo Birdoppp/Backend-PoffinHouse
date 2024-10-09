@@ -70,6 +70,13 @@ public class OwnedPokemonService {
         throw new IllegalArgumentException("OwnedPokemon with id " + id + " not found.");
     }
 
+    public List<OwnedPokemonOutputDto> getAllOwnedPokemonByGameId(Long gameId) {
+        return ownedPokemonRepository.findAllByGameId(gameId)
+                .stream()
+                .map(ownedPokemonMapper::toOutputDto)
+                .collect(Collectors.toList());
+    }
+
     public List<OwnedPokemonOutputDto> getAllOwnedPokemon() {
         return ownedPokemonRepository.findAll()
                 .stream()
@@ -106,7 +113,7 @@ public class OwnedPokemonService {
         }
         ownedPokemonRepository.deleteById(id);
 
-        return "OwnedPokemon with Id " + id + " deleted successfully.  Note: This OwnedPokemon was removed from team.";
+        return "OwnedPokemon " + ownedPokemon.getPokemon().getName() + " with Id " + id + " deleted successfully.";
 
     }
 }

@@ -46,7 +46,6 @@ public class GameService {
 
     public GameOutputDto createGame(GameInputDto inputDto) {
         String username = AuthUtil.getCurrentUsername();
-
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -110,7 +109,7 @@ public class GameService {
     }
 
     //Pokemon
-    public GameOutputDto patchPokemonList(Long id, @Valid AdjustIndexNumberListDto adjustIndexNumberListDto) {
+    public GameOutputDto adjustPokemonList(Long id, @Valid AdjustIndexNumberListDto adjustIndexNumberListDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Game with id " + id + " not found."));
 
@@ -146,7 +145,7 @@ public class GameService {
     //Team is separate
 
     //Berries
-    public GameOutputDto patchBerryList(Long id, @Valid AdjustIndexNumberListDto adjustIndexNumberListDto) {
+    public GameOutputDto adjustBerryList(Long id, @Valid AdjustIndexNumberListDto adjustIndexNumberListDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
 

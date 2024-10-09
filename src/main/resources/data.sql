@@ -287,14 +287,16 @@ INSERT INTO owned_pokemon (pokemon_id, username, nickname, nature, caught_by_tra
                            cleverness, toughness, game_id)
 VALUES (74, 'Brock', null, 'HARDY', 'Brock', 10, 20, 15, 25, 50, 1),
        (95, 'Brock', 'Rocky', 'IMPISH', 'Brock', 15, 25, 20, 30, 55, 1),
-       (120, 'Misty', null, 'CALM', 'Misty', 20, 30, 40, 50, 60, 2);
+       (120, 'Misty', null, 'CALM', 'Misty', 20, 30, 40, 50, 60, 2),
+       (152, 'Brock', null, 'BRAVE', 'Brock', 30, 40, 50, 60, 70, 3),
+       (180, 'Brock', 'BeeBoi', 'CALM', 'Brock', 35, 45, 55, 65, 75, 3),
+       (187, 'Brock', 'Hello', 'HARDY', 'Brock', 40, 50, 60, 70, 80, 3);
 
 
 -- Insert data into team table
-INSERT INTO team (description)
-VALUES ('Team of GymLeader Brock');
-INSERT INTO team (description)
-VALUES ('Team of GymLeader Misty');
+INSERT INTO team (description, game_id)
+VALUES ('Team of GymLeader Brock', 1),
+       ('Team of GymLeader Misty', 2);
 
 -- Insert data into team_owned_pokemon join table for Brock's Team
 INSERT INTO team_owned_pokemon (team_id, owned_pokemon_id)

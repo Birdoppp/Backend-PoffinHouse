@@ -53,8 +53,8 @@ public class GameController {
 
     //Pokemon
     @PatchMapping("/{id}/pokemonList")
-    public ResponseEntity<GameOutputDto> patchPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustIndexNumberListDto adjustIndexNumberListDto) {
-        GameOutputDto updatedGame = gameService.patchPokemonList(id, adjustIndexNumberListDto);
+    public ResponseEntity<GameOutputDto> adjustPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustIndexNumberListDto adjustIndexNumberListDto) {
+        GameOutputDto updatedGame = gameService.adjustPokemonList(id, adjustIndexNumberListDto);
         return ResponseEntity.ok(updatedGame);
     }
 
@@ -64,8 +64,8 @@ public class GameController {
 
     //Berries
     @PatchMapping("/{id}/berryList")
-    public ResponseEntity<GameOutputDto> patchBerryList(@PathVariable Long id, @Valid @RequestBody AdjustIndexNumberListDto adjustIndexNumberListDto) {
-        GameOutputDto updatedGame = gameService.patchBerryList(id, adjustIndexNumberListDto);
+    public ResponseEntity<GameOutputDto> adjustBerryList(@PathVariable Long id, @Valid @RequestBody AdjustIndexNumberListDto adjustIndexNumberListDto) {
+        GameOutputDto updatedGame = gameService.adjustBerryList(id, adjustIndexNumberListDto);
         return ResponseEntity.ok(updatedGame);
     }
 

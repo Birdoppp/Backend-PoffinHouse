@@ -9,6 +9,7 @@ import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.TeamRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -32,7 +33,7 @@ public class TeamService {
         this.teamMapper = teamMapper;
     }
 
-    public TeamOutputDto createTeam(TeamInputDto teamInputDto) {
+    public TeamOutputDto createTeam(@Valid TeamInputDto teamInputDto) {
         teamRepository.findByGameId(teamInputDto.getGameId()).ifPresent(existingTeam -> {
             throw new IllegalArgumentException("A team already exists for the given game.");
         });

@@ -54,6 +54,7 @@ public class SpringSecurityConfig {
                                                                          "/locations/**",
                                                                          "/berry-planting-sites/**").hasAnyRole("TRAINER","ADMIN")
                                         .requestMatchers(HttpMethod.GET, "/users/**",
+//                                                                         "/games",
                                                                          "/**").hasRole("ADMIN")
 
 //                                      TODO make RegionMap & Locations Validated
@@ -74,7 +75,7 @@ public class SpringSecurityConfig {
 
 
                                         .requestMatchers(HttpMethod.PATCH,"/users/username/**",
-                                                                          "/games/user/**",
+                                                                          "/games/**",
 //                                                                          "/pokemon/nationalDex/**",
 //                                                                          "/berries/index-number/**",
                                                                           "/berry-planting-sites/**").hasAnyRole("TRAINER", "ADMIN")
@@ -83,14 +84,16 @@ public class SpringSecurityConfig {
                                                                           "/*/validate").hasRole("ADMIN")
 
 
-                                        .requestMatchers(HttpMethod.PUT, "/*/*/team",
+                                        .requestMatchers(HttpMethod.PUT, "/teams/**",
                                                                          "/pokemon/nationalDex/**",
+                                                                         "/owned-pokemon/**",
                                                                          "/berries/**").hasAnyRole("TRAINER", "ADMIN")
                                         .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
 //                                        .requestMatchers(HttpMethod.PUT, "/*/validate").hasRole("ADMIN")
 //                                .requestMatchers(HttpMethod.PUT, "/**").authenticated()
 
 
+                                        .requestMatchers(HttpMethod.DELETE, "owned-pokemon/**").hasAnyRole("TRAINER", "ADMIN")
                                         .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
 
                                         .anyRequest().denyAll()

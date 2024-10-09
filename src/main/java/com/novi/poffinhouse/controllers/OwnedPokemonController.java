@@ -31,6 +31,12 @@ public class OwnedPokemonController {
         return ResponseEntity.ok(ownedPokemon);
     }
 
+    @GetMapping("/game/{gameId}")
+    public ResponseEntity<List<OwnedPokemonOutputDto>> getAllOwnedPokemonByGameId(@PathVariable Long gameId) {
+        List<OwnedPokemonOutputDto> ownedPokemonList = ownedPokemonService.getAllOwnedPokemonByGameId(gameId);
+        return ResponseEntity.ok(ownedPokemonList);
+    }
+
     @GetMapping
     public ResponseEntity<List<OwnedPokemonOutputDto>> getAllOwnedPokemon() {
         List<OwnedPokemonOutputDto> ownedPokemonList = ownedPokemonService.getAllOwnedPokemon();
