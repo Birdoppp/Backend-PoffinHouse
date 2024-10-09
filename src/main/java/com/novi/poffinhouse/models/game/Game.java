@@ -24,7 +24,7 @@ public class Game {
     private String versionName;
     @Setter
     @Column(nullable = false)
-    private int generation;
+    private Integer generation;
     @Setter
     private String description;
 

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class GameInputDto {
     private String versionName;
-    private int generation;
+    private Integer generation;
     private String description;
 
     private Long regionMapId;

@@ -21,11 +21,11 @@ public class GameIdListSetter {
         this.berryRepository = berryRepository;
     }
 
-    public List<Pokemon> PokemonListByGeneration(GameIdListSetterInputDto inputDto, int generation) {
+    public List<Pokemon> PokemonListByGeneration(GameIdListSetterInputDto inputDto, Integer generation) {
         List<Long> idList = inputDto.getIdList();
         if (inputDto.isAutofill()) {
-            int maxNationalDex = NationalDexByGeneration.getMaxIndexByGeneration(generation);
-            int startNationalDex = NationalDexByGeneration.getStartIndexByGeneration(generation);
+            Long maxNationalDex = NationalDexByGeneration.getMaxIndexByGeneration(generation);
+            Long startNationalDex = NationalDexByGeneration.getStartIndexByGeneration(generation);
             return pokemonRepository.findAllByValidatedTrueAndNationalDexBetween(startNationalDex, maxNationalDex);
         } else if (idList == null) {
             return Collections.emptyList();
