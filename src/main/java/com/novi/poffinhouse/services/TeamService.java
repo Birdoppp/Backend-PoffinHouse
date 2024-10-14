@@ -3,8 +3,10 @@ package com.novi.poffinhouse.services;
 import com.novi.poffinhouse.dto.input.TeamInputDto;
 import com.novi.poffinhouse.dto.output.TeamOutputDto;
 import com.novi.poffinhouse.dto.mapper.TeamMapper;
+import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.models.game.OwnedPokemon;
 import com.novi.poffinhouse.models.game.Team;
+import com.novi.poffinhouse.repositories.GameRepository;
 import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.TeamRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,15 +27,19 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
     private final OwnedPokemonRepository ownedPokemonRepository;
-    private final TeamMapper teamMapper;
+    private final GameRepository gameRepository;
 
-    public TeamService(TeamRepository teamRepository, OwnedPokemonRepository ownedPokemonRepository, TeamMapper teamMapper) {
+    public TeamService(TeamRepository teamRepository, OwnedPokemonRepository ownedPokemonRepository, GameRepository gameRepository) {
         this.teamRepository = teamRepository;
         this.ownedPokemonRepository = ownedPokemonRepository;
-        this.teamMapper = teamMapper;
+        this.gameRepository = gameRepository;
     }
 
+
     public TeamOutputDto createTeam(@Valid TeamInputDto teamInputDto) {
+        Game game = gameRepository.findById(teamInputDto.getGameId())
+                .orElseThrow(() -> new EntityNotFoundException("Game not found with id " + teamInputDto.getGameId()));
+
         teamRepository.findByGameId(teamInputDto.getGameId()).ifPresent(existingTeam -> {
             throw new IllegalArgumentException("A team already exists for the given game.");
         });
@@ -51,15 +57,23 @@ public class TeamService {
                         .orElseThrow(() -> new EntityNotFoundException("OwnedPokemon not found with id " + id)))
                 .collect(Collectors.toList());
 
-        Team team = teamMapper.toEntity(teamInputDto, ownedPokemonList);
+        // Check if each OwnedPokemon belongs to the specified Game
+        for (OwnedPokemon ownedPokemon : ownedPokemonList) {
+            if (!ownedPokemon.getGame().getId().equals(game.getId())) {
+                throw new IllegalArgumentException("OwnedPokemon with id " + ownedPokemon.getId() + " does not belong to the specified Game.");
+            }
+        }
+
+        Team team = TeamMapper.toEntity(teamInputDto, ownedPokemonList);
+        team.setGame(game);
         team = teamRepository.save(team);
-        return teamMapper.toDto(team);
+        return TeamMapper.toDto(team);
     }
 
     public TeamOutputDto getTeamById(Long id) {
         Team team = teamRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + id));
-        return teamMapper.toDto(team);
+        return TeamMapper.toDto(team);
     }
 
     public TeamOutputDto putPokemonInTeam(Long teamId, List<Long> ownedPokemonIdList) {
@@ -80,9 +94,16 @@ public class TeamService {
                         .orElseThrow(() -> new EntityNotFoundException("OwnedPokemon not found with id " + id)))
                 .collect(Collectors.toList());
 
+        // Check if each OwnedPokemon belongs to the specified Game
+        for (OwnedPokemon ownedPokemon : ownedPokemonList) {
+            if (!ownedPokemon.getGame().getId().equals(team.getGame().getId())) {
+                throw new IllegalArgumentException("OwnedPokemon with id " + ownedPokemon.getId() + " does not belong to the specified Game.");
+            }
+        }
+
         team.setOwnedPokemon(ownedPokemonList);
         team = teamRepository.save(team);
-        return teamMapper.toDto(team);
+        return TeamMapper.toDto(team);
     }
 
 }
