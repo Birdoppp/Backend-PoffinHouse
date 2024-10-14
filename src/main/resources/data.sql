@@ -247,21 +247,21 @@ VALUES (1, 1),
        (3, 4);
 
 -- -- Insert data into locations table
-INSERT INTO location (name, description, coordinate_X, coordinate_Y, game_map_id)
-VALUES ('Pallet Town', 'A small town with a quiet atmosphere', 1, 1, 1),
-       ('Viridian City', 'A beautiful city with a forest nearby', 2, 2, 1);
+INSERT INTO location (name, description,game_map_id, coordinate_X, coordinate_Y)
+VALUES ('Pallet Town', 'A small town with a quiet atmosphere', 1, 10, 10),
+       ('Viridian City', 'A beautiful city with a forest nearby', 2, 20, 20);
 
 -- -- Insert data into berry_planting_sites table
--- INSERT INTO berry_planting_sites (description, soil_slots, location_id)
--- VALUES ('East gate berry planting site', 4, 1),
---        ('Behind the lake in the North, currently unreachable due to a tree obstacle', 2, 2),
---        ('Planting spot next to a fisherman house', 4, 2);
+INSERT INTO berry_planting_sites (description,location_id, soil_slots)
+VALUES ('East gate berry planting site', 1, 4),
+       ('Behind the lake in the North, currently unreachable due to a tree obstacle', 2, 2),
+       ('Planting spot next to a fisherman house', 2, 4);
 --
 -- -- Insert data into berry_planting_site_slots table to map berries to planting slots
--- INSERT INTO berry_planting_site_slots (site_id, slot_number, planted_berries_by_slots_id)
--- VALUES (1, 1, 1), -- Cheri Berry
---        (1, 2, 2), -- Chesto Berry
---        (2, 2, 2); -- Chesto Berry
+INSERT INTO berry_planting_site_slots (site_id, slot_number, planted_berries_by_slots_id)
+VALUES (1, 1, 1), -- Cheri Berry
+       (1, 2, 2), -- Chesto Berry
+       (2, 2, 2); -- Chesto Berry
 
 
 -- Insert data into game lists table
