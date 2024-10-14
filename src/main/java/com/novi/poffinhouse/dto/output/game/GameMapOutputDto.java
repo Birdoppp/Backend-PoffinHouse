@@ -11,6 +11,5 @@ public class GameMapOutputDto {
     private Long gameId;
     private GameRegionMapOutputDto regionMap;
     private List<LocationOutputDtoShort> locationList;
-
 }
 

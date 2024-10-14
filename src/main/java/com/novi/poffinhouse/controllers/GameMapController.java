@@ -27,11 +27,4 @@ public class GameMapController {
         return ResponseEntity.ok(gameMapService.getGameMapsByUsername(username));
 
     }
-
-//    @PatchMapping("{gameMapId}/location-list")
-//    public ResponseEntity<GameMapOutputDto> updateLocationList(@PathVariable Long gameMapId, @RequestBody AdjustListDto adjustListDto) {
-//        return ResponseEntity.ok(gameMapService.updateLocationList(gameMapId, adjustListDto));
-//    }
-//
-
 }
