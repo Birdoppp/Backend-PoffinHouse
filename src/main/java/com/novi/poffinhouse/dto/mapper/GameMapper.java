@@ -29,7 +29,7 @@ public class GameMapper {
         game.setGeneration(inputDto.getGeneration());
         game.setDescription(inputDto.getDescription());
 
-        // Set GameMap
+        // Create/Set GameMap
         RegionMap regionMap = regionMapRepository.findById(inputDto.getRegionMapId())
                 .orElseThrow(() -> new IllegalArgumentException("RegionMap not found."));
         GameMap gameMap = new GameMap();
