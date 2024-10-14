@@ -20,7 +20,6 @@ public class BerryPlantingSiteMapper {
     }
 
     public BerryPlantingSite toEntity(BerryPlantingSiteInputDto inputDto, Location location) {
-        // Initialize BerryPlantingSite entity
         BerryPlantingSite berryPlantingSite = new BerryPlantingSite(inputDto.getSoilSlots());
         berryPlantingSite.setDescription(inputDto.getDescription());
         berryPlantingSite.setLocation(location);
@@ -45,9 +44,9 @@ public class BerryPlantingSiteMapper {
     public static BerryPlantingSiteOutputDto toOutputDto(BerryPlantingSite berryPlantingSite) {
         BerryPlantingSiteOutputDto outputDto = new BerryPlantingSiteOutputDto();
         outputDto.setId(berryPlantingSite.getId());
+        outputDto.setLocationId(berryPlantingSite.getLocation().getId());
         outputDto.setDescription(berryPlantingSite.getDescription());
         outputDto.setSoilSlots(berryPlantingSite.getSoilSlots());
-        outputDto.setLocationId(berryPlantingSite.getLocation().getId());
 
         Map<Integer, Long> berriesBySlotId = new HashMap<>();
         for (int i = 1; i <= berryPlantingSite.getSoilSlots(); i++) {

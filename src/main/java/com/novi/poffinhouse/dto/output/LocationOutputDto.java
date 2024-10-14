@@ -9,9 +9,9 @@ public class LocationOutputDto {
     private Long id;
     private String name;
     private String description;
+    private Long gameMapId;
     private int coordinateX;
     private int coordinateY;
-    private Long regionMapId;
     private List<BerryPlantingSiteOutputDto> berryPlantingSites;
 
 }

@@ -51,21 +51,21 @@ public class GameController {
         return ResponseEntity.ok(updatedGame);
     }
 
-    //Pokemon
+    //Pokemon list
     @PatchMapping("/{id}/pokemonList")
-    public ResponseEntity<GameOutputDto> adjustPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustIndexNumberListDto adjustIndexNumberListDto) {
-        GameOutputDto updatedGame = gameService.adjustPokemonList(id, adjustIndexNumberListDto);
+    public ResponseEntity<GameOutputDto> adjustPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustListDto adjustListDto) {
+        GameOutputDto updatedGame = gameService.adjustPokemonList(id, adjustListDto);
         return ResponseEntity.ok(updatedGame);
     }
 
-    //OwnedPokemon is separate
+    //OwnedPokemon list is separate
 
     //Team is separate
 
-    //Berries
+    //Berries list
     @PatchMapping("/{id}/berryList")
-    public ResponseEntity<GameOutputDto> adjustBerryList(@PathVariable Long id, @Valid @RequestBody AdjustIndexNumberListDto adjustIndexNumberListDto) {
-        GameOutputDto updatedGame = gameService.adjustBerryList(id, adjustIndexNumberListDto);
+    public ResponseEntity<GameOutputDto> adjustBerryList(@PathVariable Long id, @Valid @RequestBody AdjustListDto adjustListDto) {
+        GameOutputDto updatedGame = gameService.adjustBerryList(id, adjustListDto);
         return ResponseEntity.ok(updatedGame);
     }
 

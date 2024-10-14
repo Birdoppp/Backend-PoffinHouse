@@ -7,7 +7,7 @@ import java.util.Map;
 @Data
 public class BerryPlantingSiteInputDto {
     private String description;
+    private Long locationId;
     private int soilSlots;
     private Map<Integer, Long> plantedBerriesBySlots = new HashMap<>();
-    private Long locationId;
 }

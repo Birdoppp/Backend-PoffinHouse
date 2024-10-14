@@ -3,6 +3,7 @@ package com.novi.poffinhouse.models.region;
 import com.novi.poffinhouse.models.berries.Berry;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "berry_planting_sites")
 public class BerryPlantingSite {
     @Id
@@ -19,6 +21,11 @@ public class BerryPlantingSite {
     @Setter
     @Column(nullable = false)
     private String description;
+
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
     @Setter
     @Column(nullable = false)
@@ -33,17 +40,10 @@ public class BerryPlantingSite {
             inverseJoinColumns = @JoinColumn(name = "berry_id"))
     private Map<Integer, Berry> plantedBerriesBySlots = new HashMap<>();
 
-    @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id", nullable = false)
-    private Location location;
 
     public BerryPlantingSite(int soilSlots) {
         this.soilSlots = soilSlots;
         this.plantedBerriesBySlots = new HashMap<>(soilSlots);
-    }
-
-    protected BerryPlantingSite() {
     }
 
 }
