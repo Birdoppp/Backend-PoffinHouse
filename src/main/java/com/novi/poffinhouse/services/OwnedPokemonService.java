@@ -1,11 +1,11 @@
 package com.novi.poffinhouse.services;
 
+import com.novi.poffinhouse.dto.input.OwnedPokemonContestConditionInputDto;
 import com.novi.poffinhouse.dto.input.OwnedPokemonInputDto;
 import com.novi.poffinhouse.dto.mapper.OwnedPokemonMapper;
 import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
 import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.models.game.OwnedPokemon;
-import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.models.game.Team;
 import com.novi.poffinhouse.repositories.GameRepository;
 import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
@@ -84,22 +84,25 @@ public class OwnedPokemonService {
                 .collect(Collectors.toList());
     }
 
-    public OwnedPokemonOutputDto updateOwnedPokemon(Long id, OwnedPokemonInputDto inputDto) {
+    public OwnedPokemonOutputDto adjustContestCondition(Long id, @Valid OwnedPokemonContestConditionInputDto inputDto) {
         OwnedPokemon existingOwnedPokemon = ownedPokemonRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("OwnedPokemon with id " + id + " not found."));
 
-        existingOwnedPokemon.setNickname(inputDto.getNickname());
-        existingOwnedPokemon.setNature(inputDto.getNature());
-        existingOwnedPokemon.setCaughtByTrainerName(inputDto.getCaughtByTrainerName());
-        existingOwnedPokemon.setBeauty(inputDto.getBeauty());
-        existingOwnedPokemon.setCoolness(inputDto.getCoolness());
-        existingOwnedPokemon.setCuteness(inputDto.getCuteness());
-        existingOwnedPokemon.setCleverness(inputDto.getCleverness());
-        existingOwnedPokemon.setToughness(inputDto.getToughness());
-
-        Pokemon pokemon = pokemonRepository.findByName(inputDto.getPokemonName())
-                .orElseThrow(() -> new IllegalArgumentException("Pokemon with name " + inputDto.getPokemonName() + " not found."));
-        existingOwnedPokemon.setPokemon(pokemon);
+        if (inputDto.getBeauty() != null) {
+            existingOwnedPokemon.setBeauty(inputDto.getBeauty());
+        }
+        if (inputDto.getCoolness() != null) {
+            existingOwnedPokemon.setCoolness(inputDto.getCoolness());
+        }
+        if (inputDto.getCuteness() != null) {
+            existingOwnedPokemon.setCuteness(inputDto.getCuteness());
+        }
+        if (inputDto.getCleverness() != null) {
+            existingOwnedPokemon.setCleverness(inputDto.getCleverness());
+        }
+        if (inputDto.getToughness() != null) {
+            existingOwnedPokemon.setToughness(inputDto.getToughness());
+        }
 
         OwnedPokemon updatedOwnedPokemon = ownedPokemonRepository.save(existingOwnedPokemon);
         return ownedPokemonMapper.toOutputDto(updatedOwnedPokemon);

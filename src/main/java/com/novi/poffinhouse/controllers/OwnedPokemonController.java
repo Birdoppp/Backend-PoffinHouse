@@ -1,5 +1,6 @@
 package com.novi.poffinhouse.controllers;
 
+import com.novi.poffinhouse.dto.input.OwnedPokemonContestConditionInputDto;
 import com.novi.poffinhouse.dto.input.OwnedPokemonInputDto;
 import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
 import com.novi.poffinhouse.services.OwnedPokemonService;
@@ -43,9 +44,9 @@ public class OwnedPokemonController {
         return ResponseEntity.ok(ownedPokemonList);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<OwnedPokemonOutputDto> updateOwnedPokemon(@PathVariable Long id, @Valid @RequestBody OwnedPokemonInputDto inputDto) {
-        OwnedPokemonOutputDto updatedOwnedPokemon = ownedPokemonService.updateOwnedPokemon(id, inputDto);
+    @PatchMapping("/{id}/contest-condition")
+    public ResponseEntity<OwnedPokemonOutputDto> adjustContestCondition(@PathVariable Long id, @Valid @RequestBody OwnedPokemonContestConditionInputDto contestCondition) {
+        OwnedPokemonOutputDto updatedOwnedPokemon = ownedPokemonService.adjustContestCondition(id, contestCondition);
         return ResponseEntity.ok(updatedOwnedPokemon);
     }
 
