@@ -54,7 +54,7 @@ public class SpringSecurityConfig {
                                                                          "/game-maps/**",
                                                                          "/locations/**",
                                                                          "/berry-planting-sites/**"
-                                        ).hasAnyRole("TRAINER","ADMIN")
+                                                ).hasAnyRole("TRAINER","ADMIN")
                                         .requestMatchers(HttpMethod.GET, "/users/**",
                                                                          "/**").hasRole("ADMIN")
 
@@ -62,23 +62,24 @@ public class SpringSecurityConfig {
 
                                         .requestMatchers(HttpMethod.POST, "/users",
                                                                           "/authenticate").permitAll()
-                                        .requestMatchers(HttpMethod.POST, "/games/**",
-                                                                          "/locations",
-                                                                          "/berry-planting-sites/**",
-                                                                          "/berries",
+                                        .requestMatchers(HttpMethod.POST,
                                                                           "/pokemon",
+                                                                          "/berries",
+                                                                          "/games/**",
                                                                           "/owned-pokemon",
-                                                                          "/teams"
-                                        ).hasAnyRole("TRAINER", "ADMIN")
+                                                                          "/teams",
+                                                                          "/locations",
+                                                                          "/berry-planting-sites/**"
+                                                ).hasAnyRole("TRAINER", "ADMIN")
                                         .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
 
 
 
                                         .requestMatchers(HttpMethod.PUT,  "/users/username/**",
                                                                           "/pokemon/nationalDex/**",
-                                                                          "/teams/**",
-                                                                          "/berries/**"
-                                        ).hasAnyRole("TRAINER", "ADMIN")
+                                                                          "/berries/**",
+                                                                          "/teams/**"
+                                                ).hasAnyRole("TRAINER", "ADMIN")
                                         .requestMatchers(HttpMethod.PUT,  "/**").hasRole("ADMIN")
 
 
@@ -87,9 +88,8 @@ public class SpringSecurityConfig {
                                                                           "/owned-pokemon/*/contest-condition",
                                                                           "/locations/**",
                                                                           "/berry-planting-sites/**"
-                                        ).hasAnyRole("TRAINER", "ADMIN")
+                                                ).hasAnyRole("TRAINER", "ADMIN")
                                         .requestMatchers(HttpMethod.PATCH,"/region-maps/**",
-                                                                          "/games/**",
                                                                           "/*/validate").hasRole("ADMIN")
 
 
