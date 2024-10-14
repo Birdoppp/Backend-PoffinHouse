@@ -234,30 +234,37 @@ VALUES ('Kanto', 80, 60),
        ('Hoenn', 70, 40),
        ('Sinnoh', 60, 40);
 
--- Insert data into locations table
-INSERT INTO locations (name, description, coordinate_X, coordinate_Y, region_map_id)
+-- Insert Games
+INSERT INTO game (version_name, generation, description,  user_id)
+VALUES ('Yellow', 1, 'Adventure of Brock',  1),
+       ('Blue', 1, 'Adventure of Misty',  2),
+       ('Diamond', 4, 'The first appearance of PoffinHouse', 1);
+
+-- Insert data into game_map table
+INSERT INTO game_map (game_id, region_map_id)
+VALUES (1, 1),
+       (2, 1),
+       (3, 4);
+
+-- -- Insert data into locations table
+INSERT INTO location (name, description, coordinate_X, coordinate_Y, game_map_id)
 VALUES ('Pallet Town', 'A small town with a quiet atmosphere', 1, 1, 1),
        ('Viridian City', 'A beautiful city with a forest nearby', 2, 2, 1);
 
--- Insert data into berry_planting_sites table
-INSERT INTO berry_planting_sites (description, soil_slots, location_id)
-VALUES ('East gate berry planting site', 4, 1),
-       ('Behind the lake in the North, currently unreachable due to a tree obstacle', 2, 2),
-       ('Planting spot next to a fisherman house', 4, 2);
+-- -- Insert data into berry_planting_sites table
+-- INSERT INTO berry_planting_sites (description, soil_slots, location_id)
+-- VALUES ('East gate berry planting site', 4, 1),
+--        ('Behind the lake in the North, currently unreachable due to a tree obstacle', 2, 2),
+--        ('Planting spot next to a fisherman house', 4, 2);
+--
+-- -- Insert data into berry_planting_site_slots table to map berries to planting slots
+-- INSERT INTO berry_planting_site_slots (site_id, slot_number, planted_berries_by_slots_id)
+-- VALUES (1, 1, 1), -- Cheri Berry
+--        (1, 2, 2), -- Chesto Berry
+--        (2, 2, 2); -- Chesto Berry
 
--- Insert data into berry_planting_site_slots table to map berries to planting slots
-INSERT INTO berry_planting_site_slots (site_id, slot_number, planted_berries_by_slots_id)
-VALUES (1, 1, 1), -- Cheri Berry
-       (1, 2, 2), -- Chesto Berry
-       (2, 2, 2); -- Chesto Berry
 
-
--- Insert Games
-INSERT INTO game (version_name, generation, description, region_map_id, user_id)
-VALUES ('Yellow', 1, 'Adventure of Brock', 1, 1),
-       ('Blue', 1, 'Adventure of Misty', 1, 2),
-       ('Diamond', 4, 'The first appearance of PoffinHouse', 4, 1);
-
+-- Insert data into game lists table
 INSERT INTO game_pokemon (game_id, pokemon_id)
 SELECT 1, id
 FROM pokemon

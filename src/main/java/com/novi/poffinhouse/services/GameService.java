@@ -1,6 +1,6 @@
 package com.novi.poffinhouse.services;
 
-import com.novi.poffinhouse.dto.input.AdjustIndexNumberListDto;
+import com.novi.poffinhouse.dto.input.AdjustListDto;
 import com.novi.poffinhouse.dto.input.GameInputDto;
 import com.novi.poffinhouse.dto.mapper.GameMapper;
 import com.novi.poffinhouse.dto.output.game.GameOutputDto;
@@ -8,7 +8,6 @@ import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
-import com.novi.poffinhouse.models.region.RegionMap;
 import com.novi.poffinhouse.repositories.*;
 import com.novi.poffinhouse.util.AuthUtil;
 import com.novi.poffinhouse.util.GameIdListSetter;
@@ -29,16 +28,15 @@ public class GameService {
     private final GameRepository gameRepository;
     private final GameMapper gameMapper;
     private final GameIdListSetter gameIdListSetter;
-    private final RegionMapRepository regionMapRepository;
     private final UserRepository userRepository;
     private final PokemonRepository pokemonRepository;
     private final BerryRepository berryRepository;
 
-    public GameService(GameRepository gameRepository, GameMapper gameMapper, GameIdListSetter gameIdListSetter, RegionMapRepository regionMapRepository, UserRepository userRepository, PokemonRepository pokemonRepository, BerryRepository berryRepository) {
+    public GameService(GameRepository gameRepository, GameMapper gameMapper, GameIdListSetter gameIdListSetter,
+                       UserRepository userRepository, PokemonRepository pokemonRepository, BerryRepository berryRepository) {
         this.gameRepository = gameRepository;
         this.gameMapper = gameMapper;
         this.gameIdListSetter = gameIdListSetter;
-        this.regionMapRepository = regionMapRepository;
         this.userRepository = userRepository;
         this.pokemonRepository = pokemonRepository;
         this.berryRepository = berryRepository;
@@ -90,12 +88,6 @@ public class GameService {
             existingGame.setDescription(inputDto.getDescription());
         }
 
-        if (inputDto.getRegionMapId() != null) {
-            RegionMap regionMap = regionMapRepository.findById(inputDto.getRegionMapId())
-                    .orElseThrow(() -> new IllegalArgumentException("RegionMap not found."));
-            existingGame.setRegionMap(regionMap);
-        }
-
         if (inputDto.getPokemonInput() != null) {
             existingGame.setPokemonList(gameIdListSetter.PokemonListByGeneration(inputDto.getPokemonInput(), inputDto.getGeneration()));
         }
@@ -109,21 +101,21 @@ public class GameService {
     }
 
     //Pokemon
-    public GameOutputDto adjustPokemonList(Long id, @Valid AdjustIndexNumberListDto adjustIndexNumberListDto) {
+    public GameOutputDto adjustPokemonList(Long id, @Valid AdjustListDto adjustListDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Game with id " + id + " not found."));
 
         List<Pokemon> pokemonListToAdd = null;
         List<Pokemon> pokemonListToRemove = null;
 
-        if (adjustIndexNumberListDto.getAddIndexNumberList() != null) {
-            pokemonListToAdd = adjustIndexNumberListDto.getAddIndexNumberList().stream()
+        if (adjustListDto.getAddList() != null) {
+            pokemonListToAdd = adjustListDto.getAddList().stream()
                     .map(pokemonRepository::findByNationalDex)
                     .map(optionalPokemon -> optionalPokemon.orElseThrow(() -> new IllegalArgumentException("Pokemon not found.")))
                     .toList();
         }
-        if (adjustIndexNumberListDto.getRemoveIndexNumberList() != null) {
-            pokemonListToRemove = adjustIndexNumberListDto.getRemoveIndexNumberList().stream()
+        if (adjustListDto.getRemoveList() != null) {
+            pokemonListToRemove = adjustListDto.getRemoveList().stream()
                     .map(pokemonRepository::findByNationalDex)
                     .map(optionalPokemon -> optionalPokemon.orElseThrow(() -> new IllegalArgumentException("Pokemon not found.")))
                     .toList();
@@ -145,22 +137,22 @@ public class GameService {
     //Team is separate
 
     //Berries
-    public GameOutputDto adjustBerryList(Long id, @Valid AdjustIndexNumberListDto adjustIndexNumberListDto) {
+    public GameOutputDto adjustBerryList(Long id, @Valid AdjustListDto adjustListDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
 
         List<Berry> berryListToAdd = null;
         List<Berry> berryListToRemove = null;
 
-        if (adjustIndexNumberListDto.getAddIndexNumberList() != null) {
-            berryListToAdd = adjustIndexNumberListDto.getAddIndexNumberList().stream()
+        if (adjustListDto.getAddList() != null) {
+            berryListToAdd = adjustListDto.getAddList().stream()
                     .map(berryRepository::findById)
                     .map(berry -> berry.orElseThrow(() -> new IllegalArgumentException("Berry not found.")))
                     .filter(berry -> !game.getBerryList().contains(berry))
                     .toList();
         }
-        if (adjustIndexNumberListDto.getRemoveIndexNumberList() != null) {
-            berryListToRemove = adjustIndexNumberListDto.getRemoveIndexNumberList().stream()
+        if (adjustListDto.getRemoveList() != null) {
+            berryListToRemove = adjustListDto.getRemoveList().stream()
                     .map(berryRepository::findById)
                     .map(berry -> berry.orElseThrow(() -> new IllegalArgumentException("Berry not found.")))
                     .filter(berry -> game.getBerryList().contains(berry))

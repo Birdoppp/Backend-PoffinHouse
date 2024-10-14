@@ -51,46 +51,50 @@ public class SpringSecurityConfig {
                                                                          "/games/**",
                                                                          "/owned-pokemon/**",
                                                                          "/teams/**",
+                                                                         "/game-maps/**",
                                                                          "/locations/**",
                                                                          "/berry-planting-sites/**").hasAnyRole("TRAINER","ADMIN")
                                         .requestMatchers(HttpMethod.GET, "/users/**",
 //                                                                         "/games",
                                                                          "/**").hasRole("ADMIN")
 
-//                                      TODO make RegionMap & Locations Validated
 
 
                                         .requestMatchers(HttpMethod.POST, "/users",
                                                                           "/authenticate").permitAll()
-//                                        .requestMatchers(HttpMethod.POST, "/authorities/**").hasRole("ADMIN")
-//                                        .requestMatchers(HttpMethod.POST, "/region-maps").hasRole("ADMIN")
-                                        .requestMatchers(HttpMethod.POST, "/games/**",
+                                        .requestMatchers(HttpMethod.POST,
+                                                                          "/games/**",
                                                                           "/locations",
                                                                           "/berry-planting-sites/**",
                                                                           "/berries",
                                                                           "/pokemon",
                                                                           "/owned-pokemon",
                                                                           "/teams").hasAnyRole("TRAINER", "ADMIN")
+//                                        .requestMatchers(HttpMethod.POST, "/authorities/**").hasRole("ADMIN")
+//                                        .requestMatchers(HttpMethod.POST, "/region-maps").hasRole("ADMIN")
                                         .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
 
+                                        .requestMatchers(HttpMethod.PUT,
+                                                                         "/users/username/**",
+                                                                         "/teams/**",
+                                                                         "/pokemon/nationalDex/**",
+                                                                         "/owned-pokemon/**",
+                                                                         "/berries/**").hasAnyRole("TRAINER", "ADMIN")
+//                                      .requestMatchers(HttpMethod.PUT, "/*/validate").hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
 
-                                        .requestMatchers(HttpMethod.PATCH,"/users/username/**",
+                                        .requestMatchers(HttpMethod.PATCH,
                                                                           "/games/**",
 //                                                                          "/pokemon/nationalDex/**",
 //                                                                          "/berries/index-number/**",
+                                                                          "/game-maps/**",
+                                                                          "/locations/**",
                                                                           "/berry-planting-sites/**").hasAnyRole("TRAINER", "ADMIN")
                                         .requestMatchers(HttpMethod.PATCH,"/region-maps/**",
                                                                           "/games/**",
                                                                           "/*/validate").hasRole("ADMIN")
 
 
-                                        .requestMatchers(HttpMethod.PUT, "/teams/**",
-                                                                         "/pokemon/nationalDex/**",
-                                                                         "/owned-pokemon/**",
-                                                                         "/berries/**").hasAnyRole("TRAINER", "ADMIN")
-                                        .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
-//                                        .requestMatchers(HttpMethod.PUT, "/*/validate").hasRole("ADMIN")
-//                                .requestMatchers(HttpMethod.PUT, "/**").authenticated()
 
 
                                         .requestMatchers(HttpMethod.DELETE, "owned-pokemon/**").hasAnyRole("TRAINER", "ADMIN")

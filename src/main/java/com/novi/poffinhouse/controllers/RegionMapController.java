@@ -35,7 +35,7 @@ public class RegionMapController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RegionMapOutputDto> updateMap(@PathVariable Long id,@Valid @RequestBody RegionMapInputDto regionMap) {
+    public ResponseEntity<RegionMapOutputDto> updateMap(@PathVariable Long id, @Valid @RequestBody RegionMapInputDto regionMap) {
         return ResponseEntity.ok(regionMapService.updateRegionMap(id, regionMap));
     }
 }

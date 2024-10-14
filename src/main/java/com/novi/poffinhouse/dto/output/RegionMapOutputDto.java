@@ -2,7 +2,6 @@ package com.novi.poffinhouse.dto.output;
 
 import lombok.Data;
 
-import java.util.List;
 
 @Data
 public class RegionMapOutputDto {
@@ -10,5 +9,4 @@ public class RegionMapOutputDto {
     private String regionName;
     private int sizeXAxis;
     private int sizeYAxis;
-    private List<LocationOutputDtoShort> locations;
-}
+    }

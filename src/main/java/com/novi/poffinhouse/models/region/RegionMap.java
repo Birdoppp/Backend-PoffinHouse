@@ -1,6 +1,6 @@
 package com.novi.poffinhouse.models.region;
 
-import com.novi.poffinhouse.models.game.Game;
+import com.novi.poffinhouse.models.game.GameMap;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class RegionMap {
     private Long id;
 
     @Setter
-    @Column(name = "region_name", unique = true)
+    @Column(unique = true)
     private String regionName;
 
     @Setter
@@ -31,10 +31,7 @@ public class RegionMap {
     @Positive
     private int sizeYAxis;
 
-    @Getter
     @OneToMany(mappedBy = "regionMap", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Location> locations = new ArrayList<>();
+    private List<GameMap> gameMaps = new ArrayList<>();
 
-    @OneToMany(mappedBy = "regionMap")
-    private List<Game> games;
 }

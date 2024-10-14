@@ -3,6 +3,7 @@ package com.novi.poffinhouse.dto.mapper;
 import com.novi.poffinhouse.dto.input.GameInputDto;
 import com.novi.poffinhouse.dto.output.game.*;
 import com.novi.poffinhouse.models.game.Game;
+import com.novi.poffinhouse.models.game.GameMap;
 import com.novi.poffinhouse.models.region.RegionMap;
 import com.novi.poffinhouse.repositories.*;
 import com.novi.poffinhouse.util.GameIdListSetter;
@@ -15,13 +16,11 @@ public class GameMapper {
 
     private final RegionMapRepository regionMapRepository;
     private final GameIdListSetter gameIdListSetter;
-    private final TeamMapper teamMapper;
 
     public GameMapper(
-            RegionMapRepository regionMapRepository, GameIdListSetter gameIdListSetter, TeamMapper teamMapper) {
+            RegionMapRepository regionMapRepository, GameIdListSetter gameIdListSetter) {
         this.regionMapRepository = regionMapRepository;
         this.gameIdListSetter = gameIdListSetter;
-        this.teamMapper = teamMapper;
     }
 
     public Game toEntity(GameInputDto inputDto) {
@@ -30,10 +29,13 @@ public class GameMapper {
         game.setGeneration(inputDto.getGeneration());
         game.setDescription(inputDto.getDescription());
 
-        // Set RegionMap
+        // Set GameMap
         RegionMap regionMap = regionMapRepository.findById(inputDto.getRegionMapId())
                 .orElseThrow(() -> new IllegalArgumentException("RegionMap not found."));
-        game.setRegionMap(regionMap);
+        GameMap gameMap = new GameMap();
+        gameMap.setRegionMap(regionMap);
+        gameMap.setGame(game);
+        game.setGameMap(gameMap);
 
         // Set Pokémon list
         if (inputDto.getPokemonInput() != null) {
@@ -55,8 +57,8 @@ public class GameMapper {
         outputDto.setDescription(game.getDescription());
 
         // Convert to GameOutputDto
-        outputDto.setRegionMap(new GameRegionMapOutputDto(game.getRegionMap().getId(), game.getRegionMap().getRegionName()));
         outputDto.setUser(new GameUserOutputDto(game.getUser().getId(), game.getUser().getUsername()));
+        outputDto.setGameMap(GameMapMapper.toOutputDto(game.getGameMap()));
         outputDto.setPokemonList(game.getPokemonList().stream()
                 .map(pokemon -> new GamePokemonOutputDto(pokemon.getId(), pokemon.getNationalDex(), pokemon.getName(), pokemon.getType()))
                 .collect(Collectors.toList()));
@@ -64,7 +66,7 @@ public class GameMapper {
                 .map(ownedPokemon -> new GameOwnedPokemonOutputDto(ownedPokemon.getId(), ownedPokemon.getPokemon().getName(), ownedPokemon.getNickname(), ownedPokemon.getNature()))
                 .collect(Collectors.toList()));
         if (game.getTeam() != null) {
-            outputDto.setTeam(teamMapper.toDto(game.getTeam()));
+            outputDto.setTeam(TeamMapper.toDto(game.getTeam()));
         }
         outputDto.setBerryList(game.getBerryList().stream()
                 .map(berry -> new GameBerryOutputDto(berry.getId(), berry.getIndexNumber(), berry.getName()))

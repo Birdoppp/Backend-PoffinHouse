@@ -7,7 +7,7 @@ import java.util.Map;
 public class BerryPlantingSiteOutputDto {
     private Long id;
     private String description;
+    private Long locationId;
     private int soilSlots;
     private Map<Integer, Long> plantedBerriesBySlots;
-    private Long locationId;
 }

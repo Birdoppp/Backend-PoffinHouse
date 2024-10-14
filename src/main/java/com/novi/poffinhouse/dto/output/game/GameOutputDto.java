@@ -12,9 +12,9 @@ public class GameOutputDto {
     private String versionName;
     private Integer generation;
     private String description;
-    private GameRegionMapOutputDto regionMap;
     private GameUserOutputDto user;
 
+    private GameMapOutputDto gameMap;
     private List<GamePokemonOutputDto> pokemonList;
     private List<GameOwnedPokemonOutputDto> ownedPokemonList;
     private TeamOutputDto team;
