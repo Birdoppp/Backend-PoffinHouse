@@ -22,6 +22,10 @@ public class RegionMap {
     private String regionName;
 
     @Setter
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Atlas atlas;
+
+    @Setter
     @Column(name = "horizontal_axis", nullable = false)
     @Positive
     private int sizeXAxis;

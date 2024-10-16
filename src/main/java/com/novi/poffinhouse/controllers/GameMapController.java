@@ -19,12 +19,10 @@ public class GameMapController {
     @GetMapping("/id/{id}")
     public ResponseEntity<GameMapOutputDto> getGameMapById(@PathVariable Long id) {
         return ResponseEntity.ok(gameMapService.getGameMapById(id));
-
     }
 
     @GetMapping("/username/{username}")
     public ResponseEntity<List<GameMapOutputDto>> getGameMapsByUsername(@PathVariable String username) {
         return ResponseEntity.ok(gameMapService.getGameMapsByUsername(username));
-
     }
 }
