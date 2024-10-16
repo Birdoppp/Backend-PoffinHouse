@@ -14,6 +14,8 @@ import com.novi.poffinhouse.util.GameIdListSetter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -51,32 +53,46 @@ public class GameService {
         game.setUser(user);
 
         Game savedGame = gameRepository.save(game);
-        return gameMapper.toDto(savedGame);
+        return gameMapper.toOutputDto(savedGame);
     }
 
     public GameOutputDto getGameById(Long id) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
-        return gameMapper.toDto(game);
+        if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
+        }
+        return gameMapper.toOutputDto(game);
     }
 
-    public List<GameOutputDto> getAllGamesByUsername(String username) {
-        List<Game> games = gameRepository.findAllByUser_Username(username);
-        return games.stream()
-                .map(gameMapper::toDto)
-                .collect(Collectors.toList());
+    @PreAuthorize("hasRole('ADMIN') or #username == principal.username")
+    public List<GameOutputDto> getAllGamesByUsername(String username, String currentUsername) {
+        if (AuthUtil.isAdmin()) {
+            return gameRepository.findAll().stream()
+                    .map(gameMapper::toOutputDto)
+                    .collect(Collectors.toList());
+        } else if (username.equals(currentUsername)) {
+            return gameRepository.findAllByUser_Username(username).stream()
+                    .map(gameMapper::toOutputDto)
+                    .collect(Collectors.toList());
+        } else {
+            throw new IllegalArgumentException("You are not authorized to view this user's games.");
+        }
     }
 
     public List<GameOutputDto> getAllGames() {
         return gameRepository.findAll()
                 .stream()
-                .map(gameMapper::toDto)
+                .map(gameMapper::toOutputDto)
                 .collect(Collectors.toList());
     }
 
     public GameOutputDto adjustGame(Long id, @Valid GameInputDto inputDto) {
         Game existingGame = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
+        if (!AuthUtil.isAdminOrOwner(existingGame.getUser().getUsername())) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
+        }
 
         if (inputDto.getVersionName() != null) {
             existingGame.setVersionName(inputDto.getVersionName());
@@ -97,13 +113,16 @@ public class GameService {
         }
 
         Game savedGame = gameRepository.save(existingGame);
-        return gameMapper.toDto(savedGame);
+        return gameMapper.toOutputDto(savedGame);
     }
 
     //Pokemon
     public GameOutputDto adjustPokemonList(Long id, @Valid AdjustListDto adjustListDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Game with id " + id + " not found."));
+        if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
+        }
 
         List<Pokemon> pokemonListToAdd = null;
         List<Pokemon> pokemonListToRemove = null;
@@ -129,7 +148,7 @@ public class GameService {
         }
 
         Game updatedGame = gameRepository.save(game);
-        return gameMapper.toDto(updatedGame);
+        return gameMapper.toOutputDto(updatedGame);
     }
 
     //OwnedPokemon is separate
@@ -140,6 +159,9 @@ public class GameService {
     public GameOutputDto adjustBerryList(Long id, @Valid AdjustListDto adjustListDto) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
+        if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
+        }
 
         List<Berry> berryListToAdd = null;
         List<Berry> berryListToRemove = null;
@@ -167,7 +189,7 @@ public class GameService {
         }
 
         Game updatedGame = gameRepository.save(game);
-        return gameMapper.toDto(updatedGame);
+        return gameMapper.toOutputDto(updatedGame);
     }
 
     public void deleteGame(Long id) {
