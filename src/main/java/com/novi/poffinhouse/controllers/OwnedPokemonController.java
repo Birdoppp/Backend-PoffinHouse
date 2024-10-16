@@ -1,8 +1,10 @@
 package com.novi.poffinhouse.controllers;
 
+import com.novi.poffinhouse.dto.input.OwnedPokemonContestConditionInputDto;
 import com.novi.poffinhouse.dto.input.OwnedPokemonInputDto;
 import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
 import com.novi.poffinhouse.services.OwnedPokemonService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +20,10 @@ public class OwnedPokemonController {
         this.ownedPokemonService = ownedPokemonService;
     }
 
-            //    Post/Creation of OwnedPokemon happens in Game
-
-
-    @GetMapping
-    public ResponseEntity<List<OwnedPokemonOutputDto>> getAllOwnedPokemon() {
-        List<OwnedPokemonOutputDto> ownedPokemonList = ownedPokemonService.getAllOwnedPokemon();
-        return ResponseEntity.ok(ownedPokemonList);
+    @PostMapping
+    public ResponseEntity<OwnedPokemonOutputDto> createOwnedPokemon(@Valid @RequestBody OwnedPokemonInputDto ownedPokemonInputDto) {
+        OwnedPokemonOutputDto ownedPokemon = ownedPokemonService.createOwnedPokemon(ownedPokemonInputDto);
+        return ResponseEntity.ok(ownedPokemon);
     }
 
     @GetMapping("/{id}")
@@ -33,9 +32,21 @@ public class OwnedPokemonController {
         return ResponseEntity.ok(ownedPokemon);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<OwnedPokemonOutputDto> updateOwnedPokemon(@PathVariable Long id, @RequestBody OwnedPokemonInputDto inputDto) {
-        OwnedPokemonOutputDto updatedOwnedPokemon = ownedPokemonService.updateOwnedPokemon(id, inputDto);
+    @GetMapping("/game/{gameId}")
+    public ResponseEntity<List<OwnedPokemonOutputDto>> getAllOwnedPokemonByGameId(@PathVariable Long gameId) {
+        List<OwnedPokemonOutputDto> ownedPokemonList = ownedPokemonService.getAllOwnedPokemonByGameId(gameId);
+        return ResponseEntity.ok(ownedPokemonList);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OwnedPokemonOutputDto>> getAllOwnedPokemon() {
+        List<OwnedPokemonOutputDto> ownedPokemonList = ownedPokemonService.getAllOwnedPokemon();
+        return ResponseEntity.ok(ownedPokemonList);
+    }
+
+    @PatchMapping("/{id}/contest-condition")
+    public ResponseEntity<OwnedPokemonOutputDto> adjustContestCondition(@PathVariable Long id, @Valid @RequestBody OwnedPokemonContestConditionInputDto contestCondition) {
+        OwnedPokemonOutputDto updatedOwnedPokemon = ownedPokemonService.adjustContestCondition(id, contestCondition);
         return ResponseEntity.ok(updatedOwnedPokemon);
     }
 

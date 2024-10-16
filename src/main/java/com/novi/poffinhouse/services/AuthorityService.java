@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 @Validated
 @Transactional
 @Service
@@ -71,8 +72,13 @@ public class AuthorityService {
         if (username == null) {
             throw new IllegalArgumentException("Username must not be null");
         }
+
         User user = userService.findByUsername(username);
-        authorityRepository.deleteByUsername(user.getUsername());
+        if (user == null) {
+            throw new UserNotFoundException("User not found with username: " + username);
+        }
+        user.getAuthorities().clear();
+
         return "Authorization has been removed for " + username;
     }
 }

@@ -1,7 +1,6 @@
 package com.novi.poffinhouse.controllers;
 
 import com.novi.poffinhouse.dto.input.*;
-import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
 import com.novi.poffinhouse.dto.output.game.GameOutputDto;
 import com.novi.poffinhouse.services.GameService;
 import jakarta.validation.Valid;
@@ -46,37 +45,27 @@ public class GameController {
         return ResponseEntity.ok(games);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<GameOutputDto> updateGame(@PathVariable Long id, @Valid @RequestBody GameInputDto gameInputDto) {
-        GameOutputDto updatedGame = gameService.updateGame(id, gameInputDto);
+    @PatchMapping("/{id}")
+    public ResponseEntity<GameOutputDto> adjustGame(@PathVariable Long id, @Valid @RequestBody GameInputDto gameInputDto) {
+        GameOutputDto updatedGame = gameService.adjustGame(id, gameInputDto);
         return ResponseEntity.ok(updatedGame);
     }
 
-    //Pokemon
+    //Pokemon list
     @PatchMapping("/{id}/pokemonList")
-    public ResponseEntity<GameOutputDto> patchPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustIdListDto adjustIdListDto) {
-        GameOutputDto updatedGame = gameService.patchPokemonList(id, adjustIdListDto);
+    public ResponseEntity<GameOutputDto> adjustPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustListDto adjustListDto) {
+        GameOutputDto updatedGame = gameService.adjustPokemonList(id, adjustListDto);
         return ResponseEntity.ok(updatedGame);
     }
 
-    //OwnedPokemon - other methods in OwnedPokemonController
-    @PostMapping("/{id}/ownedPokemon")
-    public ResponseEntity<OwnedPokemonOutputDto> createOwnedPokemon(@PathVariable Long id, @Valid @RequestBody OwnedPokemonInputDto ownedPokemonInputDto) {
-        OwnedPokemonOutputDto ownedPokemon = gameService.createOwnedPokemon(id, ownedPokemonInputDto);
-        return ResponseEntity.ok(ownedPokemon);
-    }
+    //OwnedPokemon list is separate
 
-    //Team
-    @PutMapping("/{id}/team")
-    public ResponseEntity<GameOutputDto> updateTeam(@PathVariable Long id, @RequestBody Long teamId) {
-        GameOutputDto updatedGame = gameService.updateTeam(id, teamId);
-        return ResponseEntity.ok(updatedGame);
-    }
+    //Team is separate
 
-    //Berries
+    //Berries list
     @PatchMapping("/{id}/berryList")
-    public ResponseEntity<GameOutputDto> patchBerryList(@PathVariable Long id, @Valid @RequestBody AdjustIdListDto adjustIdListDto) {
-        GameOutputDto updatedGame = gameService.patchBerryList(id, adjustIdListDto);
+    public ResponseEntity<GameOutputDto> adjustBerryList(@PathVariable Long id, @Valid @RequestBody AdjustListDto adjustListDto) {
+        GameOutputDto updatedGame = gameService.adjustBerryList(id, adjustListDto);
         return ResponseEntity.ok(updatedGame);
     }
 

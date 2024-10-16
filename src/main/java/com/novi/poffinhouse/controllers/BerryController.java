@@ -21,14 +21,20 @@ public class BerryController {
     }
 
     @PostMapping
-    public ResponseEntity<BerryOutputDto> createBerry(@RequestBody BerryInputDto berryInputDto) {
+    public ResponseEntity<BerryOutputDto> createBerry(@Valid @RequestBody BerryInputDto berryInputDto) {
         BerryOutputDto createdBerry = berryService.createBerry(berryInputDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBerry);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<BerryOutputDto> getBerryById(@PathVariable Long id) {
         BerryOutputDto berry = berryService.getBerryById(id);
+        return ResponseEntity.ok(berry);
+    }
+
+    @GetMapping("/index-number/{indexNumber}")
+    public ResponseEntity<BerryOutputDto> getBerryByIndexNumber(@PathVariable Long indexNumber) {
+        BerryOutputDto berry = berryService.getBerryByIndexNumber(indexNumber);
         return ResponseEntity.ok(berry);
     }
 
@@ -38,21 +44,33 @@ public class BerryController {
         return ResponseEntity.ok(berries);
     }
 
-    @GetMapping("/ordered")
-    public ResponseEntity<List<BerryOutputDto>> getAllBerriesOrderedByIndexNumber() {
-        List<BerryOutputDto> berries = berryService.getAllBerriesOrderedByIndexNumber();
+    @GetMapping("/validated")
+    public ResponseEntity<List<BerryOutputDto>> getAllValidatedBerriesOrderedByIndexNumber() {
+        List<BerryOutputDto> berries = berryService.getAllValidatedBerriesOrderedByIndexNumber();
         return ResponseEntity.ok(berries);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BerryOutputDto> updateBerry(@PathVariable Long id, @Valid @RequestBody BerryInputDto berryInputDto) {
-        BerryOutputDto updatedBerry = berryService.updateBerry(id, berryInputDto);
+    @GetMapping("/unvalidated")
+    public ResponseEntity<List<BerryOutputDto>> getUnvalidatedBerries() {
+        List<BerryOutputDto> berries = berryService.getUnvalidatedBerries();
+        return ResponseEntity.ok(berries);
+    }
+
+    @PutMapping("/index-number/{indexNumber}")
+    public ResponseEntity<BerryOutputDto> adjustBerry(@PathVariable Long indexNumber, @Valid @RequestBody BerryInputDto berryInputDto) {
+        BerryOutputDto updatedBerry = berryService.updateBerry(indexNumber, berryInputDto);
         return ResponseEntity.ok(updatedBerry);
     }
 
+    @PatchMapping("/validate")
+    public ResponseEntity<BerryOutputDto> validateBerries(@RequestBody Long indexNumber) {
+        BerryOutputDto validateBerry = berryService.validateBerry(indexNumber);
+        return ResponseEntity.ok(validateBerry);
+    }
+
     @DeleteMapping
-    public ResponseEntity<String> deleteBerry(@RequestBody Long id) {
-        String message = berryService.deleteBerry(id);
+    public ResponseEntity<String> deleteBerry(@RequestBody Long indexNumber) {
+        String message = berryService.deleteBerry(indexNumber);
         return ResponseEntity.ok(message);
     }
 

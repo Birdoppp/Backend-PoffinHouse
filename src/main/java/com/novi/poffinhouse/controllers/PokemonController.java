@@ -5,6 +5,7 @@ import com.novi.poffinhouse.dto.mapper.PokemonMapper;
 import com.novi.poffinhouse.dto.output.PokemonOutputDto;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.services.PokemonService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +23,9 @@ public class PokemonController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<PokemonOutputDto> createPokemon(@RequestBody PokemonInputDto inputDto) {
+    public ResponseEntity<PokemonOutputDto> createPokemon(@Valid @RequestBody PokemonInputDto inputDto) {
         PokemonOutputDto newPokemon = pokemonService.createPokemon(inputDto);
-        return ResponseEntity.ok(newPokemon);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newPokemon);
     }
 
     @GetMapping("/id/{id}")
@@ -34,9 +34,9 @@ public class PokemonController {
         return ResponseEntity.ok(pokemon);
     }
 
-    @GetMapping("/nationalDex/{nationalDexNumber}")
-    public ResponseEntity<PokemonOutputDto> getPokemonByNationalDex(@PathVariable int nationalDexNumber) {
-        Pokemon pokemon = pokemonService.getPokemonByNationalDex(nationalDexNumber);
+    @GetMapping("/nationalDex/{nationalDex}")
+    public ResponseEntity<PokemonOutputDto> getPokemonByNationalDex(@PathVariable Long nationalDex) {
+        Pokemon pokemon = pokemonService.getPokemonByNationalDex(nationalDex);
         return ResponseEntity.ok(PokemonMapper.toOutputDto(pokemon));
     }
 
@@ -47,35 +47,35 @@ public class PokemonController {
     }
 
     @GetMapping("/validated")
-    public ResponseEntity<List<PokemonOutputDto>> getAllValidatedPokemon() {
+    public ResponseEntity<List<PokemonOutputDto>> getAllValidatedPokemonOrdered() {
         List<PokemonOutputDto> pokemonList = pokemonService.getAllValidatedPokemonOrdered();
         return ResponseEntity.ok(pokemonList);
     }
 
-    @GetMapping("/ordered")
-    public ResponseEntity<List<PokemonOutputDto>> getAllPokemonOrdered() {
-        List<PokemonOutputDto> pokemonList = pokemonService.getAllPokemonOrdered();
+    @GetMapping("/unvalidated")
+    public ResponseEntity<List<PokemonOutputDto>> getAllUnvalidatedPokemon() {
+        List<PokemonOutputDto> pokemonList = pokemonService.getAllUnvalidatedPokemonOrdered();
         return ResponseEntity.ok(pokemonList);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<PokemonOutputDto> updatePokemon(@PathVariable Long id, @RequestBody PokemonInputDto inputDto) {
-        PokemonOutputDto updatedPokemon = pokemonService.updatePokemon(id, inputDto);
+    @PutMapping("/nationalDex/{nationalDex}")
+    public ResponseEntity<PokemonOutputDto> updatePokemon(@PathVariable Long nationalDex, @Valid @RequestBody PokemonInputDto inputDto) {
+        PokemonOutputDto updatedPokemon = pokemonService.updatePokemon(nationalDex, inputDto);
         return ResponseEntity.ok(updatedPokemon);
     }
 
-    @PutMapping("/validate")
-    public ResponseEntity<PokemonOutputDto> validatePokemon(@RequestBody int nationalDexId) {
-        PokemonOutputDto validatedPokemon = pokemonService.validatePokemon(nationalDexId);
+    @PatchMapping("/validate")
+    public ResponseEntity<PokemonOutputDto> validatePokemon(@RequestBody Long nationalDex) {
+        PokemonOutputDto validatedPokemon = pokemonService.validatePokemon(nationalDex);
         return ResponseEntity.ok(validatedPokemon);
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deletePokemon(@RequestBody int nationalDexNumber) {
-        Pokemon pokemon = pokemonService.getPokemonByNationalDex(nationalDexNumber);
+    public ResponseEntity<String> deletePokemon(@RequestBody Long nationalDex) {
+        Pokemon pokemon = pokemonService.getPokemonByNationalDex(nationalDex);
         String pokemonName = pokemon.getName();
-        pokemonService.deletePokemon(nationalDexNumber);
+        pokemonService.deletePokemon(nationalDex);
 
-        return ResponseEntity.ok("Pokemon " + pokemonName + " with nationalDex number " + nationalDexNumber + " are deleted. These pokemon are deleted from games and owned pokemon lists.");
+        return ResponseEntity.ok("Pokemon " + pokemonName + " with nationalDex number " + nationalDex + " are deleted. These pokemon are deleted from games and owned pokemon lists.");
     }
 }

@@ -7,7 +7,6 @@ import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.PokemonRepository;
 import com.novi.poffinhouse.util.Capitalize;
-import com.novi.poffinhouse.util.NationalDexByGeneration;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
@@ -49,75 +48,54 @@ public class PokemonService {
         throw new IllegalArgumentException("Pokemon with id " + id + " not found.");
     }
 
-    public Pokemon getPokemonByNationalDex(int nationalDexNumber) {
-        return pokemonRepository.findByNationalDex(nationalDexNumber)
-                .orElseThrow(() -> new IllegalArgumentException("Pokemon with nationalDex number " + nationalDexNumber + " not found."));
-    }
-
-    private List<Pokemon> getPokemonByGeneration(int generation) {
-        // Assuming you have a method to get the max National Dex number for a generation
-        int startDexNumber = NationalDexByGeneration.getStartIndexByGeneration(generation);
-        int maxDexNumber = NationalDexByGeneration.getMaxIndexByGeneration(generation);
-        return pokemonRepository.findAllByValidatedTrueAndNationalDexBetween(startDexNumber,maxDexNumber);
+    public Pokemon getPokemonByNationalDex(Long nationalDex) {
+        return pokemonRepository.findByNationalDex(nationalDex).orElseThrow(() -> new IllegalArgumentException("Pokemon with nationalDex number " + nationalDex + " not found."));
     }
 
     public List<PokemonOutputDto> getAllPokemon() {
-        return pokemonRepository.findAll()
-                .stream()
-                .map(PokemonMapper::toOutputDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<PokemonOutputDto> getAllPokemonOrdered() {
-        return pokemonRepository.findAllOrderedByNationalDex()
-                .stream()
-                .map(PokemonMapper::toOutputDto)
-                .collect(Collectors.toList());
+        return pokemonRepository.findAll().stream().map(PokemonMapper::toOutputDto).collect(Collectors.toList());
     }
 
     public List<PokemonOutputDto> getAllValidatedPokemonOrdered() {
-        return pokemonRepository.findAllValidatedOrderedByNationalDex()
-                .stream()
-                .map(PokemonMapper::toOutputDto)
-                .collect(Collectors.toList());
+        return pokemonRepository.findAllValidatedOrderedByNationalDex().stream().map(PokemonMapper::toOutputDto).collect(Collectors.toList());
     }
 
-    public PokemonOutputDto updatePokemon(Long id, @Valid PokemonInputDto inputDto) {
-        Pokemon existingPokemon = pokemonRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + id + " not found."));
+    public List<PokemonOutputDto> getAllUnvalidatedPokemonOrdered() {
+        return pokemonRepository.findAllUnvalidatedOrderedByNationalDex().stream().map(PokemonMapper::toOutputDto).collect(Collectors.toList());
+    }
 
+    public PokemonOutputDto updatePokemon(Long nationalDex, @Valid PokemonInputDto inputDto) {
+        Pokemon existingPokemon = pokemonRepository.findByNationalDex(nationalDex).orElseThrow(() -> new IllegalArgumentException("Pokemon with nationalDex " + nationalDex + " not found."));
         existingPokemon.setName(inputDto.getName());
-        existingPokemon.setNationalDex(inputDto.getNationalDex());
         existingPokemon.setType(inputDto.getType());
+
         existingPokemon.setHealthPoints(inputDto.getHealthPoints());
         existingPokemon.setAttack(inputDto.getAttack());
         existingPokemon.setDefence(inputDto.getDefence());
         existingPokemon.setSpAttack(inputDto.getSpAttack());
         existingPokemon.setSpDefence(inputDto.getSpDefence());
         existingPokemon.setSpeed(inputDto.getSpeed());
+        existingPokemon.setValidated(false);
 
         Pokemon updatedPokemon = pokemonRepository.save(existingPokemon);
         return PokemonMapper.toOutputDto(updatedPokemon);
     }
 
-    public PokemonOutputDto validatePokemon(int nationalDexId) {
-        Pokemon existingPokemon = pokemonRepository.findByNationalDex(nationalDexId)
-                .orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + nationalDexId + " not found."));
-
+    public PokemonOutputDto validatePokemon(Long nationalDex) {
+        Pokemon existingPokemon = pokemonRepository.findByNationalDex(nationalDex).orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + nationalDex + " not found."));
         existingPokemon.setValidated(true);
 
         Pokemon validatedPokemon = pokemonRepository.save(existingPokemon);
         return PokemonMapper.toOutputDto(validatedPokemon);
     }
 
-    public void deletePokemon(int nationalDexId) {
-        Pokemon pokemon = pokemonRepository.findByNationalDex(nationalDexId)
-                .orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + nationalDexId + " not found."));
+    public void deletePokemon(Long nationalDex) {
+        Pokemon pokemon = pokemonRepository.findByNationalDex(nationalDex).orElseThrow(() -> new IllegalArgumentException("Pokemon with id " + nationalDex + " not found."));
         pokemon.getOwnedPokemonList().forEach(ownedPokemon -> ownedPokemon.getTeams().forEach(team -> team.getOwnedPokemon().remove(ownedPokemon)));
         ownedPokemonRepository.deleteAll(pokemon.getOwnedPokemonList());
         pokemon.getGames().forEach(game -> game.getPokemonList().remove(pokemon));
 
-        pokemonRepository.deleteByNationalDex(nationalDexId);
+        pokemonRepository.deleteByNationalDex(nationalDex);
 
     }
 

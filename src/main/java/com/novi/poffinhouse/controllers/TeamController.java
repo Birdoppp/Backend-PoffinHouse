@@ -2,10 +2,12 @@ package com.novi.poffinhouse.controllers;
 
 import com.novi.poffinhouse.dto.input.TeamInputDto;
 import com.novi.poffinhouse.dto.output.TeamOutputDto;
-import com.novi.poffinhouse.dto.input.AdjustPokemonInTeamDto;
 import com.novi.poffinhouse.services.TeamService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/teams")
@@ -17,10 +19,8 @@ public class TeamController {
         this.teamService = teamService;
     }
 
-        //    Post/Creation of Team happens in Game
-
     @PostMapping
-    public ResponseEntity<TeamOutputDto> createTeam(@RequestBody TeamInputDto dto) {
+    public ResponseEntity<TeamOutputDto> createTeam(@Valid @RequestBody TeamInputDto dto) {
         TeamOutputDto teamOutputDto = teamService.createTeam(dto);
         return ResponseEntity.ok(teamOutputDto);
     }
@@ -30,9 +30,10 @@ public class TeamController {
         TeamOutputDto teamOutputDto = teamService.getTeamById(id);
         return ResponseEntity.ok(teamOutputDto);
     }
-    @PutMapping("/{teamId}/pokemon")
-    public ResponseEntity<TeamOutputDto> adjustPokemonInTeam(@PathVariable Long teamId, @RequestBody AdjustPokemonInTeamDto dto) {
-        TeamOutputDto teamOutputDto = teamService.adjustPokemonInTeam(teamId, dto);
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TeamOutputDto> adjustPokemonInTeam(@PathVariable Long id, @Valid @RequestBody List<Long> ownedPokemonIdList) {
+        TeamOutputDto teamOutputDto = teamService.putPokemonInTeam(id, ownedPokemonIdList);
         return ResponseEntity.ok(teamOutputDto);
     }
 

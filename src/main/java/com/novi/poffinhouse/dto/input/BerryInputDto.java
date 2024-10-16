@@ -3,10 +3,7 @@ package com.novi.poffinhouse.dto.input;
 import com.novi.poffinhouse.util.TypeEnum;
 import com.novi.poffinhouse.util.ValidEnum;
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
@@ -18,18 +15,22 @@ public class BerryInputDto {
     private String description;
     @Positive
     @Column(unique = true)
-    private int indexNumber;
+    private Long indexNumber;
     @Positive
-    private int growthTime;
+    private Integer growthTime;
     @NotNull
     @ValidEnum(enumClass = TypeEnum.BERRY_CATEGORY_TYPE.class, message = "Invalid Berry-Type Category")
     private TypeEnum.BERRY_CATEGORY_TYPE categoryType;
 
-
-    private int spicyPotency;
-    private int dryPotency;
-    private int sweetPotency;
-    private int bitterPotency;
-    private int sourPotency;
+    @PositiveOrZero
+    private Integer spicyPotency;
+    @PositiveOrZero
+    private Integer dryPotency;
+    @PositiveOrZero
+    private Integer sweetPotency;
+    @PositiveOrZero
+    private Integer bitterPotency;
+    @PositiveOrZero
+    private Integer sourPotency;
 
 }

@@ -35,49 +35,15 @@ public class BerryPlantingSiteController {
         return ResponseEntity.ok(berryPlantingSiteService.getBerryPlantingSiteById(id));
     }
 
-
-
-    //    Assign Berries to BerryPlantingSite soilSlots
-
-    @PostMapping("/{berryPlantingSiteId}/berries")
-    public ResponseEntity<String> plantBerriesInBerryPlantingSite(
-            @PathVariable Long berryPlantingSiteId,
-            @RequestBody Map<Integer, Long> berriesBySlots) {
-
-        berryPlantingSiteService.plantBerriesInBerryPlantingSite(berryPlantingSiteId, berriesBySlots);
-        BerryPlantingSiteOutputDto site = berryPlantingSiteService.getBerryPlantingSiteById(berryPlantingSiteId);
-        String formattedBerries = formatBerriesBySlots(site);
-        return ResponseEntity.ok("Berries planted successfully: " + formattedBerries);
-    }
-
     @PatchMapping("/{berryPlantingSiteId}/berries")
-    public ResponseEntity<String> adjustBerriesInBerryPlantingSite(
+    public ResponseEntity<BerryPlantingSiteOutputDto> adjustBerriesInBerryPlantingSite(
             @PathVariable Long berryPlantingSiteId,
-            @RequestBody Map<Integer, Long> berriesBySlots) {
+            @Valid @RequestBody Map<Integer, Long> berriesBySlots) {
 
         berryPlantingSiteService.adjustBerriesInBerryPlantingSite(berryPlantingSiteId, berriesBySlots);
         BerryPlantingSiteOutputDto site = berryPlantingSiteService.getBerryPlantingSiteById(berryPlantingSiteId);
-        String formattedBerries = formatBerriesBySlots(site);
-        return ResponseEntity.ok("Berry Planting Site updated successfully. " + formattedBerries);
-    }
 
-    private String formatBerriesBySlots(BerryPlantingSiteOutputDto site) {
-        StringBuilder result = new StringBuilder();
-
-        for (int i = 1; i <= site.getSoilSlots(); i++) {
-            Long berry = site.getPlantedBerriesBySlots().get(i);
-            if (berry != null) {
-                result.append("Slot ").append(i).append(": BerryId ").append(berry).append(", ");
-            } else {
-                result.append("Slot ").append(i).append(": Empty, ");
-            }
-        }
-
-        if (!result.isEmpty()) {
-            result.setLength(result.length() - 2);
-        }
-
-        return result.toString();
+        return ResponseEntity.ok(site);
     }
 
 

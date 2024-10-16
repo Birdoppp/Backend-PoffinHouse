@@ -4,7 +4,6 @@ import com.novi.poffinhouse.dto.input.RegionMapInputDto;
 import com.novi.poffinhouse.dto.output.RegionMapOutputDto;
 import com.novi.poffinhouse.models.region.RegionMap;
 
-import java.util.stream.Collectors;
 
 public class RegionMapMapper {
 
@@ -20,13 +19,9 @@ public class RegionMapMapper {
         RegionMapOutputDto outputDto = new RegionMapOutputDto();
         outputDto.setId(regionMap.getId());
         outputDto.setRegionName(regionMap.getRegionName());
+        outputDto.setAtlas(regionMap.getAtlas());
         outputDto.setSizeXAxis(regionMap.getSizeXAxis());
         outputDto.setSizeYAxis(regionMap.getSizeYAxis());
-        if (regionMap.getLocations() != null){
-            outputDto.setLocations(regionMap.getLocations().stream()
-                    .map(LocationMapper::toOutputDtoShort)
-                    .collect(Collectors.toList()));
-        }
         return outputDto;
     }
 }

@@ -6,6 +6,9 @@ import com.novi.poffinhouse.dto.output.UserOutputDto;
 import com.novi.poffinhouse.models.auth.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class UserMapper {
 
@@ -29,6 +32,12 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         dto.setUsername(user.getUsername());
         return dto;
+    }
+
+    public List<UserOutputDto> toDto(List<User> users) {
+        return users.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     public AuthenticationRequest toLogInDto(User user) {

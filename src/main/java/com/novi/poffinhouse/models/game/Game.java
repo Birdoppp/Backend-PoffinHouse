@@ -3,7 +3,6 @@ package com.novi.poffinhouse.models.game;
 import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
-import com.novi.poffinhouse.models.region.RegionMap;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,19 +23,19 @@ public class Game {
     private String versionName;
     @Setter
     @Column(nullable = false)
-    private int generation;
+    private Integer generation;
     @Setter
     private String description;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_map_id", nullable = false)
-    @Setter
-    private RegionMap regionMap;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @Setter
     private User user;
+
+
+    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
+    private GameMap gameMap;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @Setter

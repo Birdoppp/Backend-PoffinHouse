@@ -12,8 +12,8 @@ VALUES ('Brock', 'ROLE_ADMIN'),
 
 -- Insert data into Pokemon table
 INSERT INTO pokemon (name, national_dex, type, health_points, attack, defence, sp_attack, sp_defence, speed, validated)
-VALUES ('Bulbasaur', 1, 'GRASS', 45, 49, 49, 65, 65, 45, true),
-       ('Ivysaur', 2, 'GRASS', 60, 62, 63, 80, 80, 60, true),
+VALUES ('Ivysaur', 2, 'GRASS', 60, 62, 63, 80, 80, 60, false),
+       ('Bulbasaur', 1, 'GRASS', 45, 49, 49, 65, 65, 45, true),
        ('Venusaur', 3, 'GRASS', 80, 82, 83, 100, 100, 80, true),
        ('Charmander', 4, 'FIRE', 39, 52, 43, 60, 50, 65, true),
        ('Charmeleon', 5, 'FIRE', 58, 64, 58, 80, 65, 80, true),
@@ -214,17 +214,17 @@ VALUES ('Bulbasaur', 1, 'GRASS', 45, 49, 49, 65, 65, 45, true),
 
 -- Insert data into berries table
 INSERT INTO berries (name, index_number, description, growth_time, category_type, spicy_potency, dry_potency,
-                     sweet_potency, bitter_potency, sour_potency)
-VALUES ('Cheri', 1, 'A Poffin ingredient. It may be used or held by a Pokémon to recover from paralysis.', 3,
-        'MEDICINE', 10, 0, 0, 0, 0),
-       ('Chesto', 2, 'A Poffin ingredient. It may be used or held by a Pokémon to recover from sleep.', 3,
-        'MEDICINE', 0, 10, 0, 0, 0),
+                     sweet_potency, bitter_potency, sour_potency, validated)
+VALUES ('Chesto', 2, 'A Poffin ingredient. It may be used or held by a Pokémon to recover from sleep.', 3,
+        'MEDICINE', 0, 10, 0, 0, 0, false),
+       ('Cheri', 1, 'A Poffin ingredient. It may be used or held by a Pokémon to recover from paralysis.', 3,
+        'MEDICINE', 10, 0, 0, 0, 0, true),
        ('Pecha', 3, 'A Poffin ingredient. It may be used or held by a Pokémon to recover from poisoning.', 3,
-        'MEDICINE', 0, 0, 10, 0, 0),
+        'MEDICINE', 0, 0, 10, 0, 0, true),
        ('Rawst', 4, 'A Poffin ingredient. It may be used or held by a Pokémon to recover from a burn.', 3,
-        'MEDICINE', 0, 0, 0, 10, 0),
+        'MEDICINE', 0, 0, 0, 10, 0, true),
        ('Aspear', 5, 'A Poffin ingredient. It may be used or held by a Pokémon to recover from being frozen.', 3,
-        'MEDICINE', 0, 0, 0, 0, 10);
+        'MEDICINE', 0, 0, 0, 0, 10, true);
 
 
 -- Insert data into region_maps table
@@ -234,39 +234,54 @@ VALUES ('Kanto', 80, 60),
        ('Hoenn', 70, 40),
        ('Sinnoh', 60, 40);
 
--- Insert data into locations table
-INSERT INTO locations (name, description, coordinate_X, coordinate_Y, region_map_id)
-VALUES ('Pallet Town', 'A small town with a quiet atmosphere', 1, 1, 1),
-       ('Viridian City', 'A beautiful city with a forest nearby', 2, 2, 1);
+-- Insert Games
+INSERT INTO game (version_name, generation, description,  user_id)
+VALUES ('Yellow', 1, 'Adventure of Brock',  1),
+       ('Blue', 1, 'Adventure of Misty',  2),
+       ('Diamond', 4, 'The first appearance of PoffinHouse', 1);
 
--- Insert data into berry_planting_sites table
-INSERT INTO berry_planting_sites (description, soil_slots, location_id)
-VALUES ('East gate berry planting site', 4, 1),
-       ('Behind the lake in the North, currently unreachable due to a tree obstacle', 2, 2);
+-- Insert data into game_map table
+INSERT INTO game_map (game_id, region_map_id)
+VALUES (1, 1),
+       (2, 1),
+       (3, 4);
 
--- Insert data into berry_planting_site_slots table to map berries to planting slots
+-- -- Insert data into locations table
+INSERT INTO location (name, description,game_map_id, coordinate_X, coordinate_Y)
+VALUES ('Pallet Town', 'A small town with a quiet atmosphere', 1, 10, 10),
+       ('Viridian City', 'A beautiful city with a forest nearby', 2, 20, 20);
+
+-- -- Insert data into berry_planting_sites table
+INSERT INTO berry_planting_sites (description,location_id, soil_slots)
+VALUES ('East gate berry planting site', 1, 4),
+       ('Behind the lake in the North, currently unreachable due to a tree obstacle', 2, 2),
+       ('Planting spot next to a fisherman house', 2, 4);
+--
+-- -- Insert data into berry_planting_site_slots table to map berries to planting slots
 INSERT INTO berry_planting_site_slots (site_id, slot_number, planted_berries_by_slots_id)
 VALUES (1, 1, 1), -- Cheri Berry
-       (1, 2, 1), -- Cheri Berry
-       (2, 1, 2); -- Chesto Berry
+       (1, 2, 2), -- Chesto Berry
+       (2, 2, 2); -- Chesto Berry
 
 
--- Insert Games
-INSERT INTO game (version_name, generation, description, region_map_id, user_id)
-VALUES ('Diamond', 4, 'The first appearance of PoffinHouse', 4, 1),
-       ('Blue', 1, 'Adventure of Misty', 1, 2);
-
+-- Insert data into game lists table
 INSERT INTO game_pokemon (game_id, pokemon_id)
 SELECT 1, id
 FROM pokemon
-WHERE national_dex >= 387
-  AND national_dex <= 493;
+WHERE national_dex >= 70
+  AND national_dex <= 100;
 
 INSERT INTO game_pokemon (game_id, pokemon_id)
 SELECT 2, id
 FROM pokemon
 WHERE national_dex >= 1
   AND national_dex <= 151;
+
+INSERT INTO game_pokemon (game_id, pokemon_id)
+SELECT 3, id
+FROM pokemon
+WHERE national_dex >= 387
+  AND national_dex <= 493;
 
 INSERT INTO game_berry (game_id, berry_id)
 VALUES (1, 1),
@@ -275,18 +290,20 @@ VALUES (1, 1),
 
 
 -- Insert data into owned_pokemon table to map users to their Pokémon
-INSERT INTO owned_pokemon (pokemon_id, nickname, nature, caught_by_trainer_name, username, beauty, coolness, cuteness,
+INSERT INTO owned_pokemon (pokemon_id, username, nickname, nature, caught_by_trainer_name, beauty, coolness, cuteness,
                            cleverness, toughness, game_id)
-VALUES (74, null, 'HARDY', 'Brock', 'Brock', 10, 20, 15, 25, 50, 1),
-       (95, 'Rocky', 'IMPISH', 'Brock', 'Brock', 15, 25, 20, 30, 55, 1),
-       (120, null, 'CALM', 'Misty', 'Misty', 20, 30, 40, 50, 60, 2);
+VALUES (74, 'Brock', null, 'HARDY', 'Brock', 10, 20, 15, 25, 50, 1),
+       (95, 'Brock', 'Rocky', 'IMPISH', 'Brock', 15, 25, 20, 30, 55, 1),
+       (120, 'Misty', null, 'CALM', 'Misty', 20, 30, 40, 50, 60, 2),
+       (152, 'Brock', null, 'BRAVE', 'Brock', 30, 40, 50, 60, 70, 3),
+       (180, 'Brock', 'BeeBoi', 'CALM', 'Brock', 35, 45, 55, 65, 75, 3),
+       (187, 'Brock', 'Hello', 'HARDY', 'Brock', 40, 50, 60, 70, 80, 3);
 
 
 -- Insert data into team table
-INSERT INTO team (description)
-VALUES ('Team of GymLeader Brock');
-INSERT INTO team (description)
-VALUES ('Team of GymLeader Misty');
+INSERT INTO team (description, game_id)
+VALUES ('Team of GymLeader Brock', 1),
+       ('Team of GymLeader Misty', 2);
 
 -- Insert data into team_owned_pokemon join table for Brock's Team
 INSERT INTO team_owned_pokemon (team_id, owned_pokemon_id)
