@@ -7,7 +7,9 @@ import com.novi.poffinhouse.dto.mapper.UserMapper;
 import com.novi.poffinhouse.exceptions.UserNotFoundException;
 import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.repositories.UserRepository;
+import com.novi.poffinhouse.util.AuthUtil;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.novi.poffinhouse.config.SpringSecurityConfig.passwordEncoder;
+import static com.novi.poffinhouse.dto.mapper.UserMapper.toOutputDto;
 
 @Validated
 @Transactional
@@ -22,25 +25,22 @@ import static com.novi.poffinhouse.config.SpringSecurityConfig.passwordEncoder;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
-
-    public UserService(UserRepository userRepository, UserMapper userMapper ) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
     }
 
     public UserOutputDto createUser(UserInputDto userInputDto) {
-        User user = userMapper.toEntity(userInputDto);
+        User user = UserMapper.toEntity(userInputDto);
         user.setPassword(passwordEncoder.encode(userInputDto.getPassword()));
         User savedUser = userRepository.save(user);
-        return userMapper.toDto(savedUser);
+        return toOutputDto(savedUser);
     }
 
     public AuthenticationRequest logInUser(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
-        return userMapper.toLogInDto(user);
+        return UserMapper.toLogInDto(user);
     }
 
     public UserOutputDto getUserBy(String field, String value) {
@@ -54,17 +54,27 @@ public class UserService {
                     .orElseThrow(() -> new UserNotFoundException("User not found with email: " + value));
             default -> throw new IllegalArgumentException("Invalid field: " + field);
         }
-        return userMapper.toDto(user);
+        return UserMapper.toOutputDto(user);
     }
 
-    public List<UserOutputDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return userMapper.toDto(users);
+    public List<UserOutputDto> getUsers() {
+        if (AuthUtil.isAdmin()) {
+            List<User> users = userRepository.findAll();
+            return UserMapper.toOutputDtoList(users);
+
+        } else {
+            User currentUser = userRepository.findByUsername(AuthUtil.getCurrentUsername())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            return List.of(UserMapper.toOutputDto(currentUser));
+        }
     }
 
     public UserOutputDto updateUser(String username, UserInputDto userInputDto) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        if (!AuthUtil.isAdminOrOwner(username)) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
+        }
 
         if (userInputDto.getEmail() != null) {
             user.setEmail(userInputDto.getEmail());
@@ -77,7 +87,7 @@ public class UserService {
         }
 
         User updatedUser = userRepository.save(user);
-        return userMapper.toDto(updatedUser);
+        return UserMapper.toOutputDto(updatedUser);
     }
 
     public String deleteUser(String username) {
@@ -88,9 +98,7 @@ public class UserService {
     }
 
 
-
-
-//For TeamService
+    //For AuthorityService
     public User findByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {

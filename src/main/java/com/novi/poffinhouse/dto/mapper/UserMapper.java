@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class UserMapper {
 
-    public User toEntity(UserInputDto dto) {
+    public static User toEntity(UserInputDto dto) {
         if (dto == null) {
             return null;
         }
@@ -23,24 +23,24 @@ public class UserMapper {
         return user;
     }
 
-    public UserOutputDto toDto(User user) {
+    public static UserOutputDto toOutputDto(User user) {
         if (user == null) {
             return null;
         }
-        UserOutputDto dto = new UserOutputDto();
-        dto.setId(user.getId());
-        dto.setEmail(user.getEmail());
-        dto.setUsername(user.getUsername());
-        return dto;
+        UserOutputDto outputDto = new UserOutputDto();
+        outputDto.setId(user.getId());
+        outputDto.setEmail(user.getEmail());
+        outputDto.setUsername(user.getUsername());
+        return outputDto;
     }
 
-    public List<UserOutputDto> toDto(List<User> users) {
+    public static List<UserOutputDto> toOutputDtoList(List<User> users) {
         return users.stream()
-                .map(this::toDto)
+                .map(UserMapper::toOutputDto)
                 .collect(Collectors.toList());
     }
 
-    public AuthenticationRequest toLogInDto(User user) {
+    public static AuthenticationRequest toLogInDto(User user) {
         if (user == null) {
             return null;
         }
