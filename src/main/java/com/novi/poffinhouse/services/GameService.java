@@ -15,7 +15,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -65,19 +64,14 @@ public class GameService {
         return gameMapper.toOutputDto(game);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or #username == principal.username")
-    public List<GameOutputDto> getAllGamesByUsername(String username, String currentUsername) {
-        if (AuthUtil.isAdmin()) {
-            return gameRepository.findAll().stream()
-                    .map(gameMapper::toOutputDto)
-                    .collect(Collectors.toList());
-        } else if (username.equals(currentUsername)) {
-            return gameRepository.findAllByUser_Username(username).stream()
-                    .map(gameMapper::toOutputDto)
-                    .collect(Collectors.toList());
-        } else {
-            throw new IllegalArgumentException("You are not authorized to view this user's games.");
+    public List<GameOutputDto> getAllGamesByUsername(String username) {
+        if (!AuthUtil.isAdminOrOwner(username)) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
         }
+        List<Game> games = gameRepository.findAllByUser_Username(username);
+        return games.stream()
+                .map(gameMapper::toOutputDto)
+                .collect(Collectors.toList());
     }
 
     public List<GameOutputDto> getAllGames() {

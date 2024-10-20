@@ -3,7 +3,6 @@ package com.novi.poffinhouse.controllers;
 import com.novi.poffinhouse.dto.input.*;
 import com.novi.poffinhouse.dto.output.game.GameOutputDto;
 import com.novi.poffinhouse.services.GameService;
-import com.novi.poffinhouse.util.AuthUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,6 @@ public class GameController {
     public GameController(GameService gameService) {
         this.gameService = gameService;
     }
-
-    String currentUsername = AuthUtil.getCurrentUsername();
 
     @PostMapping
     public ResponseEntity<GameOutputDto> createGame(@Valid @RequestBody GameInputDto gameInputDto) {
@@ -38,7 +35,7 @@ public class GameController {
 
     @GetMapping("/user/{username}")
     public ResponseEntity<List<GameOutputDto>> getAllGamesByUsername(@PathVariable String username) {
-        List<GameOutputDto> games = gameService.getAllGamesByUsername(username,currentUsername);
+        List<GameOutputDto> games = gameService.getAllGamesByUsername(username);
         return ResponseEntity.ok(games);
     }
 

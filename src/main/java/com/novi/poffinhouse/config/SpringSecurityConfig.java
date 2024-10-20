@@ -43,7 +43,13 @@ public class SpringSecurityConfig {
                                 auth
                                         .requestMatchers(HttpMethod.GET, "/*/validated").permitAll()
                                         .requestMatchers(HttpMethod.GET, "/authenticated").authenticated()
-                                        .requestMatchers(HttpMethod.GET, "/games").hasRole("ADMIN")
+                                        .requestMatchers(HttpMethod.GET, "/games",
+                                                                         "/locations",
+                                                                         "/berry-planting-sites",
+                                                                         "/owned-pokemon",
+                                                                         "/teams"
+
+                                                ).hasRole("ADMIN")
                                         .requestMatchers(HttpMethod.GET, "/users",
                                                                          "/authorities/**",
                                                                          "/region-maps/**",

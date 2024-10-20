@@ -238,24 +238,24 @@ VALUES ('Kanto', 80, 60),
 INSERT INTO game (version_name, generation, description,  user_id)
 VALUES ('Yellow', 1, 'Adventure of Brock',  1),
        ('Blue', 1, 'Adventure of Misty',  2),
-       ('Diamond', 4, 'The first appearance of PoffinHouse', 1);
+       ('Diamond', 4, 'The first appearance of PoffinHouse', 1); --Brock
 
 -- Insert data into game_map table
 INSERT INTO game_map (game_id, region_map_id)
-VALUES (1, 1),
-       (2, 1),
-       (3, 4);
+VALUES (1, 1), --Brock
+       (2, 1), --Misty
+       (3, 4); --Brock
 
 -- -- Insert data into locations table
 INSERT INTO location (name, description,game_map_id, coordinate_X, coordinate_Y)
-VALUES ('Pallet Town', 'A small town with a quiet atmosphere', 1, 10, 10),
-       ('Viridian City', 'A beautiful city with a forest nearby', 2, 20, 20);
+VALUES ('Pallet Town', 'A small town with a quiet atmosphere', 1, 10, 10), --Brock
+       ('Viridian City', 'A beautiful city with a forest nearby', 2, 20, 20); -- Misty
 
 -- -- Insert data into berry_planting_sites table
 INSERT INTO berry_planting_sites (description,location_id, soil_slots)
-VALUES ('East gate berry planting site', 1, 4),
-       ('Behind the lake in the North, currently unreachable due to a tree obstacle', 2, 2),
-       ('Planting spot next to a fisherman house', 2, 4);
+VALUES ('East gate berry planting site', 1, 4), --Brock
+       ('Behind the lake in the North, currently unreachable due to a tree obstacle', 2, 2), --Misty
+       ('Planting spot next to a fisherman house', 2, 4); --Misty
 --
 -- -- Insert data into berry_planting_site_slots table to map berries to planting slots
 INSERT INTO berry_planting_site_slots (site_id, slot_number, planted_berries_by_slots_id)
