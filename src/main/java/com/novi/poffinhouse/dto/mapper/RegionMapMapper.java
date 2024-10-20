@@ -19,7 +19,7 @@ public class RegionMapMapper {
         RegionMapOutputDto outputDto = new RegionMapOutputDto();
         outputDto.setId(regionMap.getId());
         outputDto.setRegionName(regionMap.getRegionName());
-        outputDto.setAtlas(regionMap.getAtlas());
+        outputDto.setRegionMapAtlas(regionMap.getRegionMapAtlas());
         outputDto.setSizeXAxis(regionMap.getSizeXAxis());
         outputDto.setSizeYAxis(regionMap.getSizeYAxis());
         return outputDto;

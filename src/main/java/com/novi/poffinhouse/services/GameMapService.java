@@ -4,7 +4,9 @@ import com.novi.poffinhouse.dto.mapper.GameMapMapper;
 import com.novi.poffinhouse.dto.output.game.GameMapOutputDto;
 import com.novi.poffinhouse.models.game.GameMap;
 import com.novi.poffinhouse.repositories.GameMapRepository;
+import com.novi.poffinhouse.util.AuthUtil;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -26,15 +28,28 @@ public class GameMapService {
     public GameMapOutputDto getGameMapById(Long id) {
         GameMap gameMap = gameMapRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("GameMap with id " + id + " not found."));
+        if (!AuthUtil.isAdminOrOwner(gameMap.getGame().getUser().getUsername())) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
+        }
         return GameMapMapper.toOutputDto(gameMap);
 
     }
 
     public List<GameMapOutputDto> getGameMapsByUsername(String username) {
+        if (!AuthUtil.isAdminOrOwner(username)) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
+        }
         return gameMapRepository.findByGame_UserUsername(username).stream()
                 .map(GameMapMapper::toOutputDto)
                 .toList();
     }
 
+    public List<GameMapOutputDto> getAllGameMaps() {
+        return gameMapRepository.findAll().stream()
+                .map(GameMapMapper::toOutputDto)
+                .toList();
+    }
+
     // Adding and Deleting of Locations are Separate
+    // Deletion of GameMap is not allowed
 }

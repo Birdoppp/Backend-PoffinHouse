@@ -7,13 +7,13 @@ import com.novi.poffinhouse.exceptions.UserNotFoundException;
 import com.novi.poffinhouse.models.auth.Authority;
 import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.repositories.UserRepository;
+import com.novi.poffinhouse.util.AuthUtil;
 import com.novi.poffinhouse.util.RoleEnum;
 import com.novi.poffinhouse.repositories.AuthorityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,11 +55,10 @@ public class AuthorityService {
     }
 
     public Set<AuthorityOutputDto> getAuthoritiesByUsername(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isEmpty()) {
-            throw new RuntimeException("User not found with username: " + username);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        if (AuthUtil.isAdminOrOwner(username)) {
+            throw new IllegalArgumentException("You do not have permission to access this resource.");
         }
-
         Set<Authority> authorities = authorityRepository.findByUsername(username);
 
         return authorities.stream()

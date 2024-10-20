@@ -187,8 +187,10 @@ public class GameService {
     }
 
     public void deleteGame(Long id) {
-        if (!gameRepository.existsById(id)) {
-            throw new IllegalArgumentException("Game with id " + id + " not found.");
+        Game game = gameRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
+        if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
         }
         gameRepository.deleteById(id);
     }

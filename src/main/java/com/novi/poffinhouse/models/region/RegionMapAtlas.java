@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "atlas")
 @Entity
-public class Atlas {
+public class RegionMapAtlas {
     @Id
     private String fileName;
 
-    public Atlas(String fileName) {
+    public RegionMapAtlas(String fileName) {
         this.fileName = fileName;
     }
 }

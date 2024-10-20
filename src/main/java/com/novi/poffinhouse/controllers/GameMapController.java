@@ -25,4 +25,9 @@ public class GameMapController {
     public ResponseEntity<List<GameMapOutputDto>> getGameMapsByUsername(@PathVariable String username) {
         return ResponseEntity.ok(gameMapService.getGameMapsByUsername(username));
     }
+
+    @GetMapping
+    public ResponseEntity<List<GameMapOutputDto>> getAllGameMaps() {
+        return ResponseEntity.ok(gameMapService.getAllGameMaps());
+    }
 }
