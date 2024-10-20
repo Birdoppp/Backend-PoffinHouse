@@ -8,13 +8,14 @@ import com.novi.poffinhouse.models.region.Location;
 import com.novi.poffinhouse.models.region.RegionMap;
 import com.novi.poffinhouse.repositories.GameMapRepository;
 import com.novi.poffinhouse.repositories.LocationRepository;
+import com.novi.poffinhouse.util.AuthUtil;
 import com.novi.poffinhouse.util.LocationValidator;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,11 +49,12 @@ public class LocationService {
     }
 
     public LocationOutputDto getLocationById(Long id) {
-        Optional<Location> optionalLocation = locationRepository.findById(id);
-        if (optionalLocation.isPresent()) {
-            return LocationMapper.toOutputDto(optionalLocation.get());
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Location with id " + id + " not found."));
+        if (!AuthUtil.isAdminOrOwner(location.getGameMap().getGame().getUser().getUsername())) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
         }
-        throw new IllegalArgumentException("Location with id " + id + " not found.");
+        return LocationMapper.toOutputDto(location);
     }
 
     public List<LocationOutputDto> getAllLocations() {
@@ -65,7 +67,9 @@ public class LocationService {
     public LocationOutputDto adjustLocation(Long id, @Valid LocationInputDto inputDto) {
         Location existingLocation = locationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Location with id " + id + " not found."));
-
+        if (!AuthUtil.isAdminOrOwner(existingLocation.getGameMap().getGame().getUser().getUsername())) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
+        }
         GameMap gameMap = gameMapRepository.findById(existingLocation.getGameMap().getId())
                 .orElseThrow(() -> new IllegalArgumentException("GameMap with id " + existingLocation.getGameMap().getId() + " not found."));
 
@@ -83,6 +87,11 @@ public class LocationService {
     }
 
     public void deleteLocation(Long id) {
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Location with id " + id + " not found."));
+        if (!AuthUtil.isAdminOrOwner(location.getGameMap().getGame().getUser().getUsername())) {
+            throw new AccessDeniedException("You do not have permission to access this resource.");
+        }
         locationRepository.deleteById(id);
     }
 }
