@@ -4,9 +4,9 @@ import com.novi.poffinhouse.dto.input.RegionMapInputDto;
 import com.novi.poffinhouse.dto.mapper.RegionMapMapper;
 import com.novi.poffinhouse.dto.output.RegionMapOutputDto;
 import com.novi.poffinhouse.exceptions.ResourceNotFoundException;
-import com.novi.poffinhouse.models.region.Atlas;
+import com.novi.poffinhouse.models.region.RegionMapAtlas;
 import com.novi.poffinhouse.models.region.RegionMap;
-import com.novi.poffinhouse.repositories.AtlasRepository;
+import com.novi.poffinhouse.repositories.RegionMapAtlasRepository;
 import com.novi.poffinhouse.repositories.RegionMapRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 @Service
 public class RegionMapService {
     private final RegionMapRepository regionMapRepository;
-    private final AtlasRepository atlasRepository;
+    private final RegionMapAtlasRepository regionMapAtlasRepository;
 
-    public RegionMapService(RegionMapRepository regionMapRepository, AtlasRepository atlasRepository) {
+    public RegionMapService(RegionMapRepository regionMapRepository, RegionMapAtlasRepository regionMapAtlasRepository) {
         this.regionMapRepository = regionMapRepository;
-        this.atlasRepository = atlasRepository;
+        this.regionMapAtlasRepository = regionMapAtlasRepository;
     }
 
     public RegionMapOutputDto createRegionMap(RegionMapInputDto regionMapInputDto) {
@@ -40,7 +40,6 @@ public class RegionMapService {
                 .orElseThrow(() -> new EntityNotFoundException("Map not found"));
         return RegionMapMapper.toOutputDto(regionMap);
     }
-
 
     public List<RegionMapOutputDto> getAllRegionMaps() {
         return regionMapRepository.findAll().stream()
@@ -60,12 +59,12 @@ public class RegionMapService {
 
     public RegionMapOutputDto addAtlas(String fileName, Long regionMapId) {
         Optional<RegionMap> optionalRegionMap = regionMapRepository.findById(regionMapId);
-        Optional<Atlas> optionalAtlas = atlasRepository.findById(fileName);
+        Optional<RegionMapAtlas> optionalAtlas = regionMapAtlasRepository.findById(fileName);
 
         if (optionalRegionMap.isPresent() && optionalAtlas.isPresent()) {
-            Atlas atlas = optionalAtlas.get();
+            RegionMapAtlas regionMapAtlas = optionalAtlas.get();
             RegionMap regionMap = optionalRegionMap.get();
-            regionMap.setAtlas(atlas);
+            regionMap.setRegionMapAtlas(regionMapAtlas);
             RegionMap savedRegionMap = regionMapRepository.save(regionMap);
             return RegionMapMapper.toOutputDto(savedRegionMap);
         } else {

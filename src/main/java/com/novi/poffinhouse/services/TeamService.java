@@ -9,6 +9,7 @@ import com.novi.poffinhouse.models.game.Team;
 import com.novi.poffinhouse.repositories.GameRepository;
 import com.novi.poffinhouse.repositories.OwnedPokemonRepository;
 import com.novi.poffinhouse.repositories.TeamRepository;
+import com.novi.poffinhouse.util.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 @Validated
 @Transactional
 @Service
-public class TeamService {
+public class  TeamService {
 
     private final TeamRepository teamRepository;
     private final OwnedPokemonRepository ownedPokemonRepository;
@@ -39,6 +40,9 @@ public class TeamService {
     public TeamOutputDto createTeam(@Valid TeamInputDto teamInputDto) {
         Game game = gameRepository.findById(teamInputDto.getGameId())
                 .orElseThrow(() -> new EntityNotFoundException("Game not found with id " + teamInputDto.getGameId()));
+        if(AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
+            throw new IllegalArgumentException("You do not have permission to access this resource.");
+        }
 
         teamRepository.findByGameId(teamInputDto.getGameId()).ifPresent(existingTeam -> {
             throw new IllegalArgumentException("A team already exists for the given game.");
@@ -73,6 +77,9 @@ public class TeamService {
     public TeamOutputDto getTeamById(Long id) {
         Team team = teamRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + id));
+        if(AuthUtil.isAdminOrOwner(team.getGame().getUser().getUsername())) {
+            throw new IllegalArgumentException("You do not have permission to access this resource.");
+        }
         return TeamMapper.toDto(team);
     }
 
@@ -86,6 +93,9 @@ public class TeamService {
         }
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + teamId));
+        if(AuthUtil.isAdminOrOwner(team.getGame().getUser().getUsername())) {
+            throw new IllegalArgumentException("You do not have permission to access this resource.");
+        }
 
         team.getOwnedPokemon().clear();
 

@@ -49,7 +49,7 @@ public class GameMapper {
         return game;
     }
 
-    public GameOutputDto toDto(Game game) {
+    public GameOutputDto toOutputDto(Game game) {
         GameOutputDto outputDto = new GameOutputDto();
         outputDto.setId(game.getId());
         outputDto.setVersionName(game.getVersionName());

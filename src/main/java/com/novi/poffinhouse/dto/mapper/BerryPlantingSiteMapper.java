@@ -44,8 +44,8 @@ public class BerryPlantingSiteMapper {
     public static BerryPlantingSiteOutputDto toOutputDto(BerryPlantingSite berryPlantingSite) {
         BerryPlantingSiteOutputDto outputDto = new BerryPlantingSiteOutputDto();
         outputDto.setId(berryPlantingSite.getId());
-        outputDto.setLocationId(berryPlantingSite.getLocation().getId());
         outputDto.setDescription(berryPlantingSite.getDescription());
+        outputDto.setLocationId(berryPlantingSite.getLocation().getId());
         outputDto.setSoilSlots(berryPlantingSite.getSoilSlots());
 
         Map<Integer, Long> berriesBySlotId = new HashMap<>();

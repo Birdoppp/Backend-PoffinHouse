@@ -6,7 +6,6 @@ import com.novi.poffinhouse.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +29,13 @@ public class UserController {
     // Get by Id, Email or Username
     @GetMapping("/{field}/{value}")
     public ResponseEntity<UserOutputDto> getUserByField(@PathVariable String field, @PathVariable String value) {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
         UserOutputDto userDTO = userService.getUserBy(field, value);
         return ResponseEntity.ok(userDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<UserOutputDto>> getAllUsers() {
-        List<UserOutputDto> users = userService.getAllUsers();
+    public ResponseEntity<List<UserOutputDto>> getUsers() {
+        List<UserOutputDto> users = userService.getUsers();
         return ResponseEntity.ok(users);
     }
 

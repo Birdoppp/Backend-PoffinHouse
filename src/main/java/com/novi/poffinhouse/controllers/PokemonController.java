@@ -2,15 +2,20 @@ package com.novi.poffinhouse.controllers;
 
 import com.novi.poffinhouse.dto.input.PokemonInputDto;
 import com.novi.poffinhouse.dto.mapper.PokemonMapper;
+import com.novi.poffinhouse.dto.output.PreferencesDto;
 import com.novi.poffinhouse.dto.output.PokemonOutputDto;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
 import com.novi.poffinhouse.services.PokemonService;
+import com.novi.poffinhouse.util.PreferencesEnum;
+import com.novi.poffinhouse.util.TypeEnum;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pokemon")
@@ -56,6 +61,19 @@ public class PokemonController {
     public ResponseEntity<List<PokemonOutputDto>> getAllUnvalidatedPokemon() {
         List<PokemonOutputDto> pokemonList = pokemonService.getAllUnvalidatedPokemonOrdered();
         return ResponseEntity.ok(pokemonList);
+    }
+
+    @GetMapping("/types")
+    public ResponseEntity<TypeEnum.POKEMON_TYPE[]> getAllTypes() {
+        return ResponseEntity.ok(TypeEnum.POKEMON_TYPE.values());
+    }
+
+    @GetMapping("/preferences")
+    public ResponseEntity<List<PreferencesDto>> getNatureFlavors() {
+        List<PreferencesDto> natures = Arrays.stream(PreferencesEnum.NATURE.values())
+                .map(nature -> new PreferencesDto(nature.name(), nature.getFavorite(), nature.getDislikes()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(natures);
     }
 
     @PutMapping("/nationalDex/{nationalDex}")

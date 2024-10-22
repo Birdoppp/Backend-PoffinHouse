@@ -23,7 +23,7 @@ public class RegionMap {
 
     @Setter
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Atlas atlas;
+    private RegionMapAtlas regionMapAtlas;
 
     @Setter
     @Column(name = "horizontal_axis", nullable = false)

@@ -3,6 +3,8 @@ package com.novi.poffinhouse.controllers;
 import com.novi.poffinhouse.dto.input.BerryInputDto;
 import com.novi.poffinhouse.dto.output.BerryOutputDto;
 import com.novi.poffinhouse.services.BerryService;
+import com.novi.poffinhouse.util.PreferencesEnum;
+import com.novi.poffinhouse.util.TypeEnum;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +56,16 @@ public class BerryController {
     public ResponseEntity<List<BerryOutputDto>> getUnvalidatedBerries() {
         List<BerryOutputDto> berries = berryService.getUnvalidatedBerries();
         return ResponseEntity.ok(berries);
+    }
+
+    @GetMapping("/types")
+    public ResponseEntity<TypeEnum.BERRY_CATEGORY_TYPE[]> getAllTypes() {
+        return ResponseEntity.ok(TypeEnum.BERRY_CATEGORY_TYPE.values());
+    }
+
+    @GetMapping("/flavors")
+    public ResponseEntity<PreferencesEnum.FLAVOR[]> getAllFlavors() {
+        return ResponseEntity.ok(PreferencesEnum.FLAVOR.values());
     }
 
     @PutMapping("/index-number/{indexNumber}")

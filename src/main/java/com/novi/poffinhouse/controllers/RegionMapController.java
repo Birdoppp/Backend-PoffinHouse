@@ -3,7 +3,7 @@ package com.novi.poffinhouse.controllers;
 import com.novi.poffinhouse.dto.input.RegionMapInputDto;
 import com.novi.poffinhouse.dto.output.RegionMapOutputDto;
 import com.novi.poffinhouse.exceptions.ResourceNotFoundException;
-import com.novi.poffinhouse.services.AtlasService;
+import com.novi.poffinhouse.services.RegionMapAtlasService;
 import com.novi.poffinhouse.services.RegionMapService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -25,11 +25,11 @@ import java.util.Objects;
 @RequestMapping("/region-maps")
 public class RegionMapController {
     private final RegionMapService regionMapService;
-    private final AtlasService atlasService;
+    private final RegionMapAtlasService regionMapAtlasService;
 
-    public RegionMapController(RegionMapService regionMapService, AtlasService atlasService) {
+    public RegionMapController(RegionMapService regionMapService, RegionMapAtlasService regionMapAtlasService) {
         this.regionMapService = regionMapService;
-        this.atlasService = atlasService;
+        this.regionMapAtlasService = regionMapAtlasService;
     }
 
     @PostMapping
@@ -51,8 +51,8 @@ public class RegionMapController {
     public ResponseEntity<Resource> getAtlas(@PathVariable("id") Long regionMapId, HttpServletRequest request) {
         try {
             RegionMapOutputDto outputDto = regionMapService.getRegionMapById(regionMapId);
-            String fileName = outputDto.getAtlas().getFileName();
-            Resource resource = atlasService.getImage(fileName);
+            String fileName = outputDto.getRegionMapAtlas().getFileName();
+            Resource resource = regionMapAtlasService.getImage(fileName);
 
             String mimeType;
 
@@ -87,7 +87,7 @@ public class RegionMapController {
                 .path(Objects.requireNonNull(regionMapId.toString()))
                 .path("/atlas")
                 .toUriString();
-        String fileName = atlasService.addImage(atlas);
+        String fileName = regionMapAtlasService.addImage(atlas);
         RegionMapOutputDto regionMap = regionMapService.addAtlas(fileName, regionMapId);
 
         return ResponseEntity.created(URI.create(url)).body(regionMap);

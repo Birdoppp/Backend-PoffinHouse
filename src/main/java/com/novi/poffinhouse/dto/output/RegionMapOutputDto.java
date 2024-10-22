@@ -1,6 +1,6 @@
 package com.novi.poffinhouse.dto.output;
 
-import com.novi.poffinhouse.models.region.Atlas;
+import com.novi.poffinhouse.models.region.RegionMapAtlas;
 import lombok.Data;
 
 
@@ -8,7 +8,7 @@ import lombok.Data;
 public class RegionMapOutputDto {
     private Long id;
     private String regionName;
-    private Atlas atlas;
+    private RegionMapAtlas regionMapAtlas;
     private int sizeXAxis;
     private int sizeYAxis;
     }
