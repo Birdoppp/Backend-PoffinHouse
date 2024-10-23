@@ -3,7 +3,7 @@ package com.novi.poffinhouse.dto.mapper;
 import com.novi.poffinhouse.dto.input.GameInputDto;
 import com.novi.poffinhouse.dto.output.game.*;
 import com.novi.poffinhouse.models.game.Game;
-import com.novi.poffinhouse.models.game.GameMap;
+import com.novi.poffinhouse.models.game.gamemap.GameMap;
 import com.novi.poffinhouse.models.region.RegionMap;
 import com.novi.poffinhouse.repositories.*;
 import com.novi.poffinhouse.util.GameIdListSetter;

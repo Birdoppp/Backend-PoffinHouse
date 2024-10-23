@@ -2,11 +2,11 @@ package com.novi.poffinhouse.services;
 
 import com.novi.poffinhouse.dto.mapper.GameMapMapper;
 import com.novi.poffinhouse.dto.output.game.GameMapOutputDto;
-import com.novi.poffinhouse.models.game.GameMap;
+import com.novi.poffinhouse.exceptions.AccessDeniedException;
+import com.novi.poffinhouse.models.game.gamemap.GameMap;
 import com.novi.poffinhouse.repositories.GameMapRepository;
 import com.novi.poffinhouse.util.AuthUtil;
 import jakarta.transaction.Transactional;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,7 +29,7 @@ public class GameMapService {
         GameMap gameMap = gameMapRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("GameMap with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(gameMap.getGame().getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         return GameMapMapper.toOutputDto(gameMap);
 
@@ -37,7 +37,7 @@ public class GameMapService {
 
     public List<GameMapOutputDto> getGameMapsByUsername(String username) {
         if (!AuthUtil.isAdminOrOwner(username)) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         return gameMapRepository.findByGame_UserUsername(username).stream()
                 .map(GameMapMapper::toOutputDto)

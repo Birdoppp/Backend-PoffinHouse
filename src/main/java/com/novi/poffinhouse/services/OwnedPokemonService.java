@@ -4,6 +4,7 @@ import com.novi.poffinhouse.dto.input.OwnedPokemonContestConditionInputDto;
 import com.novi.poffinhouse.dto.input.OwnedPokemonInputDto;
 import com.novi.poffinhouse.dto.mapper.OwnedPokemonMapper;
 import com.novi.poffinhouse.dto.output.OwnedPokemonOutputDto;
+import com.novi.poffinhouse.exceptions.AccessDeniedException;
 import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.models.game.OwnedPokemon;
 import com.novi.poffinhouse.models.game.Team;
@@ -41,7 +42,7 @@ public class OwnedPokemonService {
         Game game = gameRepository.findById(inputDto.getGameId())
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + inputDto.getGameId() + " not found."));
         if (AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new IllegalArgumentException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
 
         // Check if the pokemonName exists in the pokemonList of the Game
@@ -68,7 +69,7 @@ public class OwnedPokemonService {
        OwnedPokemon ownedPokemon = ownedPokemonRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("OwnedPokemon with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(ownedPokemon.getGame().getUser().getUsername())) {
-            throw new IllegalArgumentException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         return ownedPokemonMapper.toOutputDto(ownedPokemon);
     }
@@ -77,7 +78,7 @@ public class OwnedPokemonService {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + gameId + " not found."));
         if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new IllegalArgumentException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         return ownedPokemonRepository.findAllByGameId(gameId)
                 .stream()
@@ -96,7 +97,7 @@ public class OwnedPokemonService {
         OwnedPokemon existingOwnedPokemon = ownedPokemonRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("OwnedPokemon with id " + id + " not found."));
         if(!AuthUtil.isAdminOrOwner(existingOwnedPokemon.getGame().getUser().getUsername())) {
-            throw new IllegalArgumentException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
 
         if (inputDto.getBeauty() != null) {
@@ -123,7 +124,7 @@ public class OwnedPokemonService {
         OwnedPokemon ownedPokemon = ownedPokemonRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("OwnedPokemon with Id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(ownedPokemon.getGame().getUser().getUsername())) {
-            throw new IllegalArgumentException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         List<Team> teams = teamRepository.findOwnedPokemonByOwnedPokemonId(ownedPokemon.getId());
         for (Team team : teams) {

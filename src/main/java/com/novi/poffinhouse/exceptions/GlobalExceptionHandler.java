@@ -40,6 +40,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    // Handle AccessDeniedException()DeniedException
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> handleException(AccessDeniedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     // Handle any generic exception
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {

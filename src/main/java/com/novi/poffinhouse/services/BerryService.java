@@ -5,7 +5,7 @@ import com.novi.poffinhouse.dto.output.BerryOutputDto;
 import com.novi.poffinhouse.dto.mapper.BerryMapper;
 import com.novi.poffinhouse.exceptions.BerryNotFoundException;
 import com.novi.poffinhouse.models.berries.Berry;
-import com.novi.poffinhouse.models.region.BerryPlantingSite;
+import com.novi.poffinhouse.models.game.gamemap.BerryPlantingSite;
 import com.novi.poffinhouse.repositories.BerryPlantingSiteRepository;
 import com.novi.poffinhouse.repositories.BerryRepository;
 import com.novi.poffinhouse.util.Capitalize;

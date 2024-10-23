@@ -1,4 +1,4 @@
-package com.novi.poffinhouse.models.region;
+package com.novi.poffinhouse.models.game.gamemap;
 
 import com.novi.poffinhouse.models.berries.Berry;
 import jakarta.persistence.*;
@@ -29,7 +29,7 @@ public class BerryPlantingSite {
 
     @Setter
     @Column(nullable = false)
-    private int soilSlots;
+    private Integer soilSlots;
 
     @Setter
     @CollectionTable(name = "berry_planting_site_slots", joinColumns = @JoinColumn(name = "site_id"))

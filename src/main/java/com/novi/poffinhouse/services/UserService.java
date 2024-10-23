@@ -4,12 +4,12 @@ import com.novi.poffinhouse.dto.input.UserInputDto;
 import com.novi.poffinhouse.dto.authenticate.AuthenticationRequest;
 import com.novi.poffinhouse.dto.output.UserOutputDto;
 import com.novi.poffinhouse.dto.mapper.UserMapper;
+import com.novi.poffinhouse.exceptions.AccessDeniedException;
 import com.novi.poffinhouse.exceptions.UserNotFoundException;
 import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.repositories.UserRepository;
 import com.novi.poffinhouse.util.AuthUtil;
 import jakarta.transaction.Transactional;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -73,7 +73,7 @@ public class UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
         if (!AuthUtil.isAdminOrOwner(username)) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
 
         if (userInputDto.getEmail() != null) {

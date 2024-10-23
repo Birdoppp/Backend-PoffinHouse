@@ -2,7 +2,7 @@ package com.novi.poffinhouse.dto.mapper;
 
 import com.novi.poffinhouse.dto.output.game.GameMapOutputDto;
 import com.novi.poffinhouse.dto.output.game.GameRegionMapOutputDto;
-import com.novi.poffinhouse.models.game.GameMap;
+import com.novi.poffinhouse.models.game.gamemap.GameMap;
 
 import java.util.stream.Collectors;
 

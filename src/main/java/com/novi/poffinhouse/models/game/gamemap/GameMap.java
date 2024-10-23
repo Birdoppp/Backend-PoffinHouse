@@ -1,6 +1,6 @@
-package com.novi.poffinhouse.models.game;
+package com.novi.poffinhouse.models.game.gamemap;
 
-import com.novi.poffinhouse.models.region.Location;
+import com.novi.poffinhouse.models.game.Game;
 import com.novi.poffinhouse.models.region.RegionMap;
 import jakarta.persistence.*;
 import lombok.Getter;

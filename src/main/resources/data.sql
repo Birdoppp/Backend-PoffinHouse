@@ -226,13 +226,22 @@ VALUES ('Chesto', 2, 'A Poffin ingredient. It may be used or held by a Pokémon 
        ('Aspear', 5, 'A Poffin ingredient. It may be used or held by a Pokémon to recover from being frozen.', 3,
         'MEDICINE', 0, 0, 0, 0, 10, true);
 
+-- Insert data into atlas table
+INSERT INTO atlas(file_name) VALUES
+ ('Hoenn.png'),
+ ('Johto.png'),
+ ('Kanto.png'),
+ ('Sinnoh.png'),
+ ('Unova.png');
 
 -- Insert data into region_maps table
-INSERT INTO region_maps (region_name, horizontal_axis, vertical_axis)
-VALUES ('Kanto', 80, 60),
-       ('Johto', 75, 55),
-       ('Hoenn', 70, 40),
-       ('Sinnoh', 60, 40);
+INSERT INTO region_maps (region_name, horizontal_axis, vertical_axis, region_map_atlas_file_name) VALUES
+ ('Hoenn', 70, 40, 'Hoenn.png'),
+ ('Johto', 75, 55, 'Johto.png'),
+ ('Kanto', 80, 60, 'Kanto.png'),
+ ('Sinnoh', 60, 40, 'Sinnoh.png'),
+ ('Unova', 85, 65, 'Unova.png');
+
 
 -- Insert Games
 INSERT INTO game (version_name, generation, description,  user_id)
@@ -313,3 +322,4 @@ VALUES (1, 1), -- Geodude
 -- Insert data into team_owned_pokemon join table for Misty's Team
 INSERT INTO team_owned_pokemon (team_id, owned_pokemon_id)
 VALUES (2, 3); -- Staryu
+

@@ -3,17 +3,17 @@ package com.novi.poffinhouse.services;
 import com.novi.poffinhouse.dto.input.BerryPlantingSiteInputDto;
 import com.novi.poffinhouse.dto.mapper.BerryPlantingSiteMapper;
 import com.novi.poffinhouse.dto.output.BerryPlantingSiteOutputDto;
+import com.novi.poffinhouse.exceptions.AccessDeniedException;
 import com.novi.poffinhouse.exceptions.ResourceNotFoundException;
 import com.novi.poffinhouse.models.berries.Berry;
-import com.novi.poffinhouse.models.region.BerryPlantingSite;
-import com.novi.poffinhouse.models.region.Location;
+import com.novi.poffinhouse.models.game.gamemap.BerryPlantingSite;
+import com.novi.poffinhouse.models.game.gamemap.Location;
 import com.novi.poffinhouse.repositories.BerryPlantingSiteRepository;
 import com.novi.poffinhouse.repositories.LocationRepository;
 import com.novi.poffinhouse.repositories.BerryRepository;
 import com.novi.poffinhouse.util.AuthUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -39,7 +39,7 @@ public class BerryPlantingSiteService {
         Location location = locationRepository.findById(inputDto.getLocationId())
                 .orElseThrow(() -> new EntityNotFoundException("Location not found"));
         if (!AuthUtil.isAdminOrOwner(location.getGameMap().getGame().getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         BerryPlantingSiteMapper berryPlantingSiteMapper = new BerryPlantingSiteMapper(berryRepository);
         BerryPlantingSite berryPlantingSite = berryPlantingSiteMapper.toEntity(inputDto, location);
@@ -58,7 +58,7 @@ public class BerryPlantingSiteService {
         BerryPlantingSite berryPlantingSite = berryPlantingSiteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Berry Planting Site not found"));
         if (!AuthUtil.isAdminOrOwner(berryPlantingSite.getLocation().getGameMap().getGame().getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         return BerryPlantingSiteMapper.toOutputDto(berryPlantingSite);
     }
@@ -67,7 +67,7 @@ public class BerryPlantingSiteService {
         BerryPlantingSite berryPlantingSite = berryPlantingSiteRepository.findById(berryPlantingSiteId)
                 .orElseThrow(() -> new ResourceNotFoundException("BerryPlantingSite not found with id: " + berryPlantingSiteId));
         if (!AuthUtil.isAdminOrOwner(berryPlantingSite.getLocation().getGameMap().getGame().getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         for (Map.Entry<Integer, Long> entry : berriesBySlots.entrySet()) {
             Integer slotId = entry.getKey();
@@ -102,7 +102,7 @@ public class BerryPlantingSiteService {
         BerryPlantingSite berryPlantingSite = berryPlantingSiteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Berry Planting Site not found"));
         if (!AuthUtil.isAdminOrOwner(berryPlantingSite.getLocation().getGameMap().getGame().getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
             berryPlantingSiteRepository.deleteById(id);
     }

@@ -4,6 +4,7 @@ import com.novi.poffinhouse.dto.input.AdjustListDto;
 import com.novi.poffinhouse.dto.input.GameInputDto;
 import com.novi.poffinhouse.dto.mapper.GameMapper;
 import com.novi.poffinhouse.dto.output.game.GameOutputDto;
+import com.novi.poffinhouse.exceptions.AccessDeniedException;
 import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.models.game.Game;
@@ -14,7 +15,7 @@ import com.novi.poffinhouse.util.GameIdListSetter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.security.access.AccessDeniedException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -59,14 +60,14 @@ public class GameService {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         return gameMapper.toOutputDto(game);
     }
 
     public List<GameOutputDto> getAllGamesByUsername(String username) {
         if (!AuthUtil.isAdminOrOwner(username)) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         List<Game> games = gameRepository.findAllByUser_Username(username);
         return games.stream()
@@ -85,7 +86,7 @@ public class GameService {
         Game existingGame = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(existingGame.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
 
         if (inputDto.getVersionName() != null) {
@@ -115,7 +116,7 @@ public class GameService {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
 
         List<Pokemon> pokemonListToAdd = null;
@@ -154,7 +155,7 @@ public class GameService {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
 
         List<Berry> berryListToAdd = null;
@@ -190,7 +191,7 @@ public class GameService {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         gameRepository.deleteById(id);
     }

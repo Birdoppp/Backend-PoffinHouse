@@ -36,9 +36,6 @@ public class Pokemon {
     @ValidEnum(enumClass = TypeEnum.POKEMON_TYPE.class, message = "Invalid Pokemon type.")
     private TypeEnum.POKEMON_TYPE type;
 
-    @Setter
-    private Boolean validated;
-
 // Main Base Stats per Pokémon Species
     @Setter
     @Positive
@@ -58,6 +55,10 @@ public class Pokemon {
     @Setter
     @Positive
     private Integer speed;
+
+
+    @Setter
+    private Boolean validated;
 
 
     @OneToMany(mappedBy = "pokemon", cascade = CascadeType.REMOVE)
