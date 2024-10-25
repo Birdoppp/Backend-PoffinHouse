@@ -39,9 +39,6 @@ class BerryServiceTest {
     private Berry berry;
     private BerryInputDto berryInputDto;
 
-    @Captor
-    ArgumentCaptor<Berry> berryCaptor;
-
     @BeforeEach
     void setUp() {
         berry = new Berry();
@@ -55,9 +52,7 @@ class BerryServiceTest {
         berry.setBitterPotency(0);
         berry.setSourPotency(0);
         berry.setDryPotency(0);
-
         berry.setGames(List.of(new Game(),new Game()));
-
 
         berryInputDto = new BerryInputDto();
         berryInputDto.setName("Cheri");
@@ -76,7 +71,6 @@ class BerryServiceTest {
         // Arrange
         when(berryRepository.existsByNameIgnoreCase(anyString())).thenReturn(false);
         when(berryRepository.save(any(Berry.class))).thenReturn(berry);
-//        when(berryRepository.save(berryCaptor.capture())).thenReturn(berryCaptor.getValue());
 
         // Act
         BerryOutputDto result = berryService.createBerry(berryInputDto);

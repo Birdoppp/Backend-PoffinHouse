@@ -57,7 +57,7 @@ public class AuthorityService {
 
     public Set<AuthorityOutputDto> getAuthoritiesByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
-        if (AuthUtil.isAdminOrOwner(username)) {
+        if (!AuthUtil.isAdminOrOwner(username)) {
             throw new AccessDeniedException();
         }
         Set<Authority> authorities = authorityRepository.findByUsername(username);
