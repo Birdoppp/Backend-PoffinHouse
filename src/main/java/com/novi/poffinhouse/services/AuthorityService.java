@@ -40,11 +40,7 @@ public class AuthorityService {
         if (role == null || username == null) {
             throw new IllegalArgumentException("Username and role must not be null");
         }
-
         User user = userService.findByUsername(username);
-        if (user == null) {
-            throw new UserNotFoundException("User not found with username: " + username);
-        }
 
         Authority authority = new Authority();
         authority.setAuthority(role);
@@ -72,11 +68,7 @@ public class AuthorityService {
         if (username == null) {
             throw new IllegalArgumentException("Username must not be null");
         }
-
         User user = userService.findByUsername(username);
-        if (user == null) {
-            throw new UserNotFoundException("User not found with username: " + username);
-        }
         user.getAuthorities().clear();
 
         return "Authorization has been removed for " + username;

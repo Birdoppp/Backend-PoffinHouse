@@ -16,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.*;
@@ -42,8 +41,6 @@ class AuthorityServiceTest {
 
     @Mock
     Authentication authentication;
-    @Mock
-    SecurityContext context;
 
     private User user;
     private Authority authority;
@@ -51,8 +48,6 @@ class AuthorityServiceTest {
 
     @BeforeEach
     void setUp() {
-//        MockitoAnnotations.openMocks(this);
-
         user = new User();
         user.setUsername("testUser");
         user.setEmail("test@test.com");
@@ -66,14 +61,6 @@ class AuthorityServiceTest {
         assignAuthorityDto = new AssignAuthorityToUserDto("testUser", RoleEnum.ROLE_TRAINER);
 
         authentication.setAuthenticated(true);
-//
-//        PowerMockito.mockStatic(AuthUtil.class);
-//        when(AuthUtil.isAdminOrOwner("testUser")).thenReturn(false);
-
-
-//        SecurityContextHolder.setContext(context);
-//        when(context.getAuthentication()).thenReturn(authentication);
-//        when(authentication.getAuthorities()).thenReturn(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
     @Test
@@ -96,14 +83,29 @@ class AuthorityServiceTest {
         }
     }
 
+
     @Test
-    void assignAuthority_ShouldThrowUserNotFoundException_WhenUserNotFound() {
+    void assignAuthority_ShouldThrowIllegalArgumentException_WhenUsernameIsNull() {
         // Arrange
-        when(userService.findByUsername("invalid_user")).thenThrow(new UserNotFoundException("User not found"));
+        assignAuthorityDto.setUsername(null);
 
         // Act & Assert
-        assertThrows(UserNotFoundException.class, () -> authorityService.assignAuthority(new AssignAuthorityToUserDto("invalid_user", RoleEnum.ROLE_TRAINER)));
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+                () -> authorityService.assignAuthority(assignAuthorityDto));
+        assertEquals("Username and role must not be null", thrown.getMessage());
     }
+
+    @Test
+    void assignAuthority_ShouldThrowIllegalArgumentException_WhenRoleIsNull() {
+        // Arrange
+        assignAuthorityDto.setRole(null);
+
+        // Act & Assert
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+                () -> authorityService.assignAuthority(assignAuthorityDto));
+        assertEquals("Username and role must not be null", thrown.getMessage());
+    }
+
 
     @Test
     @WithMockUser(username = "testUser", roles = {"ADMIN"})
@@ -137,24 +139,21 @@ class AuthorityServiceTest {
         // Arrange
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
 
-
-//        when(AuthUtil.isAdmin()).thenReturn(true);
-//        when(AuthUtil.isAdminOrOwner("testUser")).thenReturn(true);
-//        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
-//        // Create a list of granted authorities (optional, based on your scenario)
-//        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-//        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER")); // You can add any role that is not admin
-//
-//        // Set the mock to return the granted authorities
-//        when(authentication.getAuthorities()).thenReturn(null);
-
-
         try (MockedStatic<AuthUtil> authUtil = Mockito.mockStatic(AuthUtil.class)) {
             authUtil.when(() -> AuthUtil.isAdminOrOwner("testUser")).thenReturn(false);
             authUtil.when(AuthUtil::isAdmin).thenReturn(false);
             // Act & Assert
             assertThrows(AccessDeniedException.class, () -> authorityService.getAuthoritiesByUsername("testUser"));
         }
+    }
+
+    @Test
+    void getAuthoritiesByUsername_ShouldThrowException_WhenUserNotFound() {
+        // Arrange
+        when(userRepository.findByUsername("Unknown")).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(UserNotFoundException.class, () -> authorityService.getAuthoritiesByUsername("Unknown"));
     }
 
     @Test
@@ -173,11 +172,11 @@ class AuthorityServiceTest {
     }
 
     @Test
-    void removeAllAuthorities_ShouldThrowUserNotFoundException_WhenUserNotFound() {
-        // Arrange
-        when(userService.findByUsername("invalid_user")).thenThrow(new UserNotFoundException("User not found"));
-
+    void removeAllAuthorities_ShouldThrowIllegalArgumentException_WhenUsernameIsNull() {
         // Act & Assert
-        assertThrows(UserNotFoundException.class, () -> authorityService.removeAllAuthorities("invalid_user"));
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+                () -> authorityService.removeAllAuthorities(null));
+        assertEquals("Username must not be null", thrown.getMessage());
     }
+
 }
