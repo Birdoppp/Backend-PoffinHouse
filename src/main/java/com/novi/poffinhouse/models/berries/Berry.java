@@ -64,6 +64,7 @@ public class Berry {
     @Setter
     private Boolean validated;
 
+    @Setter
     @ManyToMany(mappedBy = "berryList")
     private List<Game> games;
 
