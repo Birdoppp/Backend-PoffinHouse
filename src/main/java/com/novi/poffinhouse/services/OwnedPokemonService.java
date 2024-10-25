@@ -41,7 +41,7 @@ public class OwnedPokemonService {
     public OwnedPokemonOutputDto createOwnedPokemon(@Valid OwnedPokemonInputDto inputDto) {
         Game game = gameRepository.findById(inputDto.getGameId())
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + inputDto.getGameId() + " not found."));
-        if (AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
+        if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
             throw new AccessDeniedException();
         }
 
