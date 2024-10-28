@@ -69,7 +69,7 @@ public class BerryController {
     }
 
     @PutMapping("/index-number/{indexNumber}")
-    public ResponseEntity<BerryOutputDto> adjustBerry(@PathVariable Long indexNumber, @Valid @RequestBody BerryInputDto berryInputDto) {
+    public ResponseEntity<BerryOutputDto> updateBerry(@PathVariable Long indexNumber, @Valid @RequestBody BerryInputDto berryInputDto) {
         BerryOutputDto updatedBerry = berryService.updateBerry(indexNumber, berryInputDto);
         return ResponseEntity.ok(updatedBerry);
     }

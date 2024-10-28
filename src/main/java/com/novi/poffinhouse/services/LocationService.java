@@ -36,7 +36,9 @@ public class LocationService {
         }
         GameMap gameMap = gameMapRepository.findById(inputDto.getGameMapId())
                 .orElseThrow(() -> new IllegalArgumentException("GameMap with id " + inputDto.getGameMapId() + " not found."));
-
+        if (!AuthUtil.isAdminOrOwner(gameMap.getGame().getUser().getUsername())) {
+            throw new AccessDeniedException();
+        }
         RegionMap regionMap = gameMap.getRegionMap();
 
         LocationValidator.validateCoordinates(inputDto, regionMap);

@@ -41,7 +41,7 @@ public class  TeamService {
     public TeamOutputDto createTeam(@Valid TeamInputDto teamInputDto) {
         Game game = gameRepository.findById(teamInputDto.getGameId())
                 .orElseThrow(() -> new EntityNotFoundException("Game not found with id " + teamInputDto.getGameId()));
-        if(AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
+        if(!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
             throw new AccessDeniedException();
         }
 
@@ -78,7 +78,7 @@ public class  TeamService {
     public TeamOutputDto getTeamById(Long id) {
         Team team = teamRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + id));
-        if(AuthUtil.isAdminOrOwner(team.getGame().getUser().getUsername())) {
+        if(!AuthUtil.isAdminOrOwner(team.getGame().getUser().getUsername())) {
             throw new AccessDeniedException();
         }
         return TeamMapper.toDto(team);
@@ -94,7 +94,7 @@ public class  TeamService {
         }
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found with id " + teamId));
-        if(AuthUtil.isAdminOrOwner(team.getGame().getUser().getUsername())) {
+        if(!AuthUtil.isAdminOrOwner(team.getGame().getUser().getUsername())) {
             throw new AccessDeniedException();
         }
 

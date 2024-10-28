@@ -27,8 +27,6 @@ public class GameController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GameOutputDto> getGameById(@PathVariable Long id) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication().getName();
-
         GameOutputDto game = gameService.getGameById(id);
         return ResponseEntity.ok(game);
     }
