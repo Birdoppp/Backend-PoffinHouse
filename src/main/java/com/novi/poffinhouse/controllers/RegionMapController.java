@@ -37,14 +37,14 @@ public class RegionMapController {
         return new ResponseEntity<>(regionMapService.createRegionMap(inputDto), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<RegionMapOutputDto>> getAllRegionMaps() {
-        return ResponseEntity.ok(regionMapService.getAllRegionMaps());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<RegionMapOutputDto> getRegionMapById(@PathVariable Long id) {
         return ResponseEntity.ok(regionMapService.getRegionMapById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RegionMapOutputDto>> getAllRegionMaps() {
+        return ResponseEntity.ok(regionMapService.getAllRegionMaps());
     }
 
     @GetMapping("/{id}/atlas")
@@ -72,7 +72,7 @@ public class RegionMapController {
         }
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<RegionMapOutputDto> updateMap(@PathVariable Long id,
                                                         @Valid @RequestBody RegionMapInputDto regionMap) {
         return ResponseEntity.ok(regionMapService.updateRegionMap(id, regionMap));

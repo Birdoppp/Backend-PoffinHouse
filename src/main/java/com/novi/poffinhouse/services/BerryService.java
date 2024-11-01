@@ -52,13 +52,6 @@ public class BerryService {
         return BerryMapper.toOutputDto(berry);
     }
 
-    public List<BerryOutputDto> getUnvalidatedBerries() {
-        return berryRepository.findUnvalidatedBerriesOrderedByIndexNumber()
-                .stream()
-                .map(BerryMapper::toOutputDto)
-                .collect(Collectors.toList());
-    }
-
     public List<BerryOutputDto> getAllBerries() {
         return berryRepository.findAll()
                 .stream()
@@ -68,6 +61,13 @@ public class BerryService {
 
     public List<BerryOutputDto> getAllValidatedBerriesOrderedByIndexNumber() {
         return berryRepository.findValidatedBerriesOrderedByIndexNumber()
+                .stream()
+                .map(BerryMapper::toOutputDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<BerryOutputDto> getUnvalidatedBerries() {
+        return berryRepository.findUnvalidatedBerriesOrderedByIndexNumber()
                 .stream()
                 .map(BerryMapper::toOutputDto)
                 .collect(Collectors.toList());
