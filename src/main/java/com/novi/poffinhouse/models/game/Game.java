@@ -2,6 +2,7 @@ package com.novi.poffinhouse.models.game;
 
 import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.models.berries.Berry;
+import com.novi.poffinhouse.models.game.gamemap.GameMap;
 import com.novi.poffinhouse.models.pokemon.Pokemon;
 import jakarta.persistence.*;
 import lombok.Getter;

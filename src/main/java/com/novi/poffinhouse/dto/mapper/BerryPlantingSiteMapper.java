@@ -3,8 +3,8 @@ package com.novi.poffinhouse.dto.mapper;
 import com.novi.poffinhouse.dto.input.BerryPlantingSiteInputDto;
 import com.novi.poffinhouse.dto.output.BerryPlantingSiteOutputDto;
 import com.novi.poffinhouse.models.berries.Berry;
-import com.novi.poffinhouse.models.region.BerryPlantingSite;
-import com.novi.poffinhouse.models.region.Location;
+import com.novi.poffinhouse.models.game.gamemap.BerryPlantingSite;
+import com.novi.poffinhouse.models.game.gamemap.Location;
 import com.novi.poffinhouse.repositories.BerryRepository;
 
 import java.util.HashMap;

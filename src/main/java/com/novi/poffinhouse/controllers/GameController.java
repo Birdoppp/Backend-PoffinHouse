@@ -27,8 +27,6 @@ public class GameController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GameOutputDto> getGameById(@PathVariable Long id) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication().getName();
-
         GameOutputDto game = gameService.getGameById(id);
         return ResponseEntity.ok(game);
     }
@@ -46,13 +44,13 @@ public class GameController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<GameOutputDto> adjustGame(@PathVariable Long id, @Valid @RequestBody GameInputDto gameInputDto) {
-        GameOutputDto updatedGame = gameService.adjustGame(id, gameInputDto);
+    public ResponseEntity<GameOutputDto> adjustGame(@PathVariable Long id, @Valid @RequestBody GameAdjustInputDto adjustInputDto) {
+        GameOutputDto updatedGame = gameService.adjustGame(id, adjustInputDto);
         return ResponseEntity.ok(updatedGame);
     }
 
     //Pokemon list
-    @PatchMapping("/{id}/pokemonList")
+    @PatchMapping("/{id}/pokemon-list")
     public ResponseEntity<GameOutputDto> adjustPokemonList(@PathVariable Long id, @Valid @RequestBody AdjustListDto adjustListDto) {
         GameOutputDto updatedGame = gameService.adjustPokemonList(id, adjustListDto);
         return ResponseEntity.ok(updatedGame);
@@ -63,7 +61,7 @@ public class GameController {
     //Team is separate
 
     //Berries list
-    @PatchMapping("/{id}/berryList")
+    @PatchMapping("/{id}/berry-list")
     public ResponseEntity<GameOutputDto> adjustBerryList(@PathVariable Long id, @Valid @RequestBody AdjustListDto adjustListDto) {
         GameOutputDto updatedGame = gameService.adjustBerryList(id, adjustListDto);
         return ResponseEntity.ok(updatedGame);

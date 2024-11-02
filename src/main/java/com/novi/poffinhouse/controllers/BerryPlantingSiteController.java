@@ -25,14 +25,14 @@ public class BerryPlantingSiteController {
         return ResponseEntity.ok(berryPlantingSiteService.createBerryPlantingSite(berryPlantingSiteInputDto));
     }
 
-    @GetMapping
-    public ResponseEntity<List<BerryPlantingSiteOutputDto>> getAllBerryPlantingSites() {
-        return ResponseEntity.ok(berryPlantingSiteService.getAllBerryPlantingSites());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<BerryPlantingSiteOutputDto> getBerryPlantingSiteById(@PathVariable Long id) {
         return ResponseEntity.ok(berryPlantingSiteService.getBerryPlantingSiteById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BerryPlantingSiteOutputDto>> getAllBerryPlantingSites() {
+        return ResponseEntity.ok(berryPlantingSiteService.getAllBerryPlantingSites());
     }
 
     @PatchMapping("/{berryPlantingSiteId}/berries")

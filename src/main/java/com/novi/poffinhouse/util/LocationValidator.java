@@ -3,8 +3,8 @@ package com.novi.poffinhouse.util;
 import com.novi.poffinhouse.dto.input.LocationInputDto;
 import com.novi.poffinhouse.dto.mapper.LocationMapper;
 import com.novi.poffinhouse.dto.output.LocationOutputDto;
-import com.novi.poffinhouse.models.game.GameMap;
-import com.novi.poffinhouse.models.region.Location;
+import com.novi.poffinhouse.models.game.gamemap.GameMap;
+import com.novi.poffinhouse.models.game.gamemap.Location;
 import com.novi.poffinhouse.models.region.RegionMap;
 
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class LocationValidator {
 
     public static void checkDuplicateCoordinates(LocationInputDto inputDto, GameMap gameMap) {
         Optional<Location> existingLocation = gameMap.getLocations().stream()
-                .filter(location -> location.getCoordinateX() == inputDto.getCoordinateX() && location.getCoordinateY() == inputDto.getCoordinateY())
+                .filter(location -> location.getCoordinateX().equals( inputDto.getCoordinateX()) && location.getCoordinateY().equals(inputDto.getCoordinateY()))
                 .findFirst();
 
         if (existingLocation.isPresent()) {

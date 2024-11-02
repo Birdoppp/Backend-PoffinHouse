@@ -8,6 +8,6 @@ import java.util.Map;
 public class BerryPlantingSiteInputDto {
     private String description;
     private Long locationId;
-    private int soilSlots;
+    private Integer soilSlots;
     private Map<Integer, Long> plantedBerriesBySlots = new HashMap<>();
 }

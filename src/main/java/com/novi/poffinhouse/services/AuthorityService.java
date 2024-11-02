@@ -3,6 +3,7 @@ package com.novi.poffinhouse.services;
 import com.novi.poffinhouse.dto.input.AssignAuthorityToUserDto;
 import com.novi.poffinhouse.dto.mapper.AuthorityMapper;
 import com.novi.poffinhouse.dto.output.AuthorityOutputDto;
+import com.novi.poffinhouse.exceptions.AccessDeniedException;
 import com.novi.poffinhouse.exceptions.UserNotFoundException;
 import com.novi.poffinhouse.models.auth.Authority;
 import com.novi.poffinhouse.models.auth.User;
@@ -39,11 +40,7 @@ public class AuthorityService {
         if (role == null || username == null) {
             throw new IllegalArgumentException("Username and role must not be null");
         }
-
         User user = userService.findByUsername(username);
-        if (user == null) {
-            throw new UserNotFoundException("User not found with username: " + username);
-        }
 
         Authority authority = new Authority();
         authority.setAuthority(role);
@@ -56,8 +53,8 @@ public class AuthorityService {
 
     public Set<AuthorityOutputDto> getAuthoritiesByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
-        if (AuthUtil.isAdminOrOwner(username)) {
-            throw new IllegalArgumentException("You do not have permission to access this resource.");
+        if (!AuthUtil.isAdminOrOwner(username)) {
+            throw new AccessDeniedException();
         }
         Set<Authority> authorities = authorityRepository.findByUsername(username);
 
@@ -71,11 +68,7 @@ public class AuthorityService {
         if (username == null) {
             throw new IllegalArgumentException("Username must not be null");
         }
-
         User user = userService.findByUsername(username);
-        if (user == null) {
-            throw new UserNotFoundException("User not found with username: " + username);
-        }
         user.getAuthorities().clear();
 
         return "Authorization has been removed for " + username;

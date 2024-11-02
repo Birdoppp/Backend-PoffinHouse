@@ -3,7 +3,7 @@ package com.novi.poffinhouse.dto.mapper;
 import com.novi.poffinhouse.dto.input.LocationInputDto;
 import com.novi.poffinhouse.dto.output.LocationOutputDto;
 import com.novi.poffinhouse.dto.output.LocationOutputDtoShort;
-import com.novi.poffinhouse.models.region.Location;
+import com.novi.poffinhouse.models.game.gamemap.Location;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;

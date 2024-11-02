@@ -5,7 +5,7 @@ import com.novi.poffinhouse.dto.output.BerryOutputDto;
 import com.novi.poffinhouse.dto.mapper.BerryMapper;
 import com.novi.poffinhouse.exceptions.BerryNotFoundException;
 import com.novi.poffinhouse.models.berries.Berry;
-import com.novi.poffinhouse.models.region.BerryPlantingSite;
+import com.novi.poffinhouse.models.game.gamemap.BerryPlantingSite;
 import com.novi.poffinhouse.repositories.BerryPlantingSiteRepository;
 import com.novi.poffinhouse.repositories.BerryRepository;
 import com.novi.poffinhouse.util.Capitalize;
@@ -52,13 +52,6 @@ public class BerryService {
         return BerryMapper.toOutputDto(berry);
     }
 
-    public List<BerryOutputDto> getUnvalidatedBerries() {
-        return berryRepository.findUnvalidatedBerriesOrderedByIndexNumber()
-                .stream()
-                .map(BerryMapper::toOutputDto)
-                .collect(Collectors.toList());
-    }
-
     public List<BerryOutputDto> getAllBerries() {
         return berryRepository.findAll()
                 .stream()
@@ -68,6 +61,13 @@ public class BerryService {
 
     public List<BerryOutputDto> getAllValidatedBerriesOrderedByIndexNumber() {
         return berryRepository.findValidatedBerriesOrderedByIndexNumber()
+                .stream()
+                .map(BerryMapper::toOutputDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<BerryOutputDto> getUnvalidatedBerries() {
+        return berryRepository.findUnvalidatedBerriesOrderedByIndexNumber()
                 .stream()
                 .map(BerryMapper::toOutputDto)
                 .collect(Collectors.toList());
@@ -106,8 +106,9 @@ public class BerryService {
         List<BerryPlantingSite> sites = berryPlantingSiteRepository.findBerryPlantingSiteByPlantedBerriesBySlotsEquals(berry);
 
         // Delete Berry from all Games
-        berry.getGames().forEach(game -> game.getBerryList().remove(berry));
-
+        if (berry.getGames() != null) {
+            berry.getGames().forEach(game -> game.getBerryList().remove(berry));
+        }
         // Update each BerryPlantingSite to remove the berry
         for (BerryPlantingSite site : sites) {
 //            site.getPlantedBerriesBySlots().remove(1);

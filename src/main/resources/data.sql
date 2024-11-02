@@ -2,7 +2,6 @@
 INSERT INTO users (email, username, password)
 VALUES ('brock@pokemon.com', 'Brock', '$2a$12$764RLta2eg/DhWOm/EIZNeEeUdVrpjER/GFaL/n8H8ooBDYY4YKP2'),
        ('misty@pokemon.com', 'Misty', '$2a$12$764RLta2eg/DhWOm/EIZNeEeUdVrpjER/GFaL/n8H8ooBDYY4YKP2');
--- Password is 'password123'
 
 -- Insert data into authorities table
 INSERT INTO authorities (username, authority)
@@ -163,6 +162,34 @@ VALUES ('Ivysaur', 2, 'GRASS', 60, 62, 63, 80, 80, 60, false),
        ('Dragonite', 149, 'DRAGON', 91, 134, 95, 100, 100, 80, true),
        ('Mewtwo', 150, 'PSYCHIC', 106, 110, 90, 154, 90, 130, true),
        ('Mew', 151, 'PSYCHIC', 100, 100, 100, 100, 100, 100, true),
+       ('Meganium', 154, 'GRASS', 80, 82, 100, 83, 100, 80, true),
+       ('Cyndaquil', 155, 'FIRE', 39, 52, 43, 60, 50, 65, true),
+       ('Quilava', 156, 'FIRE', 58, 64, 58, 80, 65, 80, true),
+       ('Typhlosion', 157, 'FIRE', 78, 84, 78, 109, 85, 100, true),
+       ('Totodile', 158, 'WATER', 50, 65, 64, 44, 48, 43, true),
+       ('Croconaw', 159, 'WATER', 65, 80, 80, 59, 63, 58, true),
+       ('Feraligatr', 160, 'WATER', 85, 105, 100, 79, 83, 78, true),
+       ('Sentret', 161, 'NORMAL', 35, 46, 34, 35, 45, 20, true),
+       ('Furret', 162, 'NORMAL', 85, 76, 64, 45, 55, 90, true),
+       ('Hoothoot', 163, 'NORMAL', 60, 30, 30, 36, 56, 50, true),
+       ('Noctowl', 164, 'NORMAL', 100, 50, 50, 86, 96, 70, true),
+       ('Ledyba', 165, 'BUG', 40, 20, 30, 40, 80, 55, true),
+       ('Ledian', 166, 'BUG', 55, 35, 50, 55, 110, 85, true),
+       ('Treecko', 252, 'GRASS', 40, 45, 35, 65, 55, 70, true),
+       ('Grovyle', 253, 'GRASS', 50, 65, 45, 85, 65, 95, true),
+       ('Sceptile', 254, 'GRASS', 70, 85, 65, 105, 85, 120, true),
+       ('Torchic', 255, 'FIRE', 45, 60, 40, 70, 50, 45, true),
+       ('Combusken', 256, 'FIRE', 60, 85, 60, 85, 60, 55, true),
+       ('Blaziken', 257, 'FIRE', 80, 120, 70, 110, 70, 80, true),
+       ('Mudkip', 258, 'WATER', 50, 70, 50, 50, 50, 40, true),
+       ('Marshtomp', 259, 'WATER', 70, 85, 70, 60, 70, 50, true),
+       ('Swampert', 260, 'WATER', 100, 110, 90, 85, 90, 60, true),
+       ('Poochyena', 261, 'DARK', 35, 55, 35, 30, 30, 35, true),
+       ('Mightyena', 262, 'DARK', 70, 90, 70, 60, 60, 70, true),
+       ('Zigzagoon', 263, 'NORMAL', 38, 30, 41, 30, 41, 60, true),
+       ('Linoone', 264, 'NORMAL', 78, 70, 61, 50, 61, 100, true),
+       ('Wurmple', 265, 'BUG', 45, 45, 35, 20, 30, 20, true),
+       ('Silcoon', 266, 'BUG', 50, 35, 55, 25, 25, 15, true),
        ('Turtwig', 387, 'GRASS', 55, 68, 64, 45, 55, 31, true),
        ('Grotle', 388, 'GRASS', 75, 89, 85, 55, 65, 36, true),
        ('Torterra', 389, 'GRASS', 95, 109, 105, 75, 85, 56, true),
@@ -209,7 +236,16 @@ VALUES ('Ivysaur', 2, 'GRASS', 60, 62, 63, 80, 80, 60, false),
        ('Honchkrow', 430, 'DARK', 100, 125, 52, 105, 52, 71, true),
        ('Glameow', 431, 'NORMAL', 49, 55, 42, 42, 37, 85, true),
        ('Purugly', 432, 'NORMAL', 71, 82, 64, 64, 59, 112, true),
-       ('Chingling', 433, 'PSYCHIC', 45, 30, 50, 65, 50, 45, true);
+       ('Chingling', 433, 'PSYCHIC', 45, 30, 50, 65, 50, 45, true),
+       ('Snivy', 495, 'GRASS', 45, 45, 55, 45, 55, 63, true),
+       ('Servine', 496, 'GRASS', 60, 60, 75, 60, 75, 83, true),
+       ('Serperior', 497, 'GRASS', 75, 75, 95, 75, 95, 113, true),
+       ('Tepig', 498, 'FIRE', 65, 63, 45, 45, 45, 45, true),
+       ('Pignite', 499, 'FIRE', 90, 93, 55, 70, 55, 55, true),
+       ('Emboar', 500, 'FIRE', 110, 123, 65, 100, 65, 65, true),
+       ('Oshawott', 501, 'WATER', 55, 55, 45, 63, 45, 45, true),
+       ('Dewott', 502, 'WATER', 75, 75, 60, 83, 60, 60, true),
+       ('Samurott', 503, 'WATER', 95, 100, 85, 108, 70, 70, true);
 
 
 -- Insert data into berries table
@@ -226,13 +262,22 @@ VALUES ('Chesto', 2, 'A Poffin ingredient. It may be used or held by a Pokémon 
        ('Aspear', 5, 'A Poffin ingredient. It may be used or held by a Pokémon to recover from being frozen.', 3,
         'MEDICINE', 0, 0, 0, 0, 10, true);
 
+-- Insert data into atlas table
+INSERT INTO atlas(file_name) VALUES
+ ('Kanto.png'),
+ ('Johto.png'),
+ ('Hoenn.png'),
+ ('Sinnoh.png'),
+ ('Unova.png');
 
 -- Insert data into region_maps table
-INSERT INTO region_maps (region_name, horizontal_axis, vertical_axis)
-VALUES ('Kanto', 80, 60),
-       ('Johto', 75, 55),
-       ('Hoenn', 70, 40),
-       ('Sinnoh', 60, 40);
+INSERT INTO region_maps (region_name, horizontal_axis, vertical_axis, region_map_atlas_file_name) VALUES
+ ('Kanto', 80, 60, 'Kanto.png'),
+ ('Hoenn', 70, 40, 'Hoenn.png'),
+ ('Johto', 75, 55, 'Johto.png'),
+ ('Sinnoh', 60, 40,'Sinnoh.png'),
+ ('Unova', 85, 65, 'Unova.png');
+
 
 -- Insert Games
 INSERT INTO game (version_name, generation, description,  user_id)
@@ -295,9 +340,9 @@ INSERT INTO owned_pokemon (pokemon_id, username, nickname, nature, caught_by_tra
 VALUES (74, 'Brock', null, 'HARDY', 'Brock', 10, 20, 15, 25, 50, 1),
        (95, 'Brock', 'Rocky', 'IMPISH', 'Brock', 15, 25, 20, 30, 55, 1),
        (120, 'Misty', null, 'CALM', 'Misty', 20, 30, 40, 50, 60, 2),
-       (152, 'Brock', null, 'BRAVE', 'Brock', 30, 40, 50, 60, 70, 3),
-       (180, 'Brock', 'BeeBoi', 'CALM', 'Brock', 35, 45, 55, 65, 75, 3),
-       (187, 'Brock', 'Hello', 'HARDY', 'Brock', 40, 50, 60, 70, 80, 3);
+       (196, 'Brock', null, 'BRAVE', 'Brock', 30, 40, 50, 60, 70, 3),
+       (208, 'Brock', 'BeeBoi', 'CALM', 'Brock', 35, 45, 55, 65, 75, 3),
+       (215, 'Brock', 'Hello', 'HARDY', 'Brock', 40, 50, 60, 70, 80, 3);
 
 
 -- Insert data into team table
@@ -313,3 +358,4 @@ VALUES (1, 1), -- Geodude
 -- Insert data into team_owned_pokemon join table for Misty's Team
 INSERT INTO team_owned_pokemon (team_id, owned_pokemon_id)
 VALUES (2, 3); -- Staryu
+

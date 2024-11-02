@@ -1,6 +1,6 @@
 package com.novi.poffinhouse.repositories;
 
-import com.novi.poffinhouse.models.game.GameMap;
+import com.novi.poffinhouse.models.game.gamemap.GameMap;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

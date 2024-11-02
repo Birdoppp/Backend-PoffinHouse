@@ -13,7 +13,7 @@ public class LocationInputDto {
     @PositiveOrZero
     private Long gameMapId;
     @PositiveOrZero
-    private int coordinateX;
+    private Integer coordinateX;
     @PositiveOrZero
-    private int coordinateY;
+    private Integer coordinateY;
 }

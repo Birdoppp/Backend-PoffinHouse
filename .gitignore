@@ -20,6 +20,15 @@ target/
 *.iml
 *.ipr
 
+# Additional IntelliJ files
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/modules.xml
+
+# Spring Boot application logs
+spring.log
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

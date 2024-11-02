@@ -1,6 +1,5 @@
-package com.novi.poffinhouse.models.region;
+package com.novi.poffinhouse.models.game.gamemap;
 
-import com.novi.poffinhouse.models.game.GameMap;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
@@ -30,11 +29,11 @@ public class Location {
     @Setter
     @PositiveOrZero
     @Column(nullable = false, name = "coordinate_X")
-    private int coordinateX;
+    private Integer coordinateX;
     @Setter
     @PositiveOrZero
     @Column(nullable = false, name = "coordinate_Y")
-    private int coordinateY;
+    private Integer coordinateY;
 
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "location")

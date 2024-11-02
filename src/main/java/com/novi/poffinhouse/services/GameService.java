@@ -1,9 +1,11 @@
 package com.novi.poffinhouse.services;
 
 import com.novi.poffinhouse.dto.input.AdjustListDto;
+import com.novi.poffinhouse.dto.input.GameAdjustInputDto;
 import com.novi.poffinhouse.dto.input.GameInputDto;
 import com.novi.poffinhouse.dto.mapper.GameMapper;
 import com.novi.poffinhouse.dto.output.game.GameOutputDto;
+import com.novi.poffinhouse.exceptions.AccessDeniedException;
 import com.novi.poffinhouse.models.auth.User;
 import com.novi.poffinhouse.models.berries.Berry;
 import com.novi.poffinhouse.models.game.Game;
@@ -14,7 +16,7 @@ import com.novi.poffinhouse.util.GameIdListSetter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.security.access.AccessDeniedException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -59,14 +61,14 @@ public class GameService {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         return gameMapper.toOutputDto(game);
     }
 
     public List<GameOutputDto> getAllGamesByUsername(String username) {
         if (!AuthUtil.isAdminOrOwner(username)) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         List<Game> games = gameRepository.findAllByUser_Username(username);
         return games.stream()
@@ -81,29 +83,29 @@ public class GameService {
                 .collect(Collectors.toList());
     }
 
-    public GameOutputDto adjustGame(Long id, @Valid GameInputDto inputDto) {
+    public GameOutputDto adjustGame(Long id, @Valid GameAdjustInputDto adjustInputDto) {
         Game existingGame = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(existingGame.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
 
-        if (inputDto.getVersionName() != null) {
-            existingGame.setVersionName(inputDto.getVersionName());
+        if (adjustInputDto.getVersionName() != null) {
+            existingGame.setVersionName(adjustInputDto.getVersionName());
         }
-        if (inputDto.getGeneration() != 0) {
-            existingGame.setGeneration(inputDto.getGeneration());
+        if (adjustInputDto.getGeneration() != 0) {
+            existingGame.setGeneration(adjustInputDto.getGeneration());
         }
-        if (inputDto.getDescription() != null) {
-            existingGame.setDescription(inputDto.getDescription());
-        }
-
-        if (inputDto.getPokemonInput() != null) {
-            existingGame.setPokemonList(gameIdListSetter.PokemonListByGeneration(inputDto.getPokemonInput(), inputDto.getGeneration()));
+        if (adjustInputDto.getDescription() != null) {
+            existingGame.setDescription(adjustInputDto.getDescription());
         }
 
-        if (inputDto.getBerryInput() != null) {
-            existingGame.setBerryList(gameIdListSetter.BerryList(inputDto.getBerryInput()));
+        if (adjustInputDto.getPokemonInput() != null) {
+            existingGame.setPokemonList(gameIdListSetter.PokemonListByGeneration(adjustInputDto.getPokemonInput(), adjustInputDto.getGeneration()));
+        }
+
+        if (adjustInputDto.getBerryInput() != null) {
+            existingGame.setBerryList(gameIdListSetter.BerryList(adjustInputDto.getBerryInput()));
         }
 
         Game savedGame = gameRepository.save(existingGame);
@@ -115,34 +117,29 @@ public class GameService {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
-
-        List<Pokemon> pokemonListToAdd = null;
-        List<Pokemon> pokemonListToRemove = null;
 
         if (adjustListDto.getAddList() != null) {
-            pokemonListToAdd = adjustListDto.getAddList().stream()
-                    .map(pokemonRepository::findByNationalDex)
-                    .map(optionalPokemon -> optionalPokemon.orElseThrow(() -> new IllegalArgumentException("Pokemon not found.")))
+            List<Pokemon> pokemonToAdd = adjustListDto.getAddList().stream()
+                    .map(indexNumber -> pokemonRepository.findByNationalDex(indexNumber)
+                            .orElseThrow(() -> new IllegalArgumentException("Pokemon with index number " + indexNumber + " not found.")))
+                    .filter(pokemon -> !game.getPokemonList().contains(pokemon))
                     .toList();
+            game.getPokemonList().addAll(pokemonToAdd);
         }
+
         if (adjustListDto.getRemoveList() != null) {
-            pokemonListToRemove = adjustListDto.getRemoveList().stream()
-                    .map(pokemonRepository::findByNationalDex)
-                    .map(optionalPokemon -> optionalPokemon.orElseThrow(() -> new IllegalArgumentException("Pokemon not found.")))
+            List<Pokemon> pokemonToRemove = adjustListDto.getRemoveList().stream()
+                    .map(indexNumber -> pokemonRepository.findByNationalDex(indexNumber)
+                            .orElseThrow(() -> new IllegalArgumentException("Pokemon with index number " + indexNumber + " not found.")))
+                    .filter(pokemon -> game.getPokemonList().contains(pokemon))
                     .toList();
+            game.getPokemonList().removeAll(pokemonToRemove);
         }
 
-        if (pokemonListToRemove != null) {
-            game.getPokemonList().removeAll(pokemonListToRemove);
-        }
-        if (pokemonListToAdd != null) {
-            game.getPokemonList().addAll(pokemonListToAdd);
-        }
-
-        Game updatedGame = gameRepository.save(game);
-        return gameMapper.toOutputDto(updatedGame);
+        Game savedGame = gameRepository.save(game);
+        return gameMapper.toOutputDto(savedGame);
     }
 
     //OwnedPokemon is separate
@@ -152,45 +149,38 @@ public class GameService {
     //Berries
     public GameOutputDto adjustBerryList(Long id, @Valid AdjustListDto adjustListDto) {
         Game game = gameRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
-
-        List<Berry> berryListToAdd = null;
-        List<Berry> berryListToRemove = null;
 
         if (adjustListDto.getAddList() != null) {
-            berryListToAdd = adjustListDto.getAddList().stream()
-                    .map(berryRepository::findById)
-                    .map(berry -> berry.orElseThrow(() -> new IllegalArgumentException("Berry not found.")))
-                    .filter(berry -> !game.getBerryList().contains(berry))
-                    .toList();
-        }
-        if (adjustListDto.getRemoveList() != null) {
-            berryListToRemove = adjustListDto.getRemoveList().stream()
-                    .map(berryRepository::findById)
-                    .map(berry -> berry.orElseThrow(() -> new IllegalArgumentException("Berry not found.")))
+            List<Berry> berriesToAdd = adjustListDto.getAddList().stream()
+                    .map(indexNumber -> berryRepository.findByIndexNumber(indexNumber)
+                            .orElseThrow(() -> new IllegalArgumentException("Berry with index number " + indexNumber + " not found.")))
                     .filter(berry -> game.getBerryList().contains(berry))
                     .toList();
+            game.getBerryList().addAll(berriesToAdd);
         }
 
-        if (berryListToRemove != null) {
-            game.getBerryList().removeAll(berryListToRemove);
-        }
-        if (berryListToAdd != null) {
-            game.getBerryList().addAll(berryListToAdd);
+        if (adjustListDto.getRemoveList() != null) {
+            List<Berry> berriesToRemove = adjustListDto.getRemoveList().stream()
+                    .map(indexNumber -> berryRepository.findByIndexNumber(indexNumber)
+                            .orElseThrow(() -> new IllegalArgumentException("Berry with index number " + indexNumber + " not found.")))
+                    .filter(berry -> game.getBerryList().contains(berry))
+                    .toList();
+            game.getBerryList().removeAll(berriesToRemove);
         }
 
-        Game updatedGame = gameRepository.save(game);
-        return gameMapper.toOutputDto(updatedGame);
+        Game savedGame = gameRepository.save(game);
+        return gameMapper.toOutputDto(savedGame);
     }
 
     public void deleteGame(Long id) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Game with id " + id + " not found."));
         if (!AuthUtil.isAdminOrOwner(game.getUser().getUsername())) {
-            throw new AccessDeniedException("You do not have permission to access this resource.");
+            throw new AccessDeniedException();
         }
         gameRepository.deleteById(id);
     }
